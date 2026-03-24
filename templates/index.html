@@ -504,8 +504,9 @@ textarea{resize:vertical;min-height:50px;}
           <div class="field full">
             <label>Teléfono cliente</label>
             <div class="phone-wrap">
-              <input id="f-phone" type="tel" placeholder="+56 9 XXXX XXXX"
-                oninput="onPhoneInput(this.value)" autocomplete="tel">
+              <input id="f-phone" type="tel" placeholder="+56912345678"
+                oninput="onPhoneInput(this.value)" autocomplete="tel"
+                onpaste="setTimeout(()=>{this.value=this.value.replace(/\s/g,'');onPhoneInput(this.value)},0)">
               <span class="phone-status" id="phone-status"></span>
             </div>
             <!-- Cliente encontrado -->
@@ -1240,6 +1241,9 @@ async function selectDate(ds){
 //  CLIENTE LOOKUP
 // ════════════════════════════════════════════════════════
 function onPhoneInput(raw){
+  const input = document.getElementById('f-phone');
+  const cleaned = raw.replace(/\s/g, '');
+  if (cleaned !== raw) { input.value = cleaned; raw = cleaned; }
   clearTimeout(lookupTimer);
   currentClient=null;
   hideClientBoxes();
