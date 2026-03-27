@@ -67,7 +67,7 @@ class Delivery(models.Model):
     def to_dict(self, client=None):
         d = {
             'id':                self.id,
-            'delivery_date':     self.delivery_date.isoformat(),
+            'delivery_date':     self.delivery_date.isoformat() if hasattr(self.delivery_date, 'isoformat') else self.delivery_date,
             'client_phone':      self.client_phone,
             'name':              self.name,
             'address':           self.address,
