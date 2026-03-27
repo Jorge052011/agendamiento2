@@ -169,21 +169,21 @@ def delivery_detail(request, delivery_id):
         return JsonResponse({"ok": True})
 
     # PATCH
-    data = json.loads(request.body)
+    try:
+        data = json.loads(request.body)
+    except Exception:
+        return JsonResponse({"error": "JSON inválido"}, status=400)
+
     for k, v in data.items():
         if not hasattr(delivery, k):
             continue
-        # arrived_at puede llegar como "HH:MM" (solo hora) desde el frontend
-        if k in ('arrived_at', 'departed_at') and isinstance(v, str) and len(v) <= 5:
-            from datetime import datetime as dt
-            today = date.today()
-            try:
-                hour, minute = map(int, v.split(':'))
-                v = dt(today.year, today.month, today.day, hour, minute)
-            except Exception:
-                v = None
         setattr(delivery, k, v)
-    delivery.save()
+
+    try:
+        delivery.save()
+    except Exception as e:
+        return JsonResponse({"error": f"Error al guardar: {str(e)}"}, status=500)
+
     return JsonResponse(delivery.to_dict())
 
 

@@ -57,8 +57,8 @@ class Delivery(models.Model):
     lng             = models.FloatField(null=True, blank=True)
     stock_items     = models.JSONField(default=dict, blank=True)
     completed       = models.BooleanField(default=False)
-    arrived_at      = models.DateTimeField(null=True, blank=True)
-    departed_at     = models.DateTimeField(null=True, blank=True)
+    arrived_at      = models.CharField(max_length=10, blank=True, null=True)
+    departed_at     = models.CharField(max_length=10, blank=True, null=True)
     created_at      = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -85,8 +85,8 @@ class Delivery(models.Model):
             'lng':               self.lng,
             'stock_items':       self.stock_items,
             'completed':         self.completed,
-            'arrived_at':        self.arrived_at.isoformat() if self.arrived_at else None,
-            'departed_at':       self.departed_at.isoformat() if self.departed_at else None,
+            'arrived_at':        self.arrived_at or None,
+            'departed_at':       self.departed_at or None,
             'created_at':        self.created_at.isoformat() if self.created_at else None,
         }
         if client:
