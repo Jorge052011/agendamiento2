@@ -1429,8 +1429,11 @@ async function deleteDelivery(id){
   await loadCalSummary();renderAll();refreshMarkers();toast('🗑️ Eliminada');
 }
 async function patchDelivery(id,data){
-  const r=await fetch(`/api/deliveries/${id}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-  if(r.ok){const u=await r.json();const i=deliveries.findIndex(x=>x.id===id);if(i>-1)deliveries[i]=u;renderAll();refreshMarkers();}
+  try{
+    const r=await fetch(`/api/deliveries/${id}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    if(r.ok){const u=await r.json();const i=deliveries.findIndex(x=>x.id===id);if(i>-1)deliveries[i]=u;renderAll();refreshMarkers();}
+    else{const err=await r.json().catch(()=>({}));toast('❌ Error al guardar: '+(err.error||r.status));}
+  }catch(e){toast('❌ Sin conexión con el servidor');}
 }
 
 // ════════════════════════════════════════════════════════

@@ -171,8 +171,18 @@ def delivery_detail(request, delivery_id):
     # PATCH
     data = json.loads(request.body)
     for k, v in data.items():
-        if hasattr(delivery, k):
-            setattr(delivery, k, v)
+        if not hasattr(delivery, k):
+            continue
+        # arrived_at puede llegar como "HH:MM" (solo hora) desde el frontend
+        if k in ('arrived_at', 'departed_at') and isinstance(v, str) and len(v) <= 5:
+            from datetime import datetime as dt
+            today = date.today()
+            try:
+                hour, minute = map(int, v.split(':'))
+                v = dt(today.year, today.month, today.day, hour, minute)
+            except Exception:
+                v = None
+        setattr(delivery, k, v)
     delivery.save()
     return JsonResponse(delivery.to_dict())
 
