@@ -184,6 +184,7 @@ textarea{resize:vertical;min-height:50px;}
 .tag.driver.diego{color:var(--diego);background:rgba(64,200,240,.12);}
 .tag.driver.otro{color:var(--otro);background:rgba(240,64,144,.12);}
 .arrived-mark{font-size:.66rem;color:var(--grn);margin-top:3px;}
+.card-notes{font-size:.68rem;color:var(--acc);margin-top:3px;line-height:1.4;background:rgba(240,224,64,.06);border-left:2px solid var(--acc);padding:2px 6px;border-radius:0 4px 4px 0;}
 /* ── EDIT PANEL ── */
 .card-edit{display:none;margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--brd2);}
 .card-edit.open{display:block;}
@@ -1290,6 +1291,7 @@ function addMarker(d){
     <div class="pu-row"><span class="pu-lbl">⏰</span><span class="pu-val">${d.time_start}–${d.time_end}</span></div>
     <div class="pu-row"><span class="pu-lbl">🚴</span><span class="pu-val" style="color:${COLORS[d.driver]}">${cap(d.driver)}</span></div>
     ${d.arrived_at?`<div class="pu-row"><span class="pu-lbl">✅</span><span class="pu-val">Llegó: ${d.arrived_at}</span></div>`:''}
+    ${d.notes?`<div class="pu-row"><span class="pu-lbl">📝</span><span class="pu-val" style="color:var(--acc)">${d.notes}</span></div>`:''}
   `);
   m.addTo(map);markers[d.id]=m;
 }
@@ -1603,7 +1605,8 @@ async function saveEdit(id){
   if(!name){toast('⚠️ El nombre no puede estar vacío');return;}
 
   // Construir payload
-  const patch={name,reference:ref,time_start:ts,time_end:te,driver,product,amount,payment};
+  const notes = document.getElementById(`${eid}-notes`)?.value.trim() || '';
+  const patch={name,reference:ref,time_start:ts,time_end:te,driver,product,amount,payment,notes};
 
   // Teléfono: actualizar cliente y delivery si cambió
   const oldPhone = d.client_phone||'';
@@ -1699,6 +1702,7 @@ function renderList(){
         <span class="tag driver ${d.driver}">${cap(d.driver)}</span>
       </div>
       ${d.arrived_at?`<div class="arrived-mark">✅ Llegó ${d.arrived_at}</div>`:''}
+      ${d.notes?`<div class="card-notes">📝 ${d.notes}</div>`:''}
 
       <!-- PANEL EDICIÓN -->
       <div class="card-edit" id="${eid}">
@@ -1761,6 +1765,11 @@ function renderList(){
               <option value="diego" ${d.driver==='diego'?'selected':''}>Diego</option>
               <option value="otro"  ${d.driver==='otro'?'selected':''}>Otro</option>
             </select>
+          </div>
+        </div>
+          <div class="edit-field" style="grid-column:1/-1">
+            <div class="edit-label">Notas internas</div>
+            <textarea id="${eid}-notes" rows="2" style="resize:vertical;min-height:42px">${(d.notes||'').replace(/"/g,'&quot;')}</textarea>
           </div>
         </div>
         <div class="edit-btns">
