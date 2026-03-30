@@ -2233,6 +2233,10 @@ let ETA_SERVICE_MIN = 10;    // minutos de atención por cliente (editable)
 let ETA_START_TIME  = '09:00'; // hora de salida (editable)
 
 function calcETAs(origin, ordered){
+  // Leer siempre los valores actuales de los inputs
+  ETA_START_TIME  = document.getElementById('eta-start')?.value  || ETA_START_TIME;
+  ETA_SPEED_KMH   = parseInt(document.getElementById('eta-speed')?.value)   || ETA_SPEED_KMH;
+  ETA_SERVICE_MIN = parseInt(document.getElementById('eta-service')?.value)  || ETA_SERVICE_MIN;
   // Devuelve array de {arrivalMin, departMin} en minutos desde medianoche
   const [sh, sm] = ETA_START_TIME.split(':').map(Number);
   let cursor = sh * 60 + sm; // minutos desde medianoche
