@@ -1808,7 +1808,7 @@ function renderRoutes(){
             ${(d.product||d.amount)?`<span class="opt-order-chip amount">📦 ${[d.product,d.amount].filter(Boolean).join(' × ')}</span>`:''}
             ${d.payment?`<span class="opt-order-chip payment">💳 ${d.payment}</span>`:''}
           </div>`:''}
-          <div class="stime">⏰ ${d.time_start} – ${d.time_end}</div>
+          ${(d.time_start||d.time_end)?`<div class="stime"><span class="tag time">⏰ ${d.time_start&&d.time_end?d.time_start+' – '+d.time_end:(d.time_start||d.time_end)}</span></div>`:''}
 
           ${!d.completed?`<div class="btn-nav-row">
             <button class="btn-ir-gmaps" onclick="window.open('${navUrl}','_blank')">🗺️ Google Maps</button>
