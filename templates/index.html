@@ -851,13 +851,13 @@ textarea{resize:vertical;min-height:50px;}
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;">
             <div>
               <label style="font-size:.65rem;color:var(--mut);display:block;margin-bottom:2px;">🕐 Hora salida</label>
-              <input type="time" id="eta-start" value="09:00"
+              <input type="time" id="eta-start" value="14:00"
                 style="width:100%;background:var(--surf3);border:1px solid var(--brd2);border-radius:5px;color:var(--txt);font-size:.78rem;padding:4px 5px;"
                 onchange="ETA_START_TIME=this.value; if(currentOptResult) renderOptResult(currentOptResult);">
             </div>
             <div>
               <label style="font-size:.65rem;color:var(--mut);display:block;margin-bottom:2px;">🚗 km/h ciudad</label>
-              <input type="number" id="eta-speed" value="30" min="10" max="80"
+              <input type="number" id="eta-speed" value="25" min="10" max="80"
                 style="width:100%;background:var(--surf3);border:1px solid var(--brd2);border-radius:5px;color:var(--txt);font-size:.78rem;padding:4px 5px;"
                 onchange="ETA_SPEED_KMH=parseInt(this.value)||30; if(currentOptResult) renderOptResult(currentOptResult);">
             </div>
