@@ -462,16 +462,12 @@ def stock(request):
         delivered = {p["id"]: 0 for p in PRODUCTS}
 
         for d in qs:
-            items    = d.stock_items or {}
-            has_items = any(int(v or 0) > 0 for v in items.values())
-            if has_items:
-                for pid, qty in items.items():
-                    if pid in demand:
-                        demand[pid] += int(qty or 0)
-                if d.completed:
-                    for pid, qty in items.items():
-                        if pid in delivered:
-                            delivered[pid] += int(qty or 0)
+            items = d.stock_items or {}
+            for pid, qty in items.items():
+                if pid in demand:
+                    demand[pid] += int(qty or 0)
+                if d.completed and pid in delivered:
+                    delivered[pid] += int(qty or 0)
 
         pending = {pid: demand[pid] - delivered[pid] for pid in demand}
 
@@ -506,7 +502,7 @@ def stock(request):
             "deliveries_count": qs.count(),
             "deliveries_detail": [
                 {"id": d.id, "name": d.name, "completed": d.completed,
-                 "stock_items": d.stock_items or {}}
+                 "driver": d.driver, "stock_items": d.stock_items or {}}
                 for d in qs
             ],
         })
