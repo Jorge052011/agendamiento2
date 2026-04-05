@@ -919,6 +919,7 @@ textarea{resize:vertical;min-height:50px;}
       <div class="ml-item"><div class="ml-dot" style="background:var(--jorge)"></div>Jorge</div>
       <div class="ml-item"><div class="ml-dot" style="background:var(--diego)"></div>Diego</div>
       <div class="ml-item"><div class="ml-dot" style="background:var(--otro)"></div>Otro</div>
+      <div class="ml-item"><div class="ml-dot" style="background:#e53935"></div>Entregado</div>
     </div>
     <div class="map-stats">
       <div class="stat-pill"><div class="stat-num" id="s-total">0</div><div>Total</div></div>
@@ -1245,16 +1246,20 @@ function initMap(){
   setTimeout(()=>map.invalidateSize(),500);
 }
 function makeIcon(driver, num, size=38, pending=true){
-  const c = COLORS[driver] || '#fff';
+  const c = pending ? (COLORS[driver] || '#fff') : '#e53935';
   const pulse = pending
     ? `<div class="marker-pulse" style="background:${c};opacity:.5;"></div>`
     : '';
+  const checkmark = !pending
+    ? `<div style="position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:#e53935;border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;z-index:10;">✓</div>`
+    : '';
   return L.divIcon({
-    html: `<div class="marker-wrap" style="width:${size}px;height:${size}px;">
+    html: `<div class="marker-wrap" style="width:${size}px;height:${size}px;position:relative;">
       ${pulse}
-      <div class="marker-pin" style="background:${c};color:#000;width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;">
+      <div class="marker-pin" style="background:${c};color:#fff;width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;opacity:${pending ? '1' : '0.85'};">
         <span>${num}</span>
       </div>
+      ${checkmark}
     </div>`,
     className: '',
     iconSize:    [size, size],
@@ -2547,9 +2552,10 @@ function _doDraw(result){
         route.legs.forEach((leg, i) => {
           const stop = ordered[i];
           if(!stop || !leg.end_location) return;
+          const isCompleted = !!stop.completed;
           const m = L.marker(
             [leg.end_location.lat(), leg.end_location.lng()],
-            { icon: makeIcon(stop.driver || 'otro', i + 1, 38, true) }
+            { icon: makeIcon(stop.driver || 'otro', i + 1, 38, !isCompleted) }
           )
           .bindPopup(`
             <div class="pu-name">${i + 1}. ${stop.name || 'Parada'}</div>
@@ -2592,9 +2598,10 @@ function _drawFallbackPolyline(result, ordered){
   // Marcadores paradas
   ordered.forEach((s, i) => {
     if(!s.lat || !s.lng) return;
+    const isCompleted = !!s.completed;
     const m = L.marker(
       [parseFloat(s.lat), parseFloat(s.lng)],
-      { icon: makeIcon(s.driver || 'otro', i + 1, 38, true) }
+      { icon: makeIcon(s.driver || 'otro', i + 1, 38, !isCompleted) }
     )
     .bindPopup(`
       <div class="pu-name">${i + 1}. ${s.name || 'Parada'}</div>
