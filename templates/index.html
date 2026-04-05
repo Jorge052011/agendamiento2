@@ -12,9 +12,9 @@
 :root{
   --bg:#0a0a0f; --surf:#13131a; --surf2:#1c1c28; --surf3:#22222f;
   --brd:#2a2a3d; --brd2:#353550;
-  --acc:#f0e040; --acc2:#40c8f0; --acc3:#f04090; --grn:#40f090;
+  --acc:#f0e040; --acc2:#1e90ff; --acc3:#ff6b2b; --grn:#40f090;
   --txt:#e8e8f0; --mut:#6868a0; --mut2:#9090c0;
-  --jorge:#f0e040; --diego:#40c8f0; --otro:#f04090;
+  --jorge:#f0e040; --diego:#1e90ff; --otro:#ff6b2b;
   --nav-h:56px; --tab-h:52px;
 }
 /* ── TEMA CLARO ── */
@@ -23,15 +23,15 @@
   --brd:#d0d4db; --brd2:#b8bdc7;
   --acc:#d4a000; --acc2:#0088bb; --acc3:#cc2060; --grn:#1a9950;
   --txt:#1a1a2e; --mut:#6c7280; --mut2:#4a5060;
-  --jorge:#b8860b; --diego:#0077aa; --otro:#cc2060;
+  --jorge:#b8860b; --diego:#1565c0; --otro:#e64a19;
 }
 .light .tag.time{color:#b8860b;background:rgba(212,160,0,.12);}
 .light .tag.driver.jorge{color:#b8860b;background:rgba(212,160,0,.12);}
-.light .tag.driver.diego{color:#0077aa;background:rgba(0,136,187,.12);}
-.light .tag.driver.otro{color:#cc2060;background:rgba(204,32,96,.12);}
+.light .tag.driver.diego{color:#1565c0;background:rgba(30,144,255,.12);}
+.light .tag.driver.otro{color:#e64a19;background:rgba(255,107,43,.12);}
 .light .d-card.jorge::before{background:#d4a000;}
-.light .d-card.diego::before{background:#0088bb;}
-.light .d-card.otro::before{background:#cc2060;}
+.light .d-card.diego::before{background:#1565c0;}
+.light .d-card.otro::before{background:#e64a19;}
 .light .hdr-date{background:rgba(212,160,0,.1);border-color:rgba(212,160,0,.3);}
 .light .client-found{background:rgba(26,153,80,.08);border-color:rgba(26,153,80,.3);}
 .light .client-new{background:rgba(212,160,0,.07);border-color:rgba(212,160,0,.25);}
@@ -181,8 +181,8 @@ textarea{resize:vertical;min-height:50px;}
 .tag.pay{color:var(--grn);background:rgba(64,240,144,.1);}
 .tag.time{color:var(--acc);background:rgba(240,224,64,.1);}
 .tag.driver.jorge{color:var(--jorge);background:rgba(240,224,64,.12);}
-.tag.driver.diego{color:var(--diego);background:rgba(64,200,240,.12);}
-.tag.driver.otro{color:var(--otro);background:rgba(240,64,144,.12);}
+.tag.driver.diego{color:var(--diego);background:rgba(30,144,255,.12);}
+.tag.driver.otro{color:var(--otro);background:rgba(255,107,43,.12);}
 .arrived-mark{font-size:.66rem;color:var(--grn);margin-top:3px;}
 .card-notes{font-size:.68rem;color:var(--acc);margin-top:3px;line-height:1.4;background:rgba(240,224,64,.06);border-left:2px solid var(--acc);padding:2px 6px;border-radius:0 4px 4px 0;}
 /* ── EDIT PANEL ── */
@@ -476,8 +476,8 @@ textarea{resize:vertical;min-height:50px;}
 .carga-driver-tabs{display:flex;gap:4px;padding:.5rem 1.1rem .35rem;border-bottom:1px solid var(--brd);flex-shrink:0;}
 .carga-driver-tab{background:var(--surf2);border:1px solid var(--brd);border-radius:20px;padding:4px 14px;font-size:.75rem;cursor:pointer;color:var(--mut);transition:all .15s;}
 .carga-driver-tab.jorge.active{border-color:var(--jorge);color:var(--jorge);background:rgba(240,224,64,.08);}
-.carga-driver-tab.diego.active{border-color:var(--diego);color:var(--diego);background:rgba(64,200,240,.08);}
-.carga-driver-tab.otro.active{border-color:var(--otro);color:var(--otro);background:rgba(240,64,144,.08);}
+.carga-driver-tab.diego.active{border-color:var(--diego);color:var(--diego);background:rgba(30,144,255,.08);}
+.carga-driver-tab.otro.active{border-color:var(--otro);color:var(--otro);background:rgba(255,107,43,.08);}
 .carga-driver-tab:not(.active):hover{color:var(--txt);}
 .carga-body{display:flex;flex:1;overflow:hidden;gap:0;min-height:0;}
 .carga-col{flex:1;min-width:0;overflow-y:auto;overflow-x:hidden;padding:.8rem 1rem;height:100%;}
@@ -683,17 +683,17 @@ textarea{resize:vertical;min-height:50px;}
                 <input type="number" min="0" id="si-LAV-20" value="0" style="width:46px;background:var(--surf3);border:1px solid var(--brd2);border-radius:4px;color:var(--txt);font-size:.78rem;text-align:center;padding:2px;">
               </div>
               <div style="display:flex;align-items:center;gap:.4rem;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#40c8f0;flex-shrink:0;"></div>
+                <div style="width:8px;height:8px;border-radius:50%;background:#1e90ff;flex-shrink:0;"></div>
                 <span style="font-size:.68rem;flex:1;">Lav+C 8kg</span>
                 <input type="number" min="0" id="si-LAV-CA-8" value="0" style="width:46px;background:var(--surf3);border:1px solid var(--brd2);border-radius:4px;color:var(--txt);font-size:.78rem;text-align:center;padding:2px;">
               </div>
               <div style="display:flex;align-items:center;gap:.4rem;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#40c8f0;flex-shrink:0;"></div>
+                <div style="width:8px;height:8px;border-radius:50%;background:#1e90ff;flex-shrink:0;"></div>
                 <span style="font-size:.68rem;flex:1;">Lav+C 20kg</span>
                 <input type="number" min="0" id="si-LAV-CA-20" value="0" style="width:46px;background:var(--surf3);border:1px solid var(--brd2);border-radius:4px;color:var(--txt);font-size:.78rem;text-align:center;padding:2px;">
               </div>
               <div style="display:flex;align-items:center;gap:.4rem;grid-column:span 2;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#f04090;flex-shrink:0;"></div>
+                <div style="width:8px;height:8px;border-radius:50%;background:#ff6b2b;flex-shrink:0;"></div>
                 <span style="font-size:.68rem;flex:1;">C+Talco 20kg</span>
                 <input type="number" min="0" id="si-CA-TB-20" value="0" style="width:46px;background:var(--surf3);border:1px solid var(--brd2);border-radius:4px;color:var(--txt);font-size:.78rem;text-align:center;padding:2px;">
               </div>
@@ -1003,7 +1003,7 @@ textarea{resize:vertical;min-height:50px;}
 // ════════════════════════════════════════════════════════
 //  ESTADO
 // ════════════════════════════════════════════════════════
-const COLORS={jorge:'#f0e040',diego:'#40c8f0',otro:'#f04090'};
+const COLORS={jorge:'#f0e040',diego:'#1e90ff',otro:'#ff6b2b'};
 let deliveries=[],calSummary={},currentFilter='all';
 let map,markers={},routeLines=[];
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
@@ -1270,8 +1270,8 @@ function makeIcon(driver, num, size=38, pending=true){
 function makeOriginIcon(){
   return L.divIcon({
     html: `<div class="marker-wrap" style="width:40px;height:40px;">
-      <div class="marker-pulse" style="background:#40c8f0;opacity:.5;border-radius:50%;"></div>
-      <div style="background:#40c8f0;color:#000;width:40px;height:40px;border-radius:50%;
+      <div class="marker-pulse" style="background:#1e90ff;opacity:.5;border-radius:50%;"></div>
+      <div style="background:#1e90ff;color:#000;width:40px;height:40px;border-radius:50%;
         display:flex;align-items:center;justify-content:center;font-size:18px;
         box-shadow:0 4px 14px rgba(64,200,240,.6);border:3px solid rgba(255,255,255,.85);">🚀</div>
     </div>`,
@@ -3032,9 +3032,9 @@ let cargaData     = null;
 const PRODUCT_COLORS = {
   'LAV-8':    '#f0e040',
   'LAV-20':   '#f0e040',
-  'LAV-CA-8': '#40c8f0',
-  'LAV-CA-20':'#40c8f0',
-  'CA-TB-20': '#f04090',
+  'LAV-CA-8': '#1e90ff',
+  'LAV-CA-20':'#1e90ff',
+  'CA-TB-20': '#ff6b2b',
 };
 
 async function initCarga(){
@@ -3341,7 +3341,6 @@ async function guardarStock(){
     </div>
   </div>
 </div>
-
 
 </body>
 </html>
