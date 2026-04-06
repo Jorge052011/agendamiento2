@@ -1329,7 +1329,7 @@ function makeIcon(driver, num, size=38, pending=true){
   return L.divIcon({
     html: `<div class="marker-wrap" style="width:${size}px;height:${size}px;position:relative;">
       ${pulse}
-      <div class="marker-pin" style="background:${c};color:#fff;width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;opacity:${pending ? '1' : '0.85'};">
+      <div class="marker-pin" style="background:${c};color:#000;width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;opacity:${pending ? '1' : '0.85'};">
         <span>${num}</span>
       </div>
       ${checkmark}
@@ -2835,6 +2835,7 @@ let repartoState = {
 };
 
 let repartoDriverConfig = JSON.parse(JSON.stringify(REPARTO_DRIVER_DEFAULTS));
+let currentRepartoMapDriver = null;
 
 function loadRepartoDriverConfigs(){
   try{
@@ -2982,6 +2983,9 @@ function selectRepartoDPForDriver(driver, dpId){
   // Marcar botón guardar como pendiente
   const btn = document.getElementById(`reparto-save-${driver}`);
   if(btn){ btn.classList.add('dirty'); btn.textContent='💾 Guardar orden'; }
+  if(currentRepartoMapDriver === driver){
+    setTimeout(()=>verRepartoEnMapa(driver), 0);
+  }
 }
 
 function _refreshDriverDPButtons(driver){
@@ -3050,6 +3054,42 @@ function sortListByAppliedRouteOrder(list){
   });
 }
 
+// ── Sortable por columna de Mi Ruta ──────────────────────────────────────
+function wireDriverSortable(driver){
+  const listEl = document.getElementById(`reparto-list-${driver}`);
+  if(!listEl || !window.Sortable) return;
+
+  if(listEl._sortable && typeof listEl._sortable.destroy === 'function') {
+    try { listEl._sortable.destroy(); } catch(e){}
+  }
+
+  listEl._sortable = Sortable.create(listEl,{
+    animation:150,
+    handle:'.r-drag',
+    ghostClass:'sortable-ghost',
+    chosenClass:'sortable-chosen',
+    filter:'.r-completed',
+    onEnd(){
+      const ids = Array.from(listEl.querySelectorAll('.reparto-stop[data-id]'))
+        .map(el=>el.dataset.id);
+      repartoState[driver].orders = ids;
+      repartoState[driver].dirty  = true;
+      const btn = document.getElementById(`reparto-save-${driver}`);
+      if(btn){ btn.classList.add('dirty'); btn.textContent='💾 Guardar orden'; }
+      renderDriverColBody(driver);
+      if(currentRepartoMapDriver === driver){
+        setTimeout(()=>verRepartoEnMapa(driver), 0);
+      }
+    }
+  });
+}
+
+function wireDriverSortables(){
+  for(const drv of REPARTO_DRIVERS){
+    wireDriverSortable(drv);
+  }
+}
+
 // ── Renderizar todas las columnas ─────────────────────────────────────────
 function renderAllDriverCols(){
   const wrap = document.getElementById('reparto-drivers-wrap');
@@ -3059,27 +3099,7 @@ function renderAllDriverCols(){
     wrap.appendChild(buildDriverCol(drv));
   }
   // Sortable tras insertar en DOM
-  for(const drv of REPARTO_DRIVERS){
-    const listEl = document.getElementById(`reparto-list-${drv}`);
-    if(listEl && window.Sortable){
-      Sortable.create(listEl,{
-        animation:150,
-        handle:'.r-drag',
-        ghostClass:'sortable-ghost',
-        chosenClass:'sortable-chosen',
-        filter:'.r-completed',
-        onEnd(){
-          const ids = Array.from(listEl.querySelectorAll('.reparto-stop[data-id]'))
-            .map(el=>el.dataset.id);
-          repartoState[drv].orders = ids;
-          repartoState[drv].dirty  = true;
-          const btn = document.getElementById(`reparto-save-${drv}`);
-          if(btn){ btn.classList.add('dirty'); btn.textContent='💾 Guardar orden'; }
-          renderDriverColBody(drv);
-        }
-      });
-    }
-  }
+  wireDriverSortable(driver);
 }
 
 // ── Construir columna completa ────────────────────────────────────────────
@@ -3199,6 +3219,7 @@ function renderDriverColBody(driver){
 
 // ── Ver solo este repartidor en el mapa ───────────────────────────────────
 function verRepartoEnMapa(driver){
+  currentRepartoMapDriver = driver;
   clearRouteLines();
   Object.keys(markers).forEach(k=>{map.removeLayer(markers[k]);delete markers[k];});
 
@@ -3317,6 +3338,10 @@ async function applyRepartoOrderToViews(driver){
   renderList();
   renderRoutes();
   renderDriverColBody(driver);
+  refreshMarkers();
+  if(currentRepartoMapDriver === driver){
+    setTimeout(()=>verRepartoEnMapa(driver), 0);
+  }
   toast(`🔄 Orden de ${driver} aplicado a Pedidos y Rutas`);
 }
 
