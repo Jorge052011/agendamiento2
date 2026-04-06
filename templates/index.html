@@ -935,23 +935,9 @@ textarea{resize:vertical;min-height:50px;}
         <div class="panel-title">📍 Mi Ruta</div>
       </div>
 
-      <!-- ETA params globales (hora salida, velocidad, min/cliente) -->
-      <div style="padding:.3rem .75rem;border-bottom:1px solid var(--brd);display:flex;gap:.6rem;align-items:center;flex-shrink:0;background:var(--surf);">
-        <span style="font-size:.65rem;color:var(--mut);font-weight:700;">⏱</span>
-        <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;">
-          <label style="font-size:.62rem;color:var(--mut);">Salida</label>
-          <input type="time" id="reparto-eta-start" value="14:00"
-            style="background:var(--surf2);border:1px solid var(--brd);border-radius:5px;color:var(--txt);font-size:.7rem;padding:2px 4px;width:80px;"
-            onchange="repartoEtaStart=this.value;renderAllDriverCols();">
-          <label style="font-size:.62rem;color:var(--mut);">KM/H</label>
-          <input type="number" id="reparto-eta-speed" value="25" min="10" max="80"
-            style="background:var(--surf2);border:1px solid var(--brd);border-radius:5px;color:var(--txt);font-size:.7rem;padding:2px 4px;width:48px;"
-            onchange="repartoEtaSpeed=parseInt(this.value)||25;renderAllDriverCols();">
-          <label style="font-size:.62rem;color:var(--mut);">Min/cliente</label>
-          <input type="number" id="reparto-eta-service" value="10" min="1" max="60"
-            style="background:var(--surf2);border:1px solid var(--brd);border-radius:5px;color:var(--txt);font-size:.7rem;padding:2px 4px;width:44px;"
-            onchange="repartoEtaService=parseInt(this.value)||10;renderAllDriverCols();">
-        </div>
+      <div style="padding:.45rem .75rem;border-bottom:1px solid var(--brd);display:flex;gap:.6rem;align-items:center;flex-shrink:0;background:var(--surf);font-size:.72rem;color:var(--mut2);">
+        <span style="font-size:.8rem;">⏱</span>
+        <div>ETA por repartidor: cada columna tiene su propia <b>hora de salida</b>, <b>km/h</b> y <b>min/cliente</b>.</div>
       </div>
 
       <!-- Las 3 columnas de repartidores — cada una tiene su propio punto de partida -->
@@ -2796,10 +2782,10 @@ async function saveSettings(){
     if(ae){
       const na = ae.value.trim();
       dps[i].address = na;
-      dps[i].formatted_address = ae._formatted || na;
-      dps[i].place_id = ae._placeId || '';
-      dps[i].lat = ae._lat != null ? parseFloat(ae._lat) : null;
-      dps[i].lng = ae._lng != null ? parseFloat(ae._lng) : null;
+      dps[i].formatted_address = ae._formatted || dps[i].formatted_address || na;
+      dps[i].place_id = ae._placeId || dps[i].place_id || '';
+      dps[i].lat = ae._lat != null ? parseFloat(ae._lat) : (dps[i].lat != null ? parseFloat(dps[i].lat) : null);
+      dps[i].lng = ae._lng != null ? parseFloat(ae._lng) : (dps[i].lng != null ? parseFloat(dps[i].lng) : null);
     }
   }
   // Guardar solo puntos de partida — la API Key se gestiona desde .env
@@ -2815,6 +2801,11 @@ async function saveSettings(){
 //  MÓDULO MI RUTA — Reparto manual por repartidor
 // ════════════════════════════════════════════════════════
 const REPARTO_DRIVERS = ['jorge','diego','otro'];
+const REPARTO_DRIVER_DEFAULTS = {
+  jorge: { start_time:'14:00', speed_kmh:25, service_min:10 },
+  diego: { start_time:'14:00', speed_kmh:25, service_min:10 },
+  otro:  { start_time:'14:00', speed_kmh:25, service_min:10 },
+};
 
 // Estado independiente por repartidor
 let repartoState = {
@@ -2823,12 +2814,66 @@ let repartoState = {
   otro:  { dp: null, orders: [], dirty: false },
 };
 
-let repartoEtaStart   = '14:00';
-let repartoEtaSpeed   = 25;
-let repartoEtaService = 10;
+let repartoDriverConfig = JSON.parse(JSON.stringify(REPARTO_DRIVER_DEFAULTS));
+
+function loadRepartoDriverConfigs(){
+  try{
+    const raw = localStorage.getItem('reparto_driver_config_v1');
+    if(!raw) return;
+    const parsed = JSON.parse(raw);
+    REPARTO_DRIVERS.forEach(drv=>{
+      repartoDriverConfig[drv] = {
+        ...REPARTO_DRIVER_DEFAULTS[drv],
+        ...(parsed[drv] || {})
+      };
+    });
+  }catch(e){
+    repartoDriverConfig = JSON.parse(JSON.stringify(REPARTO_DRIVER_DEFAULTS));
+  }
+}
+
+function saveRepartoDriverConfigs(){
+  try{
+    localStorage.setItem('reparto_driver_config_v1', JSON.stringify(repartoDriverConfig));
+  }catch(e){}
+}
+
+function getDriverRouteConfig(driver){
+  if(!repartoDriverConfig[driver]){
+    repartoDriverConfig[driver] = { ...REPARTO_DRIVER_DEFAULTS[driver] };
+  }
+  return repartoDriverConfig[driver];
+}
+
+function updateRepartoDriverConfig(driver, field, value){
+  const cfg = getDriverRouteConfig(driver);
+  if(field === 'start_time'){
+    cfg.start_time = value || REPARTO_DRIVER_DEFAULTS[driver].start_time;
+  } else if(field === 'speed_kmh'){
+    cfg.speed_kmh = Math.max(5, parseInt(value) || REPARTO_DRIVER_DEFAULTS[driver].speed_kmh);
+  } else if(field === 'service_min'){
+    cfg.service_min = Math.max(1, parseInt(value) || REPARTO_DRIVER_DEFAULTS[driver].service_min);
+  }
+  saveRepartoDriverConfigs();
+  renderDriverColBody(driver);
+}
+
+function getResolvedRepartoDP(driver){
+  let dp = repartoState[driver]?.dp || null;
+  if(!dp) return null;
+  if((dp.lat == null || dp.lng == null) && dp.id){
+    const found = (appConfig.departure_points||[]).find(p => p.id === dp.id);
+    if(found){
+      repartoState[driver].dp = found;
+      dp = found;
+    }
+  }
+  return dp;
+}
 
 // ── Inicializar módulo ────────────────────────────────────────────────────
 async function initReparto(){
+  loadRepartoDriverConfigs();
   // Asegurar deliveries cargados
   if(!deliveries || deliveries.length === 0){
     try{
@@ -2870,7 +2915,7 @@ function selectRepartoDPForDriver(driver, dpId){
   // Actualizar label de DP en cabecera de columna
   const dpInfo = document.getElementById(`reparto-dp-info-${driver}`);
   if(dpInfo){
-    const dp = repartoState[driver].dp;
+    const dp = getResolvedRepartoDP(driver);
     dpInfo.innerHTML = dp
       ? `<span style="color:var(--acc);font-weight:700;"> · ${dp.name}</span>`
       : `<span style="color:#f59e0b;"> · Sin seleccionar</span>`;
@@ -2900,21 +2945,24 @@ function _buildDPButtonsHTML(driver){
 }
 
 // ── ETAs para un repartidor desde su propio DP ────────────────────────────
-function calcRepartoETAs(origin, stops){
+function calcRepartoETAs(origin, stops, driver){
   if(!origin?.lat) return stops.map(()=>null);
-  const [sh,sm] = repartoEtaStart.split(':').map(Number);
-  let cursor = sh*60 + sm;
+  const cfg = getDriverRouteConfig(driver);
+  const [sh,sm] = (cfg.start_time || '14:00').split(':').map(Number);
+  let cursor = (Number.isFinite(sh)?sh:14)*60 + (Number.isFinite(sm)?sm:0);
+  const speed = Math.max(5, parseInt(cfg.speed_kmh) || 25);
+  const service = Math.max(1, parseInt(cfg.service_min) || 10);
   const hav = (a,b)=>{
     if(!a?.lat||!b?.lat) return 15;
     const R=6371, dLat=(b.lat-a.lat)*Math.PI/180, dLng=(b.lng-a.lng)*Math.PI/180;
     const x=Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
-    return Math.round(R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))/repartoEtaSpeed*60);
+    return Math.round(R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))/speed*60);
   };
   const fmt = m=>`${String(Math.floor(m/60)%24).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
   const etas=[]; let prev=origin;
   for(const s of stops){
     const t=hav(prev,s); const arr=cursor+t;
-    etas.push({arr:fmt(arr), trav:t}); cursor=arr+repartoEtaService; prev=s;
+    etas.push({arr:fmt(arr), trav:t}); cursor=arr+service; prev=s;
   }
   return etas;
 }
@@ -2971,8 +3019,9 @@ function buildDriverCol(driver){
   const stops   = getSortedStops(driver);
   const pending = stops.filter(s=>!s.completed);
   const done    = stops.filter(s=>s.completed);
-  const dp      = repartoState[driver].dp;
+  const dp      = getResolvedRepartoDP(driver);
   const dirty   = repartoState[driver].dirty;
+  const cfg     = getDriverRouteConfig(driver);
 
   col.innerHTML = `
     <div class="reparto-driver-hd">
@@ -2992,6 +3041,26 @@ function buildDriverCol(driver){
       <div class="reparto-dp-grid" id="reparto-dp-wrap-${driver}">
         ${_buildDPButtonsHTML(driver)}
       </div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.35rem;margin-top:.45rem;">
+        <label style="display:flex;flex-direction:column;gap:.15rem;font-size:.62rem;color:var(--mut);">
+          Salida
+          <input type="time" value="${cfg.start_time || '14:00'}"
+            style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.72rem;padding:.32rem .4rem;"
+            onchange="updateRepartoDriverConfig('${driver}','start_time',this.value)">
+        </label>
+        <label style="display:flex;flex-direction:column;gap:.15rem;font-size:.62rem;color:var(--mut);">
+          KM/H
+          <input type="number" value="${cfg.speed_kmh ?? 25}" min="5" max="120"
+            style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.72rem;padding:.32rem .4rem;"
+            onchange="updateRepartoDriverConfig('${driver}','speed_kmh',this.value)">
+        </label>
+        <label style="display:flex;flex-direction:column;gap:.15rem;font-size:.62rem;color:var(--mut);">
+          Min/cliente
+          <input type="number" value="${cfg.service_min ?? 10}" min="1" max="90"
+            style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.72rem;padding:.32rem .4rem;"
+            onchange="updateRepartoDriverConfig('${driver}','service_min',this.value)">
+        </label>
+      </div>
     </div>
     <div class="reparto-driver-body" id="reparto-body-${driver}">
       <div id="reparto-list-${driver}"></div>
@@ -3002,7 +3071,6 @@ function buildDriverCol(driver){
       </button>` : ''}
     </div>`;
 
-  // Poblar lista (col ya tiene innerHTML, querySelector funciona)
   const listEl = col.querySelector(`#reparto-list-${driver}`);
   if(listEl) _fillStopsList(listEl, driver, stops);
   return col;
@@ -3015,8 +3083,8 @@ function _fillStopsList(listEl, driver, stops){
     listEl.innerHTML = `<div class="reparto-empty"><span style="font-size:1.8rem;">📭</span>Sin repartos hoy</div>`;
     return;
   }
-  const dp   = repartoState[driver].dp;
-  const etas = calcRepartoETAs(dp, stops);
+  const dp   = getResolvedRepartoDP(driver);
+  const etas = calcRepartoETAs(dp, stops, driver);
   listEl.innerHTML = stops.map((s,i)=>{
     const eta = etas[i];
     const navDest = (s.lat&&s.lng) ? `${s.lat},${s.lng}` : encodeURIComponent(s.formatted_address||s.address||'');
@@ -3047,15 +3115,11 @@ function _fillStopsList(listEl, driver, stops){
 
 // ── Re-renderizar cuerpo de una columna ya en el DOM ─────────────────────
 function renderDriverColBody(driver){
-  const listEl = document.getElementById(`reparto-list-${driver}`);
-  if(listEl) _fillStopsList(listEl, driver, getSortedStops(driver));
-  // Actualizar badge
-  const stops = getSortedStops(driver);
-  const badge = document.querySelector(`#reparto-col-${driver} .reparto-driver-badge`);
-  if(badge){
-    badge.textContent  = stops.length>0 ? `${stops.filter(s=>!s.completed).length} pend · ${stops.filter(s=>s.completed).length} ✓` : 'Sin repartos';
-    badge.className    = `reparto-driver-badge${stops.length>0?' has-stops':''}`;
-  }
+  const oldCol = document.getElementById(`reparto-col-${driver}`);
+  if(!oldCol) return;
+  const newCol = buildDriverCol(driver);
+  oldCol.replaceWith(newCol);
+  wireDriverSortables();
 }
 
 // ── Ver solo este repartidor en el mapa ───────────────────────────────────
@@ -3063,7 +3127,7 @@ function verRepartoEnMapa(driver){
   clearRouteLines();
   Object.keys(markers).forEach(k=>{map.removeLayer(markers[k]);delete markers[k];});
 
-  const dp = repartoState[driver].dp;
+  const dp = getResolvedRepartoDP(driver);
   const stops = getSortedStops(driver).filter(s=>s.lat&&s.lng);
 
   if(!dp){
@@ -3139,7 +3203,7 @@ function verRepartoEnMapa(driver){
 
 // ── Guardar orden + DP del repartidor en servidor ─────────────────────────
 async function saveRepartoOrder(driver){
-  const dp = repartoState[driver].dp;
+  const dp = getResolvedRepartoDP(driver);
   if(!dp?.id){ toast(`⚠️ Selecciona punto de partida para ${driver}`); return; }
   const stops = getSortedStops(driver);
   if(!stops.length){ toast('Sin repartos para guardar'); return; }
