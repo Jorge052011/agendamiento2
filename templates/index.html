@@ -361,6 +361,8 @@ textarea{resize:vertical;min-height:50px;}
 .r-nav-row button:hover{border-color:var(--acc);}
 .reparto-save-btn{width:100%;padding:.5rem;background:var(--surf2);border:1.5px solid var(--brd2);border-radius:8px;color:var(--mut);font-size:.72rem;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;margin-top:.4rem;transition:all .2s;}
 .reparto-save-btn.dirty{border-color:var(--acc);color:var(--acc);background:rgba(240,224,64,.07);}
+.reparto-apply-btn{width:100%;padding:.5rem;background:rgba(64,240,144,.08);border:1.5px solid rgba(64,240,144,.35);border-radius:8px;color:var(--grn);font-size:.72rem;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;margin-top:.35rem;transition:all .2s;}
+.reparto-apply-btn:hover{filter:brightness(1.08);border-color:var(--grn);}
 /* ── Tracking GPS ── */
 .tracking-card{background:var(--bg);border:1px solid var(--brd);border-radius:8px;padding:.6rem .8rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.7rem;}
 .tracking-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;animation:markerPulse 1.2s ease-out infinite;}
@@ -1773,6 +1775,7 @@ function renderList(){
   if(currentFilter==='diego')list=deliveries.filter(d=>d.driver==='diego');
   if(currentFilter==='otro') list=deliveries.filter(d=>d.driver==='otro');
   if(currentFilter==='pending')list=deliveries.filter(d=>!d.completed);
+  list = sortListByAppliedRouteOrder(list);
   document.getElementById('list-count').textContent=list.length;
   if(!list.length){
     el.innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div class="empty-txt">Sin entregas para ${fmtDate(selectedDate)}.</div></div>`;
@@ -1888,11 +1891,9 @@ function renderRoutes(){
   const drivers=[...new Set(deliveries.map(d=>d.driver))];
   if(!drivers.length){el.innerHTML=`<div class="empty"><div class="empty-icon">🗺️</div><div class="empty-txt">Sin rutas para este día.</div></div>`;return;}
   el.innerHTML=drivers.map(drv=>{
-    const dd=deliveries.filter(d=>d.driver===drv);
-    // Calcular ETAs para este conductor usando el origen ficticio (sin coords reales aquí)
-    const drvWithCoords = dd.filter(x=>x.lat&&x.lng);
-    const fakeOrigin = drvWithCoords.length ? {lat:drvWithCoords[0].lat, lng:drvWithCoords[0].lng} : {};
-    const drvEtas = calcETAs(fakeOrigin, dd);
+    const dd = getSortedStops(drv);
+    const origin = getResolvedRepartoDP(drv);
+    const drvEtas = calcRepartoETAs(origin, dd, drv);
     const stops=dd.map((d,i)=>{
       const ref=d.reference||(d._client&&d._client.reference)||'';
       const navDest = (d.lat && d.lng) ? `${d.lat},${d.lng}` : encodeURIComponent(d.address);
@@ -1902,7 +1903,7 @@ function renderRoutes(){
         <div class="snum" style="background:${COLORS[drv]};color:#000">${i+1}</div>
         <div class="sbody">
           <div class="sname">${d.name} ${d.completed?'✅':''}</div>
-          ${eta?`<div class="seta">🕐 Llegada estimada: ~${eta.arrivalStr}</div>`:''}
+          ${eta?.arr ? `<div class="seta">🕐 Llegada estimada: ~${eta.arr}</div>` : ''}
           <div class="saddr">${d.address}</div>
           ${ref?`<div class="sref">🔖 ${ref}</div>`:''}
           ${d.client_phone?`<div class="saddr">📞 ${d.client_phone}</div>`:''}
@@ -3018,6 +3019,18 @@ function getSortedStops(driver){
   return [...inOrder, ...rest];
 }
 
+function sortListByAppliedRouteOrder(list){
+  const indexMap = new Map(deliveries.map((d,i)=>[d.id, i]));
+  return [...list].sort((a,b)=>{
+    if(a.driver === b.driver){
+      const ao = Number.isFinite(Number(a.route_order)) ? Number(a.route_order) : Number.MAX_SAFE_INTEGER;
+      const bo = Number.isFinite(Number(b.route_order)) ? Number(b.route_order) : Number.MAX_SAFE_INTEGER;
+      if(ao !== bo) return ao - bo;
+    }
+    return (indexMap.get(a.id) ?? 0) - (indexMap.get(b.id) ?? 0);
+  });
+}
+
 // ── Renderizar todas las columnas ─────────────────────────────────────────
 function renderAllDriverCols(){
   const wrap = document.getElementById('reparto-drivers-wrap');
@@ -3107,6 +3120,10 @@ function buildDriverCol(driver){
       <button id="reparto-save-${driver}" class="reparto-save-btn${dirty?' dirty':''}"
               onclick="saveRepartoOrder('${driver}')">
         ${dirty ? '💾 Guardar orden' : '✅ Orden guardado'}
+      </button>
+      <button id="reparto-apply-${driver}" class="reparto-apply-btn"
+              onclick="applyRepartoOrderToViews('${driver}')">
+        🔄 Aplicar a vistas
       </button>` : ''}
     </div>`;
 
@@ -3254,6 +3271,33 @@ async function saveRepartoOrder(driver){
     if(btn){ btn.classList.remove('dirty'); btn.textContent='✅ Orden guardado'; }
     toast(`💾 Ruta de ${driver} guardada`);
   } catch(e){ toast('❌ Error al guardar'); }
+}
+
+async function applyRepartoOrderToViews(driver){
+  const ordered = getSortedStops(driver);
+  if(!ordered.length){
+    toast(`⚠️ ${driver} no tiene repartos para aplicar`);
+    return;
+  }
+
+  const patches = [];
+  deliveries
+    .filter(d => d.driver === driver)
+    .forEach(d => { d.route_order = null; });
+
+  ordered.forEach((d, i) => {
+    d.route_order = i + 1;
+    patches.push(patchDelivery(d.id, { route_order: i + 1 }));
+  });
+
+  try{
+    await Promise.all(patches);
+  } catch(e){}
+
+  renderList();
+  renderRoutes();
+  renderDriverColBody(driver);
+  toast(`🔄 Orden de ${driver} aplicado a Pedidos y Rutas`);
 }
 
 // ── Refrescar al cambiar fecha o llegar nuevo pedido ─────────────────────
