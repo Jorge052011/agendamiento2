@@ -312,6 +312,55 @@ textarea{resize:vertical;min-height:50px;}
 .btn-gmaps:hover{opacity:.9;}
 .btn-ver-mapa{background:var(--surf3);border:1.5px solid var(--acc);color:var(--acc);font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;border-radius:9px;padding:11px;cursor:pointer;width:100%;margin-top:.5rem;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;touch-action:manipulation;}
 .btn-ver-mapa:hover{background:rgba(240,224,64,.1);}
+/* ── MI RUTA (Módulo Reparto) ── */
+.reparto-dp-section{padding:.6rem .8rem .4rem;flex-shrink:0;border-bottom:1px solid var(--brd);}
+.reparto-dp-title{font-size:.68rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem;}
+.reparto-dp-grid{display:flex;flex-wrap:wrap;gap:.35rem;}
+.reparto-dp-btn{background:var(--surf2);border:1.5px solid var(--brd);border-radius:8px;padding:.35rem .65rem;font-size:.72rem;cursor:pointer;color:var(--txt);transition:all .15s;text-align:left;}
+.reparto-dp-btn.selected{border-color:var(--acc);color:var(--acc);background:rgba(240,224,64,.08);}
+.reparto-drivers-wrap{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;flex:1;min-height:0;}
+.reparto-drivers-wrap::-webkit-scrollbar{height:3px;}
+.reparto-drivers-wrap::-webkit-scrollbar-thumb{background:var(--brd2);border-radius:3px;}
+.reparto-driver-col{min-width:280px;max-width:340px;width:85vw;flex-shrink:0;scroll-snap-align:start;display:flex;flex-direction:column;border-right:1px solid var(--brd);height:100%;}
+@media(min-width:901px){
+  .reparto-driver-col{min-width:0;flex:1;width:auto;}
+  .reparto-drivers-wrap{overflow-x:visible;}
+}
+.reparto-driver-hd{display:flex;align-items:center;gap:.45rem;padding:.55rem .75rem .4rem;border-bottom:1px solid var(--brd);flex-shrink:0;}
+.reparto-driver-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;}
+.reparto-driver-name.jorge{color:var(--jorge);}
+.reparto-driver-name.diego{color:var(--diego);}
+.reparto-driver-name.otro{color:var(--otro);}
+.reparto-driver-badge{font-size:.65rem;font-weight:700;background:var(--surf3);border-radius:20px;padding:2px 7px;color:var(--mut);}
+.reparto-driver-badge.has-stops{background:rgba(240,224,64,.12);color:var(--acc);}
+.reparto-btn-mapa{margin-left:auto;background:transparent;border:1px solid var(--brd2);border-radius:6px;color:var(--mut);font-size:.68rem;padding:3px 8px;cursor:pointer;white-space:nowrap;transition:all .15s;}
+.reparto-btn-mapa:hover{border-color:var(--acc);color:var(--acc);}
+.reparto-driver-body{flex:1;overflow-y:auto;padding:.4rem .5rem;}
+.reparto-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;padding:1.5rem .5rem;color:var(--mut);font-size:.78rem;text-align:center;}
+.reparto-stop{display:flex;gap:6px;align-items:flex-start;padding:5px 3px;border-top:1px solid var(--brd);cursor:grab;transition:background .15s;}
+.reparto-stop:first-child{border-top:none;}
+.reparto-stop:active{cursor:grabbing;}
+.reparto-stop.sortable-ghost{opacity:.3;background:var(--surf3);border-radius:7px;}
+.reparto-stop.sortable-chosen{background:rgba(240,224,64,.05);border-radius:7px;}
+.reparto-stop.r-completed{cursor:default;opacity:.6;background:rgba(0,200,83,.04);border-radius:8px;padding:5px 4px;}
+.reparto-stop.r-completed .r-snum{background:#00c853!important;color:#000!important;}
+.reparto-stop.r-completed .r-sname{text-decoration:line-through;color:var(--mut);}
+.r-drag{font-size:1rem;color:var(--mut2);padding-top:1px;flex-shrink:0;user-select:none;}
+.r-snum{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;color:#000;flex-shrink:0;margin-top:1px;}
+.r-snum.jorge{background:var(--jorge);}
+.r-snum.diego{background:var(--diego);}
+.r-snum.otro{background:var(--otro);}
+.r-sbody{flex:1;min-width:0;}
+.r-sname{font-size:.78rem;font-weight:600;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.r-saddr{font-size:.67rem;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;}
+.r-seta{font-size:.63rem;color:#60a5fa;margin-top:1px;}
+.r-chips{display:flex;gap:3px;flex-wrap:wrap;margin-top:2px;}
+.r-chip{font-size:.6rem;padding:1px 5px;border-radius:4px;background:var(--surf3);color:var(--mut2);}
+.r-nav-row{display:flex;gap:4px;margin-top:4px;}
+.r-nav-row button{font-size:.62rem;padding:2px 7px;border-radius:5px;border:1px solid var(--brd2);background:var(--surf2);color:var(--txt);cursor:pointer;}
+.r-nav-row button:hover{border-color:var(--acc);}
+.reparto-save-btn{width:100%;padding:.5rem;background:var(--surf2);border:1.5px solid var(--brd2);border-radius:8px;color:var(--mut);font-size:.72rem;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;margin-top:.4rem;transition:all .2s;}
+.reparto-save-btn.dirty{border-color:var(--acc);color:var(--acc);background:rgba(240,224,64,.07);}
 /* ── Tracking GPS ── */
 .tracking-card{background:var(--bg);border:1px solid var(--brd);border-radius:8px;padding:.6rem .8rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.7rem;}
 .tracking-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;animation:markerPulse 1.2s ease-out infinite;}
@@ -541,6 +590,7 @@ textarea{resize:vertical;min-height:50px;}
     <button class="nb" onclick="switchPanel('form',this)">➕ Nuevo</button>
     <button class="nb" onclick="switchPanel('routes',this)">🗺️ Rutas</button>
     <button class="nb" onclick="switchPanel('optimizer',this)">⚡ Optimizar</button>
+    <button class="nb" onclick="switchPanel('reparto',this)">📍 Mi Ruta</button>
     <button class="nb" onclick="switchPanel('clients',this)">👥 Clientes</button>
     <button class="nb" onclick="switchPanel('carga',this)">📦 Carga</button>
     <button class="nb" onclick="switchPanel('settings',this)">⚙️</button>
@@ -879,6 +929,45 @@ textarea{resize:vertical;min-height:50px;}
       </div>
     </div>
 
+    <!-- MI RUTA — Módulo de reparto manual por repartidor -->
+    <div id="page-reparto" class="page" style="flex-direction:column;overflow:hidden;">
+      <div class="panel-hd" style="flex-shrink:0;">
+        <div class="panel-title">📍 Mi Ruta</div>
+      </div>
+
+      <!-- Punto de partida -->
+      <div class="reparto-dp-section" id="reparto-dp-section">
+        <div class="reparto-dp-title">📍 Punto de partida</div>
+        <div class="reparto-dp-grid" id="reparto-dp-buttons">
+          <div style="font-size:.72rem;color:var(--mut);">Cargando...</div>
+        </div>
+      </div>
+
+      <!-- ETA params (colapsado, compacto) -->
+      <div style="padding:.3rem .75rem;border-bottom:1px solid var(--brd);display:flex;gap:.6rem;align-items:center;flex-shrink:0;background:var(--surf);">
+        <span style="font-size:.65rem;color:var(--mut);font-weight:700;">⏱</span>
+        <div style="display:flex;gap:.4rem;align-items:center;flex-wrap:wrap;">
+          <label style="font-size:.62rem;color:var(--mut);">Salida</label>
+          <input type="time" id="reparto-eta-start" value="14:00"
+            style="background:var(--surf2);border:1px solid var(--brd);border-radius:5px;color:var(--txt);font-size:.7rem;padding:2px 4px;width:80px;"
+            onchange="repartoEtaStart=this.value;renderAllDriverCols();">
+          <label style="font-size:.62rem;color:var(--mut);">km/h</label>
+          <input type="number" id="reparto-eta-speed" value="25" min="10" max="80"
+            style="background:var(--surf2);border:1px solid var(--brd);border-radius:5px;color:var(--txt);font-size:.7rem;padding:2px 4px;width:48px;"
+            onchange="repartoEtaSpeed=parseInt(this.value)||25;renderAllDriverCols();">
+          <label style="font-size:.62rem;color:var(--mut);">min/cliente</label>
+          <input type="number" id="reparto-eta-service" value="10" min="1" max="60"
+            style="background:var(--surf2);border:1px solid var(--brd);border-radius:5px;color:var(--txt);font-size:.7rem;padding:2px 4px;width:44px;"
+            onchange="repartoEtaService=parseInt(this.value)||10;renderAllDriverCols();">
+        </div>
+      </div>
+
+      <!-- Las 3 columnas de repartidores, scroll horizontal en móvil -->
+      <div class="reparto-drivers-wrap" id="reparto-drivers-wrap">
+        <!-- Generadas por JS -->
+      </div>
+    </div>
+
     <!-- CLIENTES -->
     <div id="page-clients" class="page">
       <div class="panel-hd">
@@ -996,6 +1085,7 @@ textarea{resize:vertical;min-height:50px;}
     <button class="mnb"        data-tab="map"       onclick="mobSwitch('map',this)"><span class="ico">🗺️</span>Mapa</button>
     <button class="mnb"        data-tab="routes"    onclick="mobSwitch('routes',this)"><span class="ico">📍</span>Rutas</button>
     <button class="mnb"        data-tab="optimizer" onclick="mobSwitch('optimizer',this)"><span class="ico">⚡</span>Ruta opt.</button>
+    <button class="mnb"        data-tab="reparto"   onclick="mobSwitch('reparto',this)"><span class="ico">📍</span>Mi Ruta</button>
     <button class="mnb"        data-tab="carga"     onclick="mobSwitch('carga',this)"><span class="ico">📦</span>Carga</button>
     <button class="mnb"        data-tab="clients"   onclick="mobSwitch('clients',this)"><span class="ico">👥</span>Clientes</button>
     <button class="mnb"        data-tab="settings"  onclick="mobSwitch('settings',this)"><span class="ico">⚙️</span>Config</button>
@@ -1366,6 +1456,10 @@ async function selectDate(ds){
   const r=await fetch(`/api/deliveries?date=${ds}&_=${Date.now()}`);
   deliveries=await r.json();
   renderAll();refreshMarkers();
+  // Si el módulo Mi Ruta está visible, refrescar
+  if(document.getElementById('page-reparto')?.classList.contains('active')){
+    refreshReparto();
+  }
 }
 
 // ════════════════════════════════════════════════════════
@@ -1577,6 +1671,10 @@ async function patchDelivery(id,data){
           currentOptResult.ordered[oi].arrived_at=u.arrived_at;
           renderOptResult(currentOptResult);
         }
+      }
+      // Actualizar columna del repartidor en Mi Ruta si está visible
+      if(document.getElementById('page-reparto')?.classList.contains('active')){
+        renderAllDriverCols();
       }
     }
     else{const err=await r.json().catch(()=>({}));toast('❌ Error al guardar: '+(err.error||r.status));}
@@ -2713,6 +2811,259 @@ async function saveSettings(){
 }
 
 // ════════════════════════════════════════════════════════
+//  MÓDULO MI RUTA — Reparto manual por repartidor
+// ════════════════════════════════════════════════════════
+const REPARTO_DRIVERS = ['jorge','diego','otro'];
+let repartoDP        = null;   // punto de partida seleccionado
+let repartoEtaStart  = '14:00';
+let repartoEtaSpeed  = 25;
+let repartoEtaService= 10;
+let repartoDirty     = {};     // {driver: bool} si tiene cambios sin guardar
+let repartoOrders    = {};     // {driver: [ids]} orden manual guardado/local
+
+// ── Inicializar módulo ────────────────────────────────────────────────────
+async function initReparto(){
+  renderRepartoDPButtons();
+  // Cargar órdenes guardadas de cada repartidor
+  for(const drv of REPARTO_DRIVERS){
+    try{
+      const r = await fetch(`/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
+      if(r.ok){
+        const data = await r.json();
+        if(data?.ordered?.length){
+          repartoOrders[drv] = data.ordered.map(s=>s.id);
+          if(!repartoDP && data.origin){ repartoDP = data.origin; }
+        }
+      }
+    } catch(e){}
+  }
+  renderAllDriverCols();
+}
+
+// ── Punto de partida (reutiliza appConfig.departure_points) ───────────────
+function renderRepartoDPButtons(){
+  const c = document.getElementById('reparto-dp-buttons');
+  if(!c) return;
+  const points = appConfig.departure_points || [];
+  c.innerHTML = points.map(dp=>`
+    <div class="reparto-dp-btn${repartoDP?.id===dp.id?' selected':''}" id="rdpbtn-${dp.id}" onclick="selectRepartoDP('${dp.id}')">
+      📍 ${dp.name}
+    </div>`).join('') + `
+    <div class="reparto-dp-btn${repartoDP?.id==='custom'?' selected':''}" id="rdpbtn-custom" onclick="selectRepartoDP('custom')" style="color:var(--mut);">
+      ✏️ Personalizado
+    </div>`;
+}
+
+function selectRepartoDP(id){
+  if(id==='custom'){
+    repartoDP = { id:'custom', name:'Punto personalizado', lat:null, lng:null };
+  } else {
+    repartoDP = (appConfig.departure_points||[]).find(p=>p.id===id)||null;
+  }
+  renderRepartoDPButtons();
+  renderAllDriverCols(); // recalcular ETAs con nuevo origen
+}
+
+// ── Calcular ETAs para una lista de paradas ───────────────────────────────
+function calcRepartoETAs(origin, stops){
+  if(!origin?.lat) return stops.map(()=>null);
+  const [sh,sm] = repartoEtaStart.split(':').map(Number);
+  let cursor = sh*60 + sm;
+  const hav = (a,b)=>{
+    if(!a?.lat||!b?.lat) return 15;
+    const R=6371,dLat=(b.lat-a.lat)*Math.PI/180,dLng=(b.lng-a.lng)*Math.PI/180;
+    const x=Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
+    return Math.round(R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))/repartoEtaSpeed*60);
+  };
+  const fmt=m=>`${String(Math.floor(m/60)%24).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+  const etas=[]; let prev=origin;
+  for(const s of stops){
+    const t=hav(prev,s); const arr=cursor+t;
+    etas.push({arr:fmt(arr), trav:t}); cursor=arr+repartoEtaService; prev=s;
+  }
+  return etas;
+}
+
+// ── Ordenar entregas de un repartidor según orden guardado ────────────────
+function getSortedStops(driver){
+  const today = deliveries.filter(d=>
+    d.driver===driver && d.delivery_date===selectedDate
+  );
+  const saved  = repartoOrders[driver] || [];
+  const inOrder = saved.map(id=>today.find(d=>d.id===id)).filter(Boolean);
+  const rest    = today.filter(d=>!saved.includes(d.id));
+  return [...inOrder, ...rest];
+}
+
+// ── Renderizar todas las columnas ─────────────────────────────────────────
+function renderAllDriverCols(){
+  const wrap = document.getElementById('reparto-drivers-wrap');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  for(const drv of REPARTO_DRIVERS){
+    wrap.appendChild(buildDriverCol(drv));
+  }
+  // Inicializar SortableJS en cada columna
+  for(const drv of REPARTO_DRIVERS){
+    const listEl = document.getElementById(`reparto-list-${drv}`);
+    if(listEl && window.Sortable){
+      Sortable.create(listEl,{
+        animation:150,
+        handle:'.r-drag',
+        ghostClass:'sortable-ghost',
+        chosenClass:'sortable-chosen',
+        filter:'.r-completed',    // no arrastrar completados
+        onEnd(){
+          const ids = Array.from(listEl.querySelectorAll('.reparto-stop[data-id]'))
+            .map(el=>el.dataset.id);
+          repartoOrders[drv] = ids;
+          repartoDirty[drv]  = true;
+          // Marcar botón guardar como sucio
+          const btn = document.getElementById(`reparto-save-${drv}`);
+          if(btn){ btn.classList.add('dirty'); btn.textContent='💾 Guardar orden'; }
+          renderDriverColBody(drv); // re-render para recalcular ETAs
+        }
+      });
+    }
+  }
+}
+
+// ── Construir columna de un repartidor ────────────────────────────────────
+function buildDriverCol(driver){
+  const col = document.createElement('div');
+  col.className='reparto-driver-col';
+  col.id=`reparto-col-${driver}`;
+  const stops  = getSortedStops(driver);
+  const pending= stops.filter(s=>!s.completed);
+  const done   = stops.filter(s=>s.completed);
+  const hasBadge = stops.length > 0;
+
+  col.innerHTML=`
+    <div class="reparto-driver-hd">
+      <span class="reparto-driver-name ${driver}">${driver.charAt(0).toUpperCase()+driver.slice(1)}</span>
+      <span class="reparto-driver-badge${hasBadge?' has-stops':''}">
+        ${stops.length>0 ? `${pending.length} pend · ${done.length} ✓` : 'Sin repartos'}
+      </span>
+      <button class="reparto-btn-mapa" onclick="verRepartoEnMapa('${driver}')">🗺️ Mapa</button>
+    </div>
+    <div class="reparto-driver-body" id="reparto-body-${driver}">
+      <div id="reparto-list-${driver}"></div>
+      ${stops.length>0 ? `<button id="reparto-save-${driver}" class="reparto-save-btn${repartoDirty[driver]?' dirty':''}" onclick="saveRepartoOrder('${driver}')">
+        ${repartoDirty[driver]?'💾 Guardar orden':'✅ Orden guardado'}
+      </button>` : ''}
+    </div>`;
+
+  // Renderizar stops en el listEl
+  renderDriverColBody(driver, col);
+  return col;
+}
+
+// ── Renderizar el cuerpo (lista de paradas) ────────────────────────────────
+function renderDriverColBody(driver, colEl){
+  const listEl = (colEl||document).getElementById(`reparto-list-${driver}`);
+  if(!listEl) return;
+  const stops = getSortedStops(driver);
+
+  if(stops.length===0){
+    listEl.innerHTML=`<div class="reparto-empty"><span style="font-size:1.8rem;">📭</span>Sin repartos hoy</div>`;
+    return;
+  }
+
+  const etas = calcRepartoETAs(repartoDP, stops);
+
+  listEl.innerHTML = stops.map((s,i)=>{
+    const eta = etas[i];
+    const navDest = (s.lat&&s.lng) ? `${s.lat},${s.lng}` : encodeURIComponent(s.formatted_address||s.address||'');
+    const gmUrl = `https://www.google.com/maps/dir/?api=1&destination=${navDest}&travelmode=driving&dir_action=navigate`;
+    const wzUrl = `https://waze.com/ul?ll=${s.lat&&s.lng?s.lat+','+s.lng:''}&q=${encodeURIComponent(s.formatted_address||s.address||'')}&navigate=yes`;
+    const chips = [
+      s.amount  ? `<span class="r-chip">💵 ${s.amount}</span>`  : '',
+      s.product ? `<span class="r-chip">📦 ${s.product}</span>` : '',
+      s.payment ? `<span class="r-chip">💳 ${s.payment}</span>` : '',
+    ].filter(Boolean).join('');
+
+    return `<div class="reparto-stop${s.completed?' r-completed':''}" data-id="${s.id}">
+      ${!s.completed?`<span class="r-drag" title="Arrastrar">⠿</span>`:'<span style="width:14px;flex-shrink:0;"></span>'}
+      <div class="r-snum ${driver}">${i+1}</div>
+      <div class="r-sbody">
+        <div class="r-sname">${s.name||'Sin nombre'}${s.completed?'<span style="font-size:.6rem;background:#00c853;color:#000;border-radius:4px;padding:1px 5px;margin-left:4px;">✓</span>':''}</div>
+        ${eta&&!s.completed?`<div class="r-seta">🕐 ~${eta.arr} · ${eta.trav} min viaje</div>`:''}
+        <div class="r-saddr">${s.formatted_address||s.address||'Sin dirección'}</div>
+        ${s.reference?`<div style="font-size:.62rem;color:var(--mut2);margin-top:1px;">🔖 ${s.reference}</div>`:''}
+        ${chips?`<div class="r-chips">${chips}</div>`:''}
+        ${!s.completed?`<div class="r-nav-row">
+          <button onclick="window.open('${gmUrl}','_blank')">🗺️ GMaps</button>
+          <button onclick="window.open('${wzUrl}','_blank')">🚗 Waze</button>
+        </div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Ver en mapa solo ese repartidor ──────────────────────────────────────
+function verRepartoEnMapa(driver){
+  // Limpiar mapa y mostrar solo markers de este repartidor
+  clearRouteLines();
+  Object.keys(markers).forEach(k=>{map.removeLayer(markers[k]);delete markers[k];});
+  const stops = getSortedStops(driver).filter(s=>s.lat&&s.lng);
+  stops.forEach((s,i)=>{
+    const icon = makeIcon(s.driver, i+1, 38, !s.completed);
+    const m = L.marker([s.lat,s.lng],{icon});
+    m.addTo(map);
+    markers[`rep_${s.id}`]=m;
+  });
+  if(stops.length){
+    const lats=stops.map(s=>s.lat), lngs=stops.map(s=>s.lng);
+    map.fitBounds([[Math.min(...lats),Math.min(...lngs)],[Math.max(...lats),Math.max(...lngs)]],{padding:[30,30]});
+  }
+  // En móvil: ir al mapa
+  const isMob = window.innerWidth<=900;
+  if(isMob){
+    const mapCol=document.getElementById('map-col');
+    const panel=document.querySelector('.panel');
+    panel.style.display='none';mapCol.classList.add('mob-show');
+    setTimeout(()=>map.invalidateSize(),150);
+  }
+  toast(`🗺️ Mostrando ${stops.length} paradas de ${driver.charAt(0).toUpperCase()+driver.slice(1)}`);
+}
+
+// ── Guardar orden en servidor ─────────────────────────────────────────────
+async function saveRepartoOrder(driver){
+  const stops = getSortedStops(driver);
+  if(!stops.length){ toast('Sin repartos para guardar'); return; }
+  if(!repartoDP){ toast('⚠️ Selecciona un punto de partida'); return; }
+  const result = {
+    origin:  repartoDP,
+    ordered: stops,
+    stops:   stops.length,
+    total_km: null
+  };
+  try{
+    await fetch('/api/opt-route',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({date:selectedDate, driver, result})
+    });
+    repartoDirty[driver]=false;
+    const btn=document.getElementById(`reparto-save-${driver}`);
+    if(btn){btn.classList.remove('dirty');btn.textContent='✅ Orden guardado';}
+    toast(`💾 Orden de ${driver} guardado`);
+  } catch(e){ toast('❌ Error al guardar'); }
+}
+
+// ── Actualizar módulo cuando cambia fecha o llega nuevo pedido ────────────
+async function refreshReparto(){
+  repartoOrders={};repartoDirty={};
+  for(const drv of REPARTO_DRIVERS){
+    try{
+      const r=await fetch(`/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
+      if(r.ok){ const d=await r.json(); if(d?.ordered?.length) repartoOrders[drv]=d.ordered.map(s=>s.id); }
+    }catch(e){}
+  }
+  renderAllDriverCols();
+}
+
+// ════════════════════════════════════════════════════════
 //  NAVEGACIÓN
 // ════════════════════════════════════════════════════════
 function switchPanel(tab,el){
@@ -2722,6 +3073,7 @@ function switchPanel(tab,el){
   if(el)el.classList.add('active');
   if(tab==='clients')loadClients();
   if(tab==='carga'){ initCarga(); }
+  if(tab==='reparto'){ initReparto(); }
   if(tab==='routes'){ startTrackingMonitor(); } else { stopTrackingMonitor(); }
   // Redibujar mapa al volver a tabs que lo muestran
   if(map && ['list','routes'].includes(tab)){ setTimeout(()=>map.invalidateSize(),150); }
@@ -2758,6 +3110,10 @@ function switchPanel(tab,el){
     Object.keys(markers)
       .filter(k=>k.startsWith('opt_'))
       .forEach(k=>{ map.removeLayer(markers[k]); delete markers[k]; });
+    // Al salir de reparto: limpiar marcadores de reparto
+    Object.keys(markers)
+      .filter(k=>k.startsWith('rep_'))
+      .forEach(k=>{ map.removeLayer(markers[k]); delete markers[k]; });
     if(tab==='list') refreshMarkers();
   }
 }
@@ -2785,6 +3141,12 @@ function mobSwitch(tab,el){
         .filter(k => k.startsWith('opt_'))
         .forEach(k => { map.removeLayer(markers[k]); delete markers[k]; });
     }
+    // Al salir de reparto: limpiar marcadores de reparto
+    if(prevTab === 'reparto'){
+      Object.keys(markers)
+        .filter(k => k.startsWith('rep_'))
+        .forEach(k => { map.removeLayer(markers[k]); delete markers[k]; });
+    }
     panel.style.display='';mapCol.classList.remove('mob-show');switchPanel(tab,null);
   }
   document.querySelectorAll('.mnb').forEach(b=>b.classList.remove('active'));
@@ -2792,6 +3154,7 @@ function mobSwitch(tab,el){
   if(tab==='clients')loadClients();
   if(tab==='carga'){ initCarga(); }
   if(tab==='routes')startTrackingMonitor();
+  if(tab==='reparto'){ initReparto(); }
   if(tab==='calendar-mob') renderMobCal();
 }
 
