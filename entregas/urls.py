@@ -8,7 +8,7 @@ urlpatterns = [
     path('api/deliveries',                    views.deliveries,    name='deliveries'),
     path('api/deliveries/<str:delivery_id>',  views.delivery_detail, name='delivery_detail'),
     path('api/calendar',  views.calendar,  name='calendar'),
-    path('api/optimize',  views.optimize,  name='optimize'),
+    #path('api/optimize',  views.optimize,  name='optimize'),
     path('api/config',    views.config,    name='config'),
     # GPS tracking
     path('api/gps/update', views.gps_update, name='gps_update'),
