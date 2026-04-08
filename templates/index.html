@@ -587,6 +587,7 @@ textarea{resize:vertical;min-height:50px;}
 
 <header>
   <div class="logo">Reparto<span>Track</span></div>
+  <button onclick="location.reload()">🔄</button>
   <div class="desk-nav">
     <button class="nb active" onclick="switchPanel('list',this)">📋 Pedidos</button>
     <button class="nb" onclick="switchPanel('form',this)">➕ Nuevo</button>
@@ -596,8 +597,10 @@ textarea{resize:vertical;min-height:50px;}
     <button class="nb" onclick="switchPanel('clients',this)">👥 Clientes</button>
     <button class="nb" onclick="switchPanel('carga',this)">📦 Carga</button>
     <button class="nb" onclick="switchPanel('settings',this)">⚙️</button>
+    
   </div>
   <button class="btn-theme" id="btn-theme" onclick="toggleTheme()" title="Cambiar tema">🌙</button>
+  
   <div class="hdr-date" id="hdr-date">Hoy</div>
 </header>
 
