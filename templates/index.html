@@ -582,8 +582,9 @@ textarea{resize:vertical;min-height:50px;}
 @media(max-width:700px){.carga-body{flex-direction:column;overflow-y:auto;}.carga-col{height:auto;overflow-y:visible;}.carga-col:first-child{border-right:none;border-bottom:1px solid var(--brd);}}
 @media(max-width:900px) and (orientation:landscape){
   #page-reparto{height:100vh!important;min-height:0;}
-  .reparto-drivers-wrap{height:0;flex:1;min-height:80px;}
+  .reparto-drivers-wrap{height:0;flex:1;min-height:80px;scroll-snap-type:none;}
   .reparto-driver-body{-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+  .reparto-driver-col{width:80vw;}
 }
 </style>
 </head>
@@ -3095,6 +3096,11 @@ function wireDriverSortable(driver){
     chosenClass:'sortable-chosen',
     filter:'.r-completed',
     preventOnFilter:false,
+    forceFallback: true,
+    fallbackTolerance: 3,
+    delay: 0,
+    delayOnTouchOnly: false,
+    touchStartThreshold: 3,
     onEnd(){
       const ids = Array.from(listEl.querySelectorAll('.reparto-stop[data-id]'))
         .map(el=>el.dataset.id);
