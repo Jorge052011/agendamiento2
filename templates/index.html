@@ -4079,13 +4079,7 @@ function openDeliveryModal(id, driver){
   document.getElementById('dm-title').textContent = d.name || 'Sin nombre';
   document.getElementById('dm-num').textContent = stopNum;
 
-  const si = d.stock_items || {};
-  const siEntries = Object.entries(si).filter(([k,v]) => v > 0);
-  const stockHtml = siEntries.length
-    ? '<div class="dm-block"><div class="dm-lbl">📦 Detalle bolsas</div><div class="dm-stock">' +
-      siEntries.map(([k,v]) => `<div class="dm-sku">${k} <span>×${v}</span></div>`).join('') +
-      '</div></div><div class="dm-divider"></div>'
-    : '';
+  const stockHtml = '';
 
   document.getElementById('dm-body').innerHTML = `
     <div class="dm-block">
@@ -4104,7 +4098,7 @@ function openDeliveryModal(id, driver){
         <div class="dm-val">${d.amount || '—'}</div>
       </div>
     </div>
-    ${stockHtml}
+
     <div class="dm-row">
       <div class="dm-block">
         <div class="dm-lbl">💳 Forma de pago</div>
