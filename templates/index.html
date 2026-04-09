@@ -345,7 +345,11 @@ textarea{resize:vertical;min-height:50px;}
 .reparto-stop.r-completed{cursor:default;opacity:.6;background:rgba(0,200,83,.04);border-radius:8px;padding:5px 4px;}
 .reparto-stop.r-completed .r-snum{background:#00c853!important;color:#000!important;}
 .reparto-stop.r-completed .r-sname{text-decoration:line-through;color:var(--mut);}
-.r-drag{font-size:1.3rem;color:var(--mut2);padding:4px 6px;flex-shrink:0;user-select:none;touch-action:none;cursor:grab;-webkit-user-select:none;}
+.r-drag{display:none;}
+.r-move-btns{display:flex;flex-direction:column;gap:2px;flex-shrink:0;align-self:center;}
+.r-move-btn{background:var(--surf3);border:1px solid var(--brd2);color:var(--txt);border-radius:5px;width:28px;height:26px;font-size:.85rem;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;transition:background .12s;}
+.r-move-btn:active{background:var(--acc);color:#000;}
+.r-move-btn:disabled{opacity:.2;cursor:default;background:none;border-color:transparent;}
 .r-snum{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;color:#000;flex-shrink:0;margin-top:1px;}
 .r-snum.jorge{background:var(--jorge);}
 .r-snum.diego{background:var(--diego);}
@@ -581,10 +585,31 @@ textarea{resize:vertical;min-height:50px;}
 .carga-pedido-status.pending{color:var(--acc);}
 @media(max-width:700px){.carga-body{flex-direction:column;overflow-y:auto;}.carga-col{height:auto;overflow-y:visible;}.carga-col:first-child{border-right:none;border-bottom:1px solid var(--brd);}}
 @media(max-width:900px) and (orientation:landscape){
-  #page-reparto{height:100vh!important;min-height:0;}
-  .reparto-drivers-wrap{height:0;flex:1;min-height:80px;scroll-snap-type:none;}
-  .reparto-driver-body{-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
-  .reparto-driver-col{width:80vw;}
+  /* En landscape: las columnas se apilan verticalmente y la página scrollea */
+  #page-reparto{height:auto!important;overflow-y:auto!important;overflow-x:hidden;}
+  .reparto-drivers-wrap{
+    flex-direction:column!important;
+    overflow-x:hidden!important;
+    overflow-y:visible!important;
+    height:auto!important;
+    min-height:0!important;
+    scroll-snap-type:none!important;
+    flex:none!important;
+  }
+  .reparto-driver-col{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:visible!important;
+    flex-shrink:0!important;
+    border-right:none!important;
+    border-bottom:1px solid var(--brd)!important;
+  }
+  .reparto-driver-body{
+    overflow-y:visible!important;
+    height:auto!important;
+    flex:none!important;
+  }
 }
 </style>
 </head>
@@ -3084,6 +3109,31 @@ function refreshRepartoStopNumbers(driver){
   });
 }
 
+function moveStop(driver, id, dir){
+  const listEl = document.getElementById('reparto-list-' + driver);
+  if(!listEl) return;
+  const items = Array.from(listEl.querySelectorAll('.reparto-stop[data-id]'));
+  const idx = items.findIndex(el => el.dataset.id === String(id));
+  if(idx === -1) return;
+  const newIdx = idx + dir;
+  if(newIdx < 0 || newIdx >= items.length) return;
+  // Mover en el DOM
+  if(dir === -1) listEl.insertBefore(items[idx], items[newIdx]);
+  else           listEl.insertBefore(items[newIdx], items[idx]);
+  // Actualizar estado
+  const ids = Array.from(listEl.querySelectorAll('.reparto-stop[data-id]')).map(el=>el.dataset.id);
+  repartoState[driver].orders = ids;
+  repartoState[driver].dirty  = true;
+  ids.forEach((sid, index) => {
+    const d = deliveries.find(x => String(x.id) === String(sid));
+    if(d) d.route_order = index + 1;
+  });
+  refreshRepartoStopNumbers(driver);
+  const btn = document.getElementById('reparto-save-' + driver);
+  if(btn){ btn.classList.add('dirty'); btn.textContent='💾 Guardar orden'; }
+  if(currentRepartoMapDriver === driver) setTimeout(()=>verRepartoEnMapa(driver), 0);
+}
+
 function wireDriverSortable(driver){
   const listEl = document.getElementById(`reparto-list-${driver}`);
   if(!listEl || !window.Sortable) return;
@@ -3252,7 +3302,7 @@ function _fillStopsList(listEl, driver, stops){
       s.payment ? `<span class="r-chip">💳 ${s.payment}</span>` : '',
     ].filter(Boolean).join('');
     return `<div class="reparto-stop${s.completed?' r-completed':''}" data-id="${s.id}">
-      ${!s.completed?`<span class="r-drag" title="Arrastrar">⠿</span>`:`<span style="width:14px;flex-shrink:0;"></span>`}
+      ${!s.completed?`<div class="r-move-btns"><button class="r-move-btn" onclick="moveStop('${driver}','${s.id}',-1)" title="Subir">▲</button><button class="r-move-btn" onclick="moveStop('${driver}','${s.id}',1)" title="Bajar">▼</button></div>`:''}
       <div class="r-snum ${driver}">${Number.isFinite(parseInt(s.route_order)) ? parseInt(s.route_order) : (i+1)}</div>
       <div class="r-sbody">
         <div class="r-sname">${s.name||'Sin nombre'}${s.completed?`<span style="font-size:.6rem;background:#00c853;color:#000;border-radius:4px;padding:1px 5px;margin-left:4px;">✓</span>`:''}</div>
