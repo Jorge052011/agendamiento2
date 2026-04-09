@@ -6,127 +6,7 @@
 <title>RepartoTrack</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-// ── Modal pantalla completa de pedido ────────────────────────────────────
-let _modalDeliveryId = null;
-let _modalDriver     = null;
-
-function openDeliveryModal(id, driver){
-  const d = deliveries.find(x => String(x.id) === String(id));
-  if(!d) return;
-  _modalDeliveryId = id;
-  _modalDriver     = driver;
-
-  // Número de parada
-  const listEl = document.getElementById('reparto-list-' + driver);
-  let stopNum = '—';
-  if(listEl){
-    const items = Array.from(listEl.querySelectorAll('.reparto-stop[data-id]'));
-    const idx   = items.findIndex(el => String(el.dataset.id) === String(id));
-    if(idx > -1) stopNum = idx + 1;
-  }
-
-  document.getElementById('dm-title').textContent = d.name || 'Sin nombre';
-  document.getElementById('dm-num').textContent   = stopNum;
-
-  // Stock items
-  let stockHtml = '';
-  const si = d.stock_items || {};
-  const siEntries = Object.entries(si).filter(([k,v]) => v > 0);
-  if(siEntries.length){
-    stockHtml = '<div class="dm-stock">' +
-      siEntries.map(([k,v]) => `<div class="dm-sku">${k} <span>×${v}</span></div>`).join('') +
-      '</div>';
-  }
-
-  document.getElementById('dm-body').innerHTML = `
-    <div class="dm-section">
-      <div class="dm-lbl">📍 Dirección</div>
-      <div class="dm-val big">${d.formatted_address || d.address || '—'}</div>
-      ${d.reference ? `<div class="dm-val muted" style="margin-top:4px;">🔖 ${d.reference}</div>` : ''}
-    </div>
-    <div class="dm-divider"></div>
-    <div class="dm-row">
-      <div class="dm-section">
-        <div class="dm-lbl">📦 Producto</div>
-        <div class="dm-val">${d.product || '—'}</div>
-      </div>
-      <div class="dm-section">
-        <div class="dm-lbl">🔢 Cantidad</div>
-        <div class="dm-val">${d.amount || '—'}</div>
-      </div>
-    </div>
-    ${stockHtml ? `<div class="dm-section"><div class="dm-lbl">📦 Detalle bolsas</div>${stockHtml}</div><div class="dm-divider"></div>` : '<div class="dm-divider"></div>'}
-    <div class="dm-row">
-      <div class="dm-section">
-        <div class="dm-lbl">💳 Forma de pago</div>
-        <div class="dm-val accent">${d.payment || '—'}</div>
-      </div>
-      <div class="dm-section">
-        <div class="dm-lbl">📞 Teléfono</div>
-        <div class="dm-val">${d.client_phone ? `<a href="tel:${d.client_phone}" style="color:var(--acc2)">${d.client_phone}</a>` : '—'}</div>
-      </div>
-    </div>
-    <div class="dm-divider"></div>
-    <div class="dm-row">
-      <div class="dm-section">
-        <div class="dm-lbl">🕐 Hora inicio</div>
-        <div class="dm-val">${d.time_start || '—'}</div>
-      </div>
-      <div class="dm-section">
-        <div class="dm-lbl">🕑 Hora fin</div>
-        <div class="dm-val">${d.time_end || '—'}</div>
-      </div>
-    </div>
-    ${d.notes ? `<div class="dm-divider"></div>
-    <div class="dm-section">
-      <div class="dm-lbl">📝 Nota interna</div>
-      <div class="dm-notes">${d.notes}</div>
-    </div>` : ''}
-  `;
-
-  _updateModalFooter(d);
-  document.getElementById('delivery-modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function _updateModalFooter(d){
-  const btn     = document.getElementById('dm-btn-complete');
-  const arrived = document.getElementById('dm-arrived');
-  if(d.completed){
-    btn.textContent = '↩️ Marcar como pendiente';
-    btn.className   = 'dm-btn-complete done';
-    arrived.textContent = d.arrived_at ? '✅ Entregado a las ' + d.arrived_at : '✅ Entregado';
-  } else {
-    btn.textContent = '✅ Marcar como entregado';
-    btn.className   = 'dm-btn-complete';
-    arrived.textContent = '';
-  }
-}
-
-async function toggleCompleteFromModal(){
-  if(!_modalDeliveryId) return;
-  const d = deliveries.find(x => String(x.id) === String(_modalDeliveryId));
-  if(!d) return;
-  const nowTime = new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});
-  await patchDelivery(d.id, {
-    completed: !d.completed,
-    arrived_at: !d.completed ? nowTime : null
-  });
-  // Refrescar columna y footer
-  const updated = deliveries.find(x => String(x.id) === String(_modalDeliveryId));
-  if(updated) _updateModalFooter(updated);
-  if(_modalDriver) renderDriverColBody(_modalDriver);
-}
-
-function closeDeliveryModal(){
-  document.getElementById('delivery-modal').classList.remove('open');
-  document.body.style.overflow = '';
-  _modalDeliveryId = null;
-  _modalDriver     = null;
-}
-
-</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
 <style>
 :root{
@@ -701,87 +581,39 @@ textarea{resize:vertical;min-height:50px;}
 .carga-pedido-status.pending{color:var(--acc);}
 @media(max-width:700px){.carga-body{flex-direction:column;overflow-y:auto;}.carga-col{height:auto;overflow-y:visible;}.carga-col:first-child{border-right:none;border-bottom:1px solid var(--brd);}}
 
-@media(orientation:landscape) and (max-height:600px){
-  #page-reparto{
-    height:auto!important;
-    overflow-y:auto!important;
-    -webkit-overflow-scrolling:touch!important;
-  }
-  .reparto-drivers-wrap{
-    flex-direction:column!important;
-    overflow:visible!important;
-    height:auto!important;
-    min-height:0!important;
-    scroll-snap-type:none!important;
-    flex:none!important;
-  }
-  .reparto-driver-col{
-    width:100%!important;
-    min-width:0!important;
-    max-width:100%!important;
-    overflow:visible!important;
-    height:auto!important;
-    border-right:none!important;
-    border-bottom:1px solid var(--brd)!important;
-  }
-  .reparto-driver-body{
-    overflow-y:visible!important;
-    height:auto!important;
-    flex:none!important;
-  }
-}
-
 /* ── Modal pantalla completa pedido ─────────────────────────────────── */
-#delivery-modal{
-  display:none;position:fixed;inset:0;z-index:9999;
-  background:var(--bg);flex-direction:column;
-  font-family:'DM Sans',sans-serif;
-}
+#delivery-modal{display:none;position:fixed;inset:0;z-index:9999;background:var(--bg);flex-direction:column;}
 #delivery-modal.open{display:flex;}
-.dm-header{
-  background:var(--surf);border-bottom:1px solid var(--brd);
-  padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;flex-shrink:0;
-}
-.dm-back{
-  background:var(--surf2);border:1px solid var(--brd2);color:var(--txt);
-  border-radius:8px;padding:6px 14px;font-size:.85rem;cursor:pointer;
-  font-family:'DM Sans',sans-serif;touch-action:manipulation;
-  display:flex;align-items:center;gap:5px;
-}
+.dm-header{background:var(--surf);border-bottom:1px solid var(--brd);padding:.75rem 1rem;display:flex;align-items:center;gap:.75rem;flex-shrink:0;}
+.dm-back{background:var(--surf2);border:1px solid var(--brd2);color:var(--txt);border-radius:8px;padding:7px 16px;font-size:.85rem;cursor:pointer;font-family:'DM Sans',sans-serif;touch-action:manipulation;}
 .dm-back:active{background:var(--surf3);}
-.dm-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;flex:1;}
-.dm-num{background:var(--acc);color:#000;font-weight:800;font-size:.8rem;
-  border-radius:50%;width:26px;height:26px;display:flex;align-items:center;
-  justify-content:center;flex-shrink:0;}
+.dm-title{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dm-num{background:var(--acc);color:#000;font-weight:800;font-size:.8rem;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .dm-body{flex:1;overflow-y:auto;padding:1.1rem 1rem;-webkit-overflow-scrolling:touch;}
-.dm-section{margin-bottom:1.1rem;}
-.dm-lbl{font-size:.65rem;font-weight:700;color:var(--mut);text-transform:uppercase;
-  letter-spacing:.06em;margin-bottom:.35rem;}
-.dm-val{font-size:1rem;color:var(--txt);line-height:1.4;}
-.dm-val.big{font-size:1.1rem;font-weight:600;}
+.dm-lbl{font-size:.65rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.3rem;}
+.dm-val{font-size:.95rem;color:var(--txt);line-height:1.4;}
+.dm-val.big{font-size:1.05rem;font-weight:600;}
 .dm-val.accent{color:var(--acc);font-weight:700;}
-.dm-val.muted{color:var(--mut);font-size:.9rem;}
-.dm-divider{height:1px;background:var(--brd);margin:1rem 0;}
-.dm-row{display:flex;gap:1rem;margin-bottom:1rem;}
-.dm-row .dm-section{flex:1;margin-bottom:0;}
-.dm-notes{background:rgba(240,224,64,.06);border-left:3px solid var(--acc);
-  border-radius:0 8px 8px 0;padding:.6rem .8rem;font-size:.9rem;
-  color:var(--acc);line-height:1.5;}
-.dm-footer{padding:.85rem 1rem;border-top:1px solid var(--brd);
-  display:flex;flex-direction:column;gap:.5rem;flex-shrink:0;
-  background:var(--surf);}
-.dm-btn-complete{
-  background:var(--grn);color:#000;font-family:'Syne',sans-serif;font-weight:800;
-  font-size:1rem;border:none;border-radius:11px;padding:14px;cursor:pointer;
-  touch-action:manipulation;letter-spacing:.3px;
-}
+.dm-val.muted{color:var(--mut);font-size:.85rem;}
+.dm-divider{height:1px;background:var(--brd);margin:.85rem 0;}
+.dm-row{display:flex;gap:1rem;margin-bottom:.85rem;}
+.dm-row>.dm-block{flex:1;}
+.dm-block{margin-bottom:.85rem;}
+.dm-notes{background:rgba(240,224,64,.06);border-left:3px solid var(--acc);border-radius:0 8px 8px 0;padding:.6rem .8rem;font-size:.9rem;color:var(--acc);line-height:1.5;}
+.dm-footer{padding:.85rem 1rem;border-top:1px solid var(--brd);display:flex;flex-direction:column;gap:.4rem;flex-shrink:0;background:var(--surf);}
+.dm-btn-complete{background:#00c853;color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;border:none;border-radius:11px;padding:14px;cursor:pointer;touch-action:manipulation;width:100%;}
 .dm-btn-complete.done{background:var(--surf3);color:var(--mut);border:1px solid var(--brd2);}
-.dm-btn-complete:active{opacity:.85;}
-.dm-arrived{font-size:.75rem;color:var(--mut);text-align:center;margin-top:.15rem;}
-.dm-stock{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.3rem;}
-.dm-sku{background:var(--surf2);border:1px solid var(--brd);border-radius:6px;
-  padding:5px 10px;font-size:.82rem;}
+.dm-arrived{font-size:.75rem;color:var(--mut);text-align:center;}
+.dm-stock{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.3rem;}
+.dm-sku{background:var(--surf2);border:1px solid var(--brd);border-radius:6px;padding:4px 10px;font-size:.82rem;}
 .dm-sku span{font-weight:700;color:var(--acc);}
+
+@media(orientation:landscape) and (max-height:600px){
+  #page-reparto{height:auto!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;}
+  .reparto-drivers-wrap{flex-direction:column!important;overflow:visible!important;height:auto!important;min-height:0!important;scroll-snap-type:none!important;flex:none!important;}
+  .reparto-driver-col{width:100%!important;min-width:0!important;max-width:100%!important;overflow:visible!important;height:auto!important;border-right:none!important;border-bottom:1px solid var(--brd)!important;}
+  .reparto-driver-body{overflow-y:visible!important;height:auto!important;flex:none!important;}
+}
 </style>
 </head>
 <body>
@@ -3434,12 +3266,10 @@ function _fillStopsList(listEl, driver, stops){
         <div class="r-saddr">${s.formatted_address||s.address||'Sin dirección'}</div>
         ${s.reference?`<div style="font-size:.62rem;color:var(--mut2);margin-top:1px;">🔖 ${s.reference}</div>`:''}
         ${chips?`<div class="r-chips">${chips}</div>`:''}
-        ${!s.completed?`<div class="r-nav-row">
-          <button onclick="window.open('${gmUrl}','_blank')">🗺️ GMaps</button>
-          <button onclick="window.open('${wzUrl}','_blank')">🚗 Waze</button>
+        <div class="r-nav-row">
+          ${!s.completed?`<button onclick="window.open('${gmUrl}','_blank')">🗺️ GMaps</button><button onclick="window.open('${wzUrl}','_blank')">🚗 Waze</button>`:''}
           <button onclick="openDeliveryModal('${s.id}','${driver}')" style="background:var(--acc);color:#000;font-weight:700;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:.75rem;touch-action:manipulation;">📋 Ver</button>
-        </div>`:''}
-        <button onclick="openDeliveryModal('${s.id}','${driver}')" style="margin-top:4px;font-size:.7rem;background:var(--surf3);border:1px solid var(--brd2);color:var(--mut);border-radius:6px;padding:3px 10px;cursor:pointer;touch-action:manipulation;width:100%;">📋 Ver detalle del pedido</button>
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -4227,6 +4057,117 @@ async function guardarStock(){
   } catch(e){ toast('❌ Error al guardar'); }
 }
 
+
+// ── Modal pantalla completa de pedido ─────────────────────────────────────
+let _modalDeliveryId = null;
+let _modalDriver = null;
+
+function openDeliveryModal(id, driver){
+  const d = deliveries.find(x => String(x.id) === String(id));
+  if(!d){ console.warn('delivery not found', id); return; }
+  _modalDeliveryId = id;
+  _modalDriver = driver;
+
+  const listEl = document.getElementById('reparto-list-' + driver);
+  let stopNum = '—';
+  if(listEl){
+    const items = Array.from(listEl.querySelectorAll('.reparto-stop[data-id]'));
+    const idx = items.findIndex(el => String(el.dataset.id) === String(id));
+    if(idx > -1) stopNum = idx + 1;
+  }
+
+  document.getElementById('dm-title').textContent = d.name || 'Sin nombre';
+  document.getElementById('dm-num').textContent = stopNum;
+
+  const si = d.stock_items || {};
+  const siEntries = Object.entries(si).filter(([k,v]) => v > 0);
+  const stockHtml = siEntries.length
+    ? '<div class="dm-block"><div class="dm-lbl">📦 Detalle bolsas</div><div class="dm-stock">' +
+      siEntries.map(([k,v]) => `<div class="dm-sku">${k} <span>×${v}</span></div>`).join('') +
+      '</div></div><div class="dm-divider"></div>'
+    : '';
+
+  document.getElementById('dm-body').innerHTML = `
+    <div class="dm-block">
+      <div class="dm-lbl">📍 Dirección</div>
+      <div class="dm-val big">${d.formatted_address || d.address || '—'}</div>
+      ${d.reference ? `<div class="dm-val muted" style="margin-top:4px;">🔖 ${d.reference}</div>` : ''}
+    </div>
+    <div class="dm-divider"></div>
+    <div class="dm-row">
+      <div class="dm-block">
+        <div class="dm-lbl">📦 Producto</div>
+        <div class="dm-val">${d.product || '—'}</div>
+      </div>
+      <div class="dm-block">
+        <div class="dm-lbl">🔢 Cantidad</div>
+        <div class="dm-val">${d.amount || '—'}</div>
+      </div>
+    </div>
+    ${stockHtml}
+    <div class="dm-row">
+      <div class="dm-block">
+        <div class="dm-lbl">💳 Forma de pago</div>
+        <div class="dm-val accent">${d.payment || '—'}</div>
+      </div>
+      <div class="dm-block">
+        <div class="dm-lbl">📞 Teléfono</div>
+        <div class="dm-val">${d.client_phone ? `<a href="tel:${d.client_phone}" style="color:var(--acc2)">${d.client_phone}</a>` : '—'}</div>
+      </div>
+    </div>
+    <div class="dm-divider"></div>
+    <div class="dm-row">
+      <div class="dm-block">
+        <div class="dm-lbl">🕐 Hora inicio</div>
+        <div class="dm-val">${d.time_start || '—'}</div>
+      </div>
+      <div class="dm-block">
+        <div class="dm-lbl">🕑 Hora fin</div>
+        <div class="dm-val">${d.time_end || '—'}</div>
+      </div>
+    </div>
+    ${d.notes ? `<div class="dm-divider"></div><div class="dm-block"><div class="dm-lbl">📝 Nota interna</div><div class="dm-notes">${d.notes}</div></div>` : ''}
+  `;
+
+  _updateModalFooter(d);
+  document.getElementById('delivery-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function _updateModalFooter(d){
+  const btn = document.getElementById('dm-btn-complete');
+  const arrived = document.getElementById('dm-arrived');
+  if(d.completed){
+    btn.textContent = '↩️ Marcar como pendiente';
+    btn.className = 'dm-btn-complete done';
+    arrived.textContent = d.arrived_at ? '✅ Entregado a las ' + d.arrived_at : '✅ Entregado';
+  } else {
+    btn.textContent = '✅ Marcar como entregado';
+    btn.className = 'dm-btn-complete';
+    arrived.textContent = '';
+  }
+}
+
+async function toggleCompleteFromModal(){
+  if(!_modalDeliveryId) return;
+  const d = deliveries.find(x => String(x.id) === String(_modalDeliveryId));
+  if(!d) return;
+  const nowTime = new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});
+  await patchDelivery(d.id, {
+    completed: !d.completed,
+    arrived_at: !d.completed ? nowTime : null
+  });
+  const updated = deliveries.find(x => String(x.id) === String(_modalDeliveryId));
+  if(updated) _updateModalFooter(updated);
+  if(_modalDriver) renderDriverColBody(_modalDriver);
+}
+
+function closeDeliveryModal(){
+  document.getElementById('delivery-modal').classList.remove('open');
+  document.body.style.overflow = '';
+  _modalDeliveryId = null;
+  _modalDriver = null;
+}
 </script>
 <!-- ══ MODAL CRUD CLIENTE — fuera del panel para que funcione en móvil ══ -->
 <div id="cli-modal" onclick="if(event.target===this)closeClientModal()"
@@ -4269,7 +4210,6 @@ async function guardarStock(){
 </div>
 
 
-<!-- ── Modal pantalla completa pedido ─────────────────────────── -->
 <div id="delivery-modal">
   <div class="dm-header">
     <button class="dm-back" onclick="closeDeliveryModal()">← Mi Ruta</button>
@@ -4278,9 +4218,7 @@ async function guardarStock(){
   </div>
   <div class="dm-body" id="dm-body"></div>
   <div class="dm-footer">
-    <button class="dm-btn-complete" id="dm-btn-complete" onclick="toggleCompleteFromModal()">
-      ✅ Marcar como entregado
-    </button>
+    <button class="dm-btn-complete" id="dm-btn-complete" onclick="toggleCompleteFromModal()">✅ Marcar como entregado</button>
     <div class="dm-arrived" id="dm-arrived"></div>
   </div>
 </div>
