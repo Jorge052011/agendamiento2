@@ -173,7 +173,7 @@ textarea{resize:vertical;min-height:50px;}
 .ibtn.del:hover{color:var(--acc3);}
 .ibtn.ok:hover{color:var(--grn);}
 .card-addr{font-size:.85rem;color:var(--mut);margin-bottom:4px;line-height:1.35;}
-.card-ref{font-size:.68rem;color:var(--acc2);margin-bottom:4px;}
+.card-ref{font-size:.86rem;color:var(--acc2);margin-bottom:5px;font-weight:700;line-height:1.35;}
 .card-phone{font-size:.7rem;color:var(--acc2);margin-bottom:4px;}
 .card-tags{display:flex;flex-wrap:wrap;gap:3px;}
 .tag{font-size:.6rem;font-weight:600;padding:2px 6px;border-radius:20px;background:var(--brd);color:var(--mut);text-transform:uppercase;letter-spacing:.4px;}
@@ -353,6 +353,7 @@ textarea{resize:vertical;min-height:50px;}
 .r-sbody{flex:1;min-width:0;}
 .r-sname{font-size:.86rem;font-weight:600;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .r-saddr{font-size:.85rem;color:var(--mut);white-space:normal;overflow:visible;text-overflow:unset;margin-top:2px;}
+.r-sref{font-size:.82rem;color:var(--mut2);margin-top:2px;font-weight:700;line-height:1.35;}
 .r-seta{font-size:.63rem;color:#60a5fa;margin-top:1px;}
 .r-chips{display:flex;gap:3px;flex-wrap:wrap;margin-top:2px;}
 .r-chip{font-size:.75rem;padding:3px 8px;border-radius:8px;background:var(--surf3);color:var(--mut2);}
@@ -448,7 +449,7 @@ textarea{resize:vertical;min-height:50px;}
   .d-card{ padding:.85rem 1rem; margin-bottom:.55rem; border-radius:11px; }
   .card-name{ font-size:.95rem !important; }
   .card-addr{ font-size:1rem !important; line-height:1.4; }
-  .card-ref{ font-size:.78rem !important; }
+  .card-ref{ font-size:1rem !important; font-weight:800; line-height:1.4; }
   .card-phone{ font-size:.8rem !important; }
   .card-top{ margin-bottom:4px; }
 
@@ -479,6 +480,7 @@ textarea{resize:vertical;min-height:50px;}
   .cc-phone{ font-size:.8rem !important; }
   .cc-addr{ font-size:.8rem !important; }
   .cc-ref{ font-size:.75rem !important; }
+  .r-sref{ font-size:.95rem !important; font-weight:800; line-height:1.4; }
 
   /* Búsqueda y sort en clientes */
   #cli-search, #cli-sort{ font-size:.82rem !important; padding:.5rem .75rem !important; }
@@ -3270,7 +3272,7 @@ function _fillStopsList(listEl, driver, stops){
         <div class="r-sname">${s.name||'Sin nombre'}${s.completed?`<span style="font-size:.6rem;background:#00c853;color:#000;border-radius:4px;padding:1px 5px;margin-left:4px;">✓</span>`:''}</div>
         ${eta&&!s.completed?`<div class="r-seta">🕐 Llegada estimada: ~${eta.arr}${dp?' · '+eta.trav+' min':''}</div>`:''}
         <div class="r-saddr">📍 ${address}</div>
-        ${ref?`<div style="font-size:.62rem;color:var(--mut2);margin-top:1px;">🔖 ${ref}</div>`:''}
+        ${ref?`<div class="r-sref">🔖 ${ref}</div>`:''}
         ${phone?`<div style="font-size:.62rem;color:var(--mut2);margin-top:1px;">📞 ${phone}</div>`:''}
         ${chips?`<div class="r-chips">${chips}</div>`:''}
         ${s.notes?`<div class="route-notes" style="margin-top:4px;">📝 ${s.notes}</div>`:''}
