@@ -3249,23 +3249,31 @@ function _fillStopsList(listEl, driver, stops){
   const etas = calcRepartoETAs(dp, stops, driver);
   listEl.innerHTML = stops.map((s,i)=>{
     const eta = etas[i];
-    const navDest = (s.lat&&s.lng) ? `${s.lat},${s.lng}` : encodeURIComponent(s.formatted_address||s.address||'');
+    const ref = s.reference || (s._client && s._client.reference) || '';
+    const phone = s.client_phone || (s._client && s._client.phone) || '';
+    const address = s.formatted_address || s.address || 'Sin dirección';
+    const navDest = (s.lat&&s.lng) ? `${s.lat},${s.lng}` : encodeURIComponent(address);
     const gmUrl = `https://www.google.com/maps/dir/?api=1&destination=${navDest}&travelmode=driving&dir_action=navigate`;
-    const wzUrl = `https://waze.com/ul?ll=${s.lat&&s.lng?s.lat+','+s.lng:''}&q=${encodeURIComponent(s.formatted_address||s.address||'')}&navigate=yes`;
+    const wzUrl = `https://waze.com/ul?ll=${s.lat&&s.lng?s.lat+','+s.lng:''}&q=${encodeURIComponent(address)}&navigate=yes`;
+    const horario = (s.time_start || s.time_end)
+      ? (s.time_start && s.time_end ? `${s.time_start} – ${s.time_end}` : (s.time_start || s.time_end))
+      : '';
     const chips = [
-      s.amount  ? `<span class="r-chip">💵 ${s.amount}</span>`  : '',
-      s.product ? `<span class="r-chip">📦 ${s.product}</span>` : '',
+      (s.product || s.amount) ? `<span class="r-chip">📦 ${[s.product, s.amount].filter(Boolean).join(' × ')}</span>` : '',
       s.payment ? `<span class="r-chip">💳 ${s.payment}</span>` : '',
+      horario ? `<span class="r-chip">⏰ ${horario}</span>` : '',
     ].filter(Boolean).join('');
     return `<div class="reparto-stop${s.completed?' r-completed':''}" data-id="${s.id}">
       ${!s.completed?`<span class="r-drag" title="Arrastrar">⠿</span>`:`<span style="width:14px;flex-shrink:0;"></span>`}
       <div class="r-snum ${driver}">${Number.isFinite(parseInt(s.route_order)) ? parseInt(s.route_order) : (i+1)}</div>
       <div class="r-sbody">
         <div class="r-sname">${s.name||'Sin nombre'}${s.completed?`<span style="font-size:.6rem;background:#00c853;color:#000;border-radius:4px;padding:1px 5px;margin-left:4px;">✓</span>`:''}</div>
-        ${eta&&!s.completed?`<div class="r-seta">🕐 ~${eta.arr}${dp?' · '+eta.trav+' min':''}</div>`:''}
-        <div class="r-saddr">${s.formatted_address||s.address||'Sin dirección'}</div>
-        ${s.reference?`<div style="font-size:.62rem;color:var(--mut2);margin-top:1px;">🔖 ${s.reference}</div>`:''}
+        ${eta&&!s.completed?`<div class="r-seta">🕐 Llegada estimada: ~${eta.arr}${dp?' · '+eta.trav+' min':''}</div>`:''}
+        <div class="r-saddr">📍 ${address}</div>
+        ${ref?`<div style="font-size:.62rem;color:var(--mut2);margin-top:1px;">🔖 ${ref}</div>`:''}
+        ${phone?`<div style="font-size:.62rem;color:var(--mut2);margin-top:1px;">📞 ${phone}</div>`:''}
         ${chips?`<div class="r-chips">${chips}</div>`:''}
+        ${s.notes?`<div class="route-notes" style="margin-top:4px;">📝 ${s.notes}</div>`:''}
         <div class="r-nav-row">
           ${!s.completed?`<button onclick="window.open('${gmUrl}','_blank')">🗺️ GMaps</button><button onclick="window.open('${wzUrl}','_blank')">🚗 Waze</button>`:''}
           <button onclick="openDeliveryModal('${s.id}','${driver}')" style="background:var(--acc);color:#000;font-weight:700;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:.75rem;touch-action:manipulation;">📋 Ver</button>
