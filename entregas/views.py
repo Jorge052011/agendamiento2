@@ -436,6 +436,7 @@ PRODUCTS = [
     {"id": "LAV-CA-8",  "name": "Arena Lavanda + Carbón",    "unit": "Bolsa 8kg",  "color": "#40c8f0"},
     {"id": "LAV-CA-20", "name": "Arena Lavanda + Carbón",    "unit": "Bolsa 20kg", "color": "#40c8f0"},
     {"id": "CA-TB-20",  "name": "Arena Carbón + Talco Bebé", "unit": "Bolsa 20kg", "color": "#f04090"},
+    {"id": "CAF-20",    "name": "Bentonita Aroma Café",      "unit": "Bolsa 20kg", "color": "#a66a3f"},
 ]
 
 @require_http_methods(["GET"])

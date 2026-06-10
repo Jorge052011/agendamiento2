@@ -754,6 +754,7 @@ textarea{resize:vertical;min-height:50px;}
                 <option>16 k ca lav</option><option>20 k ca lav</option><option>24 k ca lav</option>
                 <option>28 k ca lav</option><option>32 k ca lav</option><option>40 k ca lav</option>
                 <option>20 k ca tal</option><option>40 k ca tal</option>
+                <option>20 k aroma café</option>
                 <option>8 k lav</option>
                 <option>16 k lav</option><option>20 k lav</option><option>24 k lav</option>
                 <option>28 k lav</option><option>32 k lav</option><option>40 k lav</option>
@@ -789,10 +790,15 @@ textarea{resize:vertical;min-height:50px;}
                 <span style="font-size:.68rem;flex:1;">Lav+C 20kg</span>
                 <input type="number" min="0" id="si-LAV-CA-20" value="0" style="width:46px;background:var(--surf3);border:1px solid var(--brd2);border-radius:4px;color:var(--txt);font-size:.78rem;text-align:center;padding:2px;">
               </div>
-              <div style="display:flex;align-items:center;gap:.4rem;grid-column:span 2;">
+              <div style="display:flex;align-items:center;gap:.4rem;">
                 <div style="width:8px;height:8px;border-radius:50%;background:#ff6b2b;flex-shrink:0;"></div>
                 <span style="font-size:.68rem;flex:1;">C+Talco 20kg</span>
                 <input type="number" min="0" id="si-CA-TB-20" value="0" style="width:46px;background:var(--surf3);border:1px solid var(--brd2);border-radius:4px;color:var(--txt);font-size:.78rem;text-align:center;padding:2px;">
+              </div>
+              <div style="display:flex;align-items:center;gap:.4rem;">
+                <div style="width:8px;height:8px;border-radius:50%;background:#a66a3f;flex-shrink:0;"></div>
+                <span style="font-size:.68rem;flex:1;">Café 20kg</span>
+                <input type="number" min="0" id="si-CAF-20" value="0" style="width:46px;background:var(--surf3);border:1px solid var(--brd2);border-radius:4px;color:var(--txt);font-size:.78rem;text-align:center;padding:2px;">
               </div>
             </div>
           </div>
@@ -1637,6 +1643,7 @@ async function addDelivery(){
           'LAV-CA-8': parseInt(document.getElementById('si-LAV-CA-8').value)||0,
           'LAV-CA-20':parseInt(document.getElementById('si-LAV-CA-20').value)||0,
           'CA-TB-20': parseInt(document.getElementById('si-CA-TB-20').value)||0,
+          'CAF-20':   parseInt(document.getElementById('si-CAF-20').value)||0,
         }
       })
     });
@@ -1651,7 +1658,7 @@ async function addDelivery(){
       await _appendToOpt(nd);
       ['f-phone','f-name','f-address','f-reference','f-amount','f-notes'].forEach(id=>document.getElementById(id).value='');
       ['f-product','f-payment','f-driver'].forEach(id=>document.getElementById(id).value='');
-      ['si-LAV-8','si-LAV-20','si-LAV-CA-8','si-LAV-CA-20','si-CA-TB-20'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value='0'; });
+      ['si-LAV-8','si-LAV-20','si-LAV-CA-8','si-LAV-CA-20','si-CA-TB-20','si-CAF-20'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value='0'; });
       hideClientBoxes();currentClient=null;pendingAddressData=null;
       const addrHint=document.getElementById('addr-hint');
       if(addrHint){addrHint.textContent='Selecciona una sugerencia de Google Maps';addrHint.style.color='';}
@@ -3801,6 +3808,7 @@ const PRODUCT_COLORS = {
   'LAV-CA-8': '#1e90ff',
   'LAV-CA-20':'#1e90ff',
   'CA-TB-20': '#ff6b2b',
+  'CAF-20':   '#a66a3f',
 };
 
 async function initCarga(){
