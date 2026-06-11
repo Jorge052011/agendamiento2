@@ -721,7 +721,10 @@ textarea{resize:vertical;min-height:50px;}
                 <label>Dirección de entrega</label>
                 <select id="f-address-select" onchange="selectClientAddress(this.value)"></select>
               </div>
-              <button type="button" class="btn" style="margin-top:.45rem" onclick="showAddAddressForm()">➕ Agregar otra dirección</button>
+              <div style="display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.45rem">
+                <button type="button" class="btn" onclick="showAddAddressForm()">➕ Agregar otra dirección</button>
+                <button type="button" class="btn" id="btn-delete-address" onclick="deleteSelectedAddress()">🗑️ Borrar dirección seleccionada</button>
+              </div>
               <div class="cf-ref"  id="cf-ref"></div>
               <div class="cf-verified" id="cf-verified"></div>
             </div>
@@ -1562,6 +1565,36 @@ function selectClientAddress(id){
   document.getElementById('cf-addr').textContent=currentAddress.formatted_address||currentAddress.address||'';
   document.getElementById('cf-ref').textContent=currentAddress.reference?`🔖 ${currentAddress.reference}`:'';
 }
+async function deleteSelectedAddress(){
+  if(!currentClient||!currentAddress)return;
+  if(currentAddress.id==='legacy'){
+    alert('Esta dirección antigua todavía no puede borrarse desde aquí. Ejecuta primero la migración de direcciones.');
+    return;
+  }
+
+  const addressText=currentAddress.formatted_address||currentAddress.address||'esta dirección';
+  if(!confirm(`¿Seguro que deseas borrar esta dirección?\n\n${addressText}\n\nLas entregas antiguas conservarán la dirección utilizada.`))return;
+
+  try{
+    const r=await fetch(`/api/clients/${encodeURIComponent(currentClient.phone)}/addresses/${currentAddress.id}`,{
+      method:'DELETE'
+    });
+    const data=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(data.error||'No se pudo borrar la dirección');
+
+    currentClient=data.client;
+    currentAddress=null;
+    showClientFound(currentClient);
+
+    if(!(currentClient.addresses||[]).length){
+      showAddAddressForm();
+      alert('La dirección fue borrada. Ahora ingresa la dirección correcta.');
+    }
+  }catch(e){
+    alert(e.message||'No se pudo borrar la dirección');
+  }
+}
+
 function showAddAddressForm(){
   addingAddress=true;
   pendingAddressData=null;

@@ -143,6 +143,34 @@ def client_addresses(request, phone):
     return JsonResponse(address.to_dict(), status=201)
 
 
+@csrf_exempt
+@require_http_methods(["DELETE"])
+def client_address_detail(request, phone, address_id):
+    norm = normalize_phone(phone)
+    try:
+        client = Client.objects.get(phone=norm)
+        address = client.addresses.get(id=address_id)
+    except Client.DoesNotExist:
+        return JsonResponse({"error": "Cliente no encontrado"}, status=404)
+    except ClientAddress.DoesNotExist:
+        return JsonResponse({"error": "Dirección no encontrada"}, status=404)
+
+    was_default = address.is_default
+    address.delete()
+
+    # Si se borró la dirección principal, deja otra dirección como principal.
+    if was_default:
+        next_address = client.addresses.filter(active=True).first()
+        if next_address:
+            next_address.is_default = True
+            next_address.save(update_fields=["is_default"])
+
+    return JsonResponse({
+        "ok": True,
+        "client": client.to_dict(),
+    })
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 #  ENTREGAS
 # ═══════════════════════════════════════════════════════════════════════════════
