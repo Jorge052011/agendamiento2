@@ -34,6 +34,46 @@ class Client(models.Model):
             'verified':          self.verified,
             'geocode_source':    self.geocode_source,
             'created_at':        self.created_at.isoformat() if self.created_at else None,
+            'addresses':         [a.to_dict() for a in self.addresses.filter(active=True)],
+        }
+
+
+class ClientAddress(models.Model):
+    client            = models.ForeignKey(Client, on_delete=models.CASCADE, related_name='addresses')
+    label             = models.CharField(max_length=100, blank=True)
+    address_input     = models.TextField(blank=True)
+    address           = models.TextField(blank=True)
+    formatted_address = models.TextField(blank=True)
+    place_id          = models.CharField(max_length=200, blank=True)
+    reference         = models.TextField(blank=True)
+    lat               = models.FloatField(null=True, blank=True)
+    lng               = models.FloatField(null=True, blank=True)
+    verified          = models.BooleanField(default=False)
+    geocode_source    = models.CharField(max_length=50, default='manual')
+    is_default        = models.BooleanField(default=False)
+    active            = models.BooleanField(default=True)
+    created_at        = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'client_addresses'
+        ordering = ['-is_default', 'id']
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'label': self.label,
+            'address_input': self.address_input,
+            'address': self.address,
+            'formatted_address': self.formatted_address,
+            'place_id': self.place_id,
+            'reference': self.reference,
+            'lat': self.lat,
+            'lng': self.lng,
+            'verified': self.verified,
+            'geocode_source': self.geocode_source,
+            'is_default': self.is_default,
+            'active': self.active,
+            'created_at': self.created_at.isoformat() if self.created_at else None,
         }
 
 
@@ -41,6 +81,7 @@ class Delivery(models.Model):
     id              = models.CharField(max_length=20, primary_key=True)
     delivery_date   = models.DateField()
     client_phone    = models.CharField(max_length=20, blank=True)
+    client_address   = models.ForeignKey('ClientAddress', null=True, blank=True, on_delete=models.SET_NULL, related_name='deliveries')
     name            = models.CharField(max_length=200, blank=True)
     address         = models.TextField(blank=True)
     formatted_address = models.TextField(blank=True)
@@ -69,6 +110,7 @@ class Delivery(models.Model):
             'id':                self.id,
             'delivery_date':     self.delivery_date.isoformat() if hasattr(self.delivery_date, 'isoformat') else self.delivery_date,
             'client_phone':      self.client_phone,
+            'client_address_id': self.client_address_id,
             'name':              self.name,
             'address':           self.address,
             'formatted_address': self.formatted_address,

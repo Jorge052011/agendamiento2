@@ -717,6 +717,11 @@ textarea{resize:vertical;min-height:50px;}
               <div class="cf-title">✅ Cliente registrado</div>
               <div class="cf-name" id="cf-name"></div>
               <div class="cf-addr" id="cf-addr"></div>
+              <div class="field full" id="address-selector-wrap" style="margin-top:.5rem;display:none">
+                <label>Dirección de entrega</label>
+                <select id="f-address-select" onchange="selectClientAddress(this.value)"></select>
+              </div>
+              <button type="button" class="btn" style="margin-top:.45rem" onclick="showAddAddressForm()">➕ Agregar otra dirección</button>
               <div class="cf-ref"  id="cf-ref"></div>
               <div class="cf-verified" id="cf-verified"></div>
             </div>
@@ -1129,7 +1134,7 @@ let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 let selectedDate=todayStr();
 let appConfig={google_maps_key:'',departure_points:[]};
 let selectedDP=null,customDPSelected=false,selectedOptDriver='';
-let lookupTimer=null,currentClient=null;
+let lookupTimer=null,currentClient=null,currentAddress=null,addingAddress=false;
 
 // Google Places state
 let addressAutocomplete=null;   // para formulario nuevo cliente
@@ -1533,13 +1538,38 @@ async function lookupClient(raw){
 }
 
 function showClientFound(c){
+  addingAddress=false;
   document.getElementById('phone-status').textContent='✅';
   document.getElementById('cf-name').textContent=c.name||'Sin nombre';
-  document.getElementById('cf-addr').textContent=c.formatted_address||c.address||'Sin dirección';
-  document.getElementById('cf-ref').textContent=c.reference?`🔖 ${c.reference}`:'';
-  document.getElementById('cf-verified').textContent=c.geocode_source==='google'?'📍 Coordenadas verificadas por Google':'';
+  const addresses=(c.addresses&&c.addresses.length)?c.addresses:[{
+    id:'legacy', formatted_address:c.formatted_address||c.address, address:c.address,
+    reference:c.reference, lat:c.lat, lng:c.lng, place_id:c.place_id
+  }].filter(a=>a.formatted_address||a.address);
+  const sel=document.getElementById('f-address-select');
+  sel.innerHTML=addresses.map((a,i)=>`<option value="${a.id}">${a.label?`${a.label} — `:''}${a.formatted_address||a.address}</option>`).join('');
+  document.getElementById('address-selector-wrap').style.display=addresses.length?'block':'none';
+  currentAddress=addresses[0]||null;
+  document.getElementById('cf-addr').textContent=currentAddress?(currentAddress.formatted_address||currentAddress.address):'Sin dirección registrada';
+  document.getElementById('cf-ref').textContent=currentAddress?.reference?`🔖 ${currentAddress.reference}`:'';
+  document.getElementById('cf-verified').textContent=currentAddress?.geocode_source==='google'?'📍 Coordenadas verificadas por Google':'';
   document.getElementById('client-found').classList.add('show');
   document.getElementById('client-new').classList.remove('show');
+}
+function selectClientAddress(id){
+  if(!currentClient)return;
+  currentAddress=(currentClient.addresses||[]).find(a=>String(a.id)===String(id))||currentAddress;
+  if(!currentAddress)return;
+  document.getElementById('cf-addr').textContent=currentAddress.formatted_address||currentAddress.address||'';
+  document.getElementById('cf-ref').textContent=currentAddress.reference?`🔖 ${currentAddress.reference}`:'';
+}
+function showAddAddressForm(){
+  addingAddress=true;
+  pendingAddressData=null;
+  document.getElementById('f-name').value=currentClient?.name||'';
+  document.getElementById('f-address').value='';
+  document.getElementById('f-reference').value='';
+  document.getElementById('client-new').classList.add('show');
+  document.querySelector('#client-new .cn-title').textContent='➕ Nueva dirección para este cliente';
 }
 function showClientNew(){
   document.getElementById('phone-status').textContent='🆕';
@@ -1575,16 +1605,14 @@ async function addDelivery(){
   try {
     let clientData={};
 
-    if(currentClient){
-      // Cliente existente — usar sus datos guardados
+    if(currentClient && !addingAddress){
+      if(!currentAddress){toast('⚠️ Selecciona o agrega una dirección');return;}
       clientData={
-        phone:             currentClient.phone,
-        name:              currentClient.name,
-        address:           currentClient.formatted_address||currentClient.address,
-        formatted_address: currentClient.formatted_address||currentClient.address,
-        lat:               currentClient.lat,
-        lng:               currentClient.lng,
-        reference:         currentClient.reference||'',
+        phone:currentClient.phone, name:currentClient.name,
+        address:currentAddress.formatted_address||currentAddress.address,
+        formatted_address:currentAddress.formatted_address||currentAddress.address,
+        lat:currentAddress.lat, lng:currentAddress.lng,
+        reference:currentAddress.reference||'', client_address_id:currentAddress.id==='legacy'?null:currentAddress.id,
       };
     } else {
       // Cliente nuevo
@@ -1612,17 +1640,25 @@ async function addDelivery(){
         return;
       }
 
-      // Guardar cliente
-      const clientRes = await fetch('/api/clients',{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({phone,name,address_input:addressInput,address:formatted_address,formatted_address,place_id,reference,lat,lng,verified,geocode_source})
-      });
-      if(!clientRes.ok){
-        const ce = await clientRes.json().catch(()=>({}));
-        throw new Error('Error guardando cliente: '+(ce.error||clientRes.status));
+      let client_address_id=null;
+      if(currentClient && addingAddress){
+        const addressRes=await fetch(`/api/clients/${encodeURIComponent(currentClient.phone)}/addresses`,{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({label:'Dirección '+((currentClient.addresses?.length||0)+1),address_input:addressInput,address:formatted_address,formatted_address,place_id,reference,lat,lng,verified,geocode_source})
+        });
+        if(!addressRes.ok){const ae=await addressRes.json().catch(()=>({}));throw new Error(ae.error||'Error guardando dirección');}
+        const savedAddress=await addressRes.json();
+        client_address_id=savedAddress.id;
+      }else{
+        const clientRes = await fetch('/api/clients',{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({phone,name,address_input:addressInput,address:formatted_address,formatted_address,place_id,reference,lat,lng,verified,geocode_source})
+        });
+        if(!clientRes.ok){const ce=await clientRes.json().catch(()=>({}));throw new Error('Error guardando cliente: '+(ce.error||clientRes.status));}
+        const savedClient=await clientRes.json();
+        if(savedClient.addresses?.length)client_address_id=savedClient.addresses[0].id;
       }
-
-      clientData={phone,name,address:formatted_address,formatted_address,lat,lng,reference};
+      clientData={phone,name,address:formatted_address,formatted_address,lat,lng,reference,client_address_id};
     }
 
     const res=await fetch('/api/deliveries',{
@@ -1634,6 +1670,7 @@ async function addDelivery(){
         address:clientData.formatted_address||clientData.address,
         formatted_address:clientData.formatted_address||clientData.address,
         reference:clientData.reference||'',
+        client_address_id:clientData.client_address_id||null,
         product,amount,payment,driver,
         time_start:ts,time_end:te,notes,
         lat:clientData.lat,lng:clientData.lng,
@@ -1659,7 +1696,7 @@ async function addDelivery(){
       ['f-phone','f-name','f-address','f-reference','f-amount','f-notes'].forEach(id=>document.getElementById(id).value='');
       ['f-product','f-payment','f-driver'].forEach(id=>document.getElementById(id).value='');
       ['si-LAV-8','si-LAV-20','si-LAV-CA-8','si-LAV-CA-20','si-CA-TB-20','si-CAF-20'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value='0'; });
-      hideClientBoxes();currentClient=null;pendingAddressData=null;
+      hideClientBoxes();currentClient=null;currentAddress=null;addingAddress=false;pendingAddressData=null;
       const addrHint=document.getElementById('addr-hint');
       if(addrHint){addrHint.textContent='Selecciona una sugerencia de Google Maps';addrHint.style.color='';}
       document.getElementById('addr-status').textContent='';

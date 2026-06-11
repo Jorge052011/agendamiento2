@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 
-from .models import Client, Delivery, DailyStock, OptRoute, Config
+from .models import Client, ClientAddress, Delivery, DailyStock, OptRoute, Config
 from .utils import normalize_phone, haversine, nearest_neighbor_route
 
 
@@ -66,6 +66,24 @@ def clients(request):
         client.phone_raw = data.get("phone", phone)
 
     client.save()
+
+    # Al crear un cliente, guardar su primera dirección en la tabla histórica.
+    formatted = (data.get("formatted_address") or data.get("address") or "").strip()
+    if created and formatted:
+        ClientAddress.objects.create(
+            client=client,
+            label=data.get("label", "Dirección principal").strip() or "Dirección principal",
+            address_input=data.get("address_input", "").strip(),
+            address=formatted,
+            formatted_address=formatted,
+            place_id=data.get("place_id", "").strip(),
+            reference=data.get("reference", "").strip(),
+            lat=data.get("lat"), lng=data.get("lng"),
+            verified=bool(data.get("verified", False)),
+            geocode_source=data.get("geocode_source", "manual"),
+            is_default=True,
+        )
+
     status = 201 if created else 200
     return JsonResponse(client.to_dict(), status=status)
 
@@ -90,6 +108,39 @@ def client_detail(request, phone):
             setattr(client, k, v)
     client.save()
     return JsonResponse(client.to_dict())
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def client_addresses(request, phone):
+    norm = normalize_phone(phone)
+    try:
+        client = Client.objects.get(phone=norm)
+    except Client.DoesNotExist:
+        return JsonResponse({"error": "Cliente no encontrado"}, status=404)
+
+    data = json.loads(request.body)
+    formatted = (data.get("formatted_address") or data.get("address") or "").strip()
+    if not formatted:
+        return JsonResponse({"error": "Dirección requerida"}, status=400)
+
+    if data.get("is_default"):
+        client.addresses.update(is_default=False)
+
+    address = ClientAddress.objects.create(
+        client=client,
+        label=data.get("label", "").strip(),
+        address_input=data.get("address_input", "").strip(),
+        address=formatted,
+        formatted_address=formatted,
+        place_id=data.get("place_id", "").strip(),
+        reference=data.get("reference", "").strip(),
+        lat=data.get("lat"), lng=data.get("lng"),
+        verified=bool(data.get("verified", False)),
+        geocode_source=data.get("geocode_source", "manual"),
+        is_default=bool(data.get("is_default", not client.addresses.exists())),
+    )
+    return JsonResponse(address.to_dict(), status=201)
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -118,9 +169,24 @@ def deliveries(request):
     except Client.DoesNotExist:
         pass
 
+    client_address = None
+    address_id = data.get("client_address_id")
+    if client and address_id:
+        try:
+            client_address = client.addresses.get(id=address_id, active=True)
+        except ClientAddress.DoesNotExist:
+            return JsonResponse({"error": "La dirección seleccionada no pertenece al cliente"}, status=400)
+
     address = (data.get("formatted_address") or data.get("address", "")).strip()
-    if not address and client:
-        address = client.formatted_address or client.address or ""
+    if client_address:
+        address = client_address.formatted_address or client_address.address
+    elif not address and client:
+        default_address = client.addresses.filter(active=True).first()
+        if default_address:
+            client_address = default_address
+            address = default_address.formatted_address or default_address.address
+        else:
+            address = client.formatted_address or client.address or ""
 
     name = (data.get("name", "").strip() or (client.name if client else ""))
     driver = data.get("driver", "").lower().strip()
@@ -133,14 +199,15 @@ def deliveries(request):
         id               = str(int(datetime.now().timestamp() * 1000)),
         delivery_date    = data.get("delivery_date", date.today().isoformat()),
         client_phone     = phone,
+        client_address   = client_address,
         name             = name,
         address          = address,
         formatted_address= (data.get("formatted_address", "").strip() or
-                            (client.formatted_address if client else "")),
+                            (client_address.formatted_address if client_address else (client.formatted_address if client else ""))),
         place_id         = (data.get("place_id", "").strip() or
-                            (client.place_id if client else "")),
+                            (client_address.place_id if client_address else (client.place_id if client else ""))),
         reference        = (data.get("reference", "").strip() or
-                            (client.reference if client else "")),
+                            (client_address.reference if client_address else (client.reference if client else ""))),
         product          = data.get("product", "").strip(),
         amount           = data.get("amount", "").strip(),
         payment          = data.get("payment", "").strip(),
@@ -148,8 +215,8 @@ def deliveries(request):
         time_start       = data.get("time_start", ""),
         time_end         = data.get("time_end", ""),
         notes            = data.get("notes", "").strip(),
-        lat              = data.get("lat") or (client.lat if client else None),
-        lng              = data.get("lng") or (client.lng if client else None),
+        lat              = data.get("lat") or (client_address.lat if client_address else (client.lat if client else None)),
+        lng              = data.get("lng") or (client_address.lng if client_address else (client.lng if client else None)),
         stock_items      = data.get("stock_items", {}),
         completed        = False,
     )
