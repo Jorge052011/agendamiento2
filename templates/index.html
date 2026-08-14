@@ -14,7 +14,7 @@
   --brd:#2a2a3d; --brd2:#353550;
   --acc:#f0e040; --acc2:#1e90ff; --acc3:#ff6b2b; --grn:#40f090;
   --txt:#e8e8f0; --mut:#6868a0; --mut2:#9090c0;
-  --jorge:#f0e040; --diego:#1e90ff; --otro:#ff6b2b;
+  --jorge:#f0e040; --diego:#1e90ff; --jorge-noche:#ff6b2b; --diego-noche:#b56cff;
   --nav-h:56px; --tab-h:52px;
 }
 /* ── TEMA CLARO ── */
@@ -23,15 +23,17 @@
   --brd:#d0d4db; --brd2:#b8bdc7;
   --acc:#d4a000; --acc2:#0088bb; --acc3:#cc2060; --grn:#1a9950;
   --txt:#1a1a2e; --mut:#6c7280; --mut2:#4a5060;
-  --jorge:#b8860b; --diego:#1565c0; --otro:#e64a19;
+  --jorge:#b8860b; --diego:#1565c0; --jorge-noche:#e64a19; --diego-noche:#7e57c2;
 }
 .light .tag.time{color:#b8860b;background:rgba(212,160,0,.12);}
 .light .tag.driver.jorge{color:#b8860b;background:rgba(212,160,0,.12);}
 .light .tag.driver.diego{color:#1565c0;background:rgba(30,144,255,.12);}
-.light .tag.driver.otro{color:#e64a19;background:rgba(255,107,43,.12);}
+.light .tag.driver.jorge_noche{color:#e64a19;background:rgba(255,107,43,.12);}
+.light .tag.driver.diego_noche{color:#7e57c2;background:rgba(126,87,194,.12);}
 .light .d-card.jorge::before{background:#d4a000;}
 .light .d-card.diego::before{background:#1565c0;}
-.light .d-card.otro::before{background:#e64a19;}
+.light .d-card.jorge_noche::before{background:#e64a19;}
+.light .d-card.diego_noche::before{background:#7e57c2;}
 .light .hdr-date{background:rgba(212,160,0,.1);border-color:rgba(212,160,0,.3);}
 .light .client-found{background:rgba(26,153,80,.08);border-color:rgba(26,153,80,.3);}
 .light .client-new{background:rgba(212,160,0,.07);border-color:rgba(212,160,0,.25);}
@@ -98,6 +100,8 @@ header{background:var(--surf);border-bottom:1px solid var(--brd);display:flex;al
 .chip.active{border-color:var(--acc);color:var(--acc);}
 .chip.jorge.active{border-color:var(--jorge);color:var(--jorge);}
 .chip.diego.active{border-color:var(--diego);color:var(--diego);}
+.chip.jorge_noche.active{border-color:var(--jorge-noche);color:var(--jorge-noche);}
+.chip.diego_noche.active{border-color:var(--diego-noche);color:var(--diego-noche);}
 .map-col{flex:1;position:relative;display:flex;flex-direction:column;min-width:200px;overflow:hidden;height:100%;}
 #map{flex:1;}
 /* Filtro nocturno: tono oscuro azulado legible, similar a Google Maps noche */
@@ -161,7 +165,8 @@ textarea{resize:vertical;min-height:50px;}
 .d-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:2px 0 0 2px;}
 .d-card.jorge::before{background:var(--jorge);}
 .d-card.diego::before{background:var(--diego);}
-.d-card.otro::before{background:var(--otro);}
+.d-card.jorge_noche::before{background:var(--jorge-noche);}
+.d-card.diego_noche::before{background:var(--diego-noche);}
 .d-card:hover{border-color:var(--brd2);}
 .d-card.completed{opacity:.35;}
 .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px;}
@@ -182,7 +187,8 @@ textarea{resize:vertical;min-height:50px;}
 .tag.time{color:var(--acc);background:rgba(240,224,64,.1);}
 .tag.driver.jorge{color:var(--jorge);background:rgba(240,224,64,.12);}
 .tag.driver.diego{color:var(--diego);background:rgba(30,144,255,.12);}
-.tag.driver.otro{color:var(--otro);background:rgba(255,107,43,.12);}
+.tag.driver.jorge_noche{color:var(--jorge-noche);background:rgba(255,107,43,.12);}
+.tag.driver.diego_noche{color:var(--diego-noche);background:rgba(181,108,255,.12);}
 .arrived-mark{font-size:.66rem;color:var(--grn);margin-top:3px;}
 .card-notes{font-size:.68rem;color:var(--acc);margin-top:3px;line-height:1.4;background:rgba(240,224,64,.06);border-left:2px solid var(--acc);padding:2px 6px;border-radius:0 4px 4px 0;}
 /* ── EDIT PANEL ── */
@@ -212,7 +218,7 @@ textarea{resize:vertical;min-height:50px;}
 .route-block{background:var(--surf2);border:1px solid var(--brd);border-radius:9px;padding:.8rem;margin-bottom:.6rem;}
 .route-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;}
 .rdriver{font-family:'Syne',sans-serif;font-weight:700;font-size:.84rem;}
-.rdriver.jorge{color:var(--jorge);}.rdriver.diego{color:var(--diego);}.rdriver.otro{color:var(--otro);}
+.rdriver.jorge{color:var(--jorge);}.rdriver.diego{color:var(--diego);}.rdriver.jorge_noche{color:var(--jorge-noche);}.rdriver.diego_noche{color:var(--diego-noche);}
 .rsub{font-size:.68rem;color:var(--mut);}
 .stop{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-top:1px solid var(--brd);}
 .snum{width:20px;height:20px;border-radius:50%;font-size:.58rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -268,6 +274,8 @@ textarea{resize:vertical;min-height:50px;}
 .dchip.active{border-color:var(--acc);color:var(--acc);}
 .dchip.jorge.active{border-color:var(--jorge);color:var(--jorge);}
 .dchip.diego.active{border-color:var(--diego);color:var(--diego);}
+.dchip.jorge_noche.active{border-color:var(--jorge-noche);color:var(--jorge-noche);}
+.dchip.diego_noche.active{border-color:var(--diego-noche);color:var(--diego-noche);}
 .opt-result{background:var(--surf2);border:1px solid var(--brd);border-radius:9px;padding:.85rem;margin-top:.75rem;}
 .opt-rh{display:flex;justify-content:space-between;align-items:center;margin-bottom:.65rem;}
 .opt-rtitle{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--grn);}
@@ -330,7 +338,8 @@ textarea{resize:vertical;min-height:50px;}
 .reparto-driver-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;}
 .reparto-driver-name.jorge{color:var(--jorge);}
 .reparto-driver-name.diego{color:var(--diego);}
-.reparto-driver-name.otro{color:var(--otro);}
+.reparto-driver-name.jorge_noche{color:var(--jorge-noche);}
+.reparto-driver-name.diego_noche{color:var(--diego-noche);}
 .reparto-driver-badge{font-size:.65rem;font-weight:700;background:var(--surf3);border-radius:20px;padding:2px 7px;color:var(--mut);}
 .reparto-driver-badge.has-stops{background:rgba(240,224,64,.12);color:var(--acc);}
 .reparto-btn-mapa{margin-left:auto;background:transparent;border:1px solid var(--brd2);border-radius:6px;color:var(--mut);font-size:.68rem;padding:3px 8px;cursor:pointer;white-space:nowrap;transition:all .15s;}
@@ -349,7 +358,8 @@ textarea{resize:vertical;min-height:50px;}
 .r-snum{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;color:#000;flex-shrink:0;margin-top:1px;}
 .r-snum.jorge{background:var(--jorge);}
 .r-snum.diego{background:var(--diego);}
-.r-snum.otro{background:var(--otro);}
+.r-snum.jorge_noche{background:var(--jorge-noche);}
+.r-snum.diego_noche{background:var(--diego-noche);}
 .r-sbody{flex:1;min-width:0;}
 .r-sname{font-size:.86rem;font-weight:600;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .r-saddr{font-size:.85rem;color:var(--mut);white-space:normal;overflow:visible;text-overflow:unset;margin-top:2px;}
@@ -535,7 +545,8 @@ textarea{resize:vertical;min-height:50px;}
 .carga-driver-tab{background:var(--surf2);border:1px solid var(--brd);border-radius:20px;padding:4px 14px;font-size:.75rem;cursor:pointer;color:var(--mut);transition:all .15s;}
 .carga-driver-tab.jorge.active{border-color:var(--jorge);color:var(--jorge);background:rgba(240,224,64,.08);}
 .carga-driver-tab.diego.active{border-color:var(--diego);color:var(--diego);background:rgba(30,144,255,.08);}
-.carga-driver-tab.otro.active{border-color:var(--otro);color:var(--otro);background:rgba(255,107,43,.08);}
+.carga-driver-tab.jorge_noche.active{border-color:var(--jorge-noche);color:var(--jorge-noche);background:rgba(255,107,43,.08);}
+.carga-driver-tab.diego_noche.active{border-color:var(--diego-noche);color:var(--diego-noche);background:rgba(181,108,255,.08);}
 .carga-driver-tab:not(.active):hover{color:var(--txt);}
 .carga-body{display:flex;flex:1;overflow:hidden;gap:0;min-height:0;}
 .carga-col{flex:1;min-width:0;overflow-y:auto;overflow-x:hidden;padding:.8rem 1rem;height:100%;}
@@ -657,7 +668,8 @@ textarea{resize:vertical;min-height:50px;}
     <div class="cal-legend">
       <div class="cl-item"><div class="cl-dot" style="background:var(--jorge)"></div>Jorge</div>
       <div class="cl-item"><div class="cl-dot" style="background:var(--diego)"></div>Diego</div>
-      <div class="cl-item"><div class="cl-dot" style="background:var(--otro)"></div>Otro</div>
+      <div class="cl-item"><div class="cl-dot" style="background:var(--jorge-noche)"></div>Jorge Noche</div>
+      <div class="cl-item"><div class="cl-dot" style="background:var(--diego-noche)"></div>Diego Noche</div>
     </div>
   </div>
 
@@ -686,7 +698,8 @@ textarea{resize:vertical;min-height:50px;}
         <div class="chip active" onclick="setFilter('all',this)">Todos</div>
         <div class="chip jorge"  onclick="setFilter('jorge',this)">Jorge</div>
         <div class="chip diego"  onclick="setFilter('diego',this)">Diego</div>
-        <div class="chip"        onclick="setFilter('otro',this)">Otro</div>
+        <div class="chip jorge_noche" onclick="setFilter('jorge_noche',this)">Jorge Noche</div>
+        <div class="chip diego_noche" onclick="setFilter('diego_noche',this)">Diego Noche</div>
         <div class="chip"        onclick="setFilter('pending',this)">Pendientes</div>
       </div>
       <div class="scrollable" id="delivery-list"></div>
@@ -826,7 +839,8 @@ textarea{resize:vertical;min-height:50px;}
                 <option value="">Seleccionar...</option>
                 <option value="jorge">Jorge</option>
                 <option value="diego">Diego</option>
-                <option value="otro">Otro</option>
+                <option value="jorge_noche">Jorge Noche</option>
+                <option value="diego_noche">Diego Noche</option>
               </select>
             </div>
           </div>
@@ -866,7 +880,8 @@ textarea{resize:vertical;min-height:50px;}
           <div style="display:flex;gap:6px;margin-bottom:.7rem;" id="tracking-who">
             <button class="dchip jorge" onclick="setTrackingDriver('jorge',this)">Jorge</button>
             <button class="dchip diego" onclick="setTrackingDriver('diego',this)">Diego</button>
-            <button class="dchip otro"  onclick="setTrackingDriver('otro',this)">Otro</button>
+            <button class="dchip jorge_noche" onclick="setTrackingDriver('jorge_noche',this)">Jorge Noche</button>
+            <button class="dchip diego_noche" onclick="setTrackingDriver('diego_noche',this)">Diego Noche</button>
           </div>
           <button class="btn-primary" id="btn-tracking" onclick="toggleTracking()" disabled>
             📍 ACTIVAR SEGUIMIENTO
@@ -952,7 +967,8 @@ textarea{resize:vertical;min-height:50px;}
             <div class="dchip active" onclick="setOptDriver('',this)">Todos</div>
             <div class="dchip jorge"  onclick="setOptDriver('jorge',this)">Jorge</div>
             <div class="dchip diego"  onclick="setOptDriver('diego',this)">Diego</div>
-            <div class="dchip"        onclick="setOptDriver('otro',this)">Otro</div>
+            <div class="dchip jorge_noche" onclick="setOptDriver('jorge_noche',this)">Jorge Noche</div>
+            <div class="dchip diego_noche" onclick="setOptDriver('diego_noche',this)">Diego Noche</div>
           </div>
         </div>
         <div class="divider"></div>
@@ -1044,7 +1060,8 @@ textarea{resize:vertical;min-height:50px;}
       <div class="ml-title">Repartidores</div>
       <div class="ml-item"><div class="ml-dot" style="background:var(--jorge)"></div>Jorge</div>
       <div class="ml-item"><div class="ml-dot" style="background:var(--diego)"></div>Diego</div>
-      <div class="ml-item"><div class="ml-dot" style="background:var(--otro)"></div>Otro</div>
+      <div class="ml-item"><div class="ml-dot" style="background:var(--jorge-noche)"></div>Jorge Noche</div>
+      <div class="ml-item"><div class="ml-dot" style="background:var(--diego-noche)"></div>Diego Noche</div>
       <div class="ml-item"><div class="ml-dot" style="background:#00c853"></div>Entregado</div>
     </div>
     <div class="map-stats">
@@ -1077,7 +1094,8 @@ textarea{resize:vertical;min-height:50px;}
     <span style="font-size:.72rem;color:var(--mut);align-self:center;margin-right:4px;">Ver:</span>
     <button class="carga-driver-tab jorge active" onclick="setCargaDriver('jorge',this)">Jorge</button>
     <button class="carga-driver-tab diego" onclick="setCargaDriver('diego',this)">Diego</button>
-    <button class="carga-driver-tab otro" onclick="setCargaDriver('otro',this)">Otro</button>
+    <button class="carga-driver-tab jorge_noche" onclick="setCargaDriver('jorge_noche',this)">Jorge Noche</button>
+    <button class="carga-driver-tab diego_noche" onclick="setCargaDriver('diego_noche',this)">Diego Noche</button>
   </div>
 
   <!-- Cuerpo en dos columnas -->
@@ -1130,7 +1148,10 @@ textarea{resize:vertical;min-height:50px;}
 // ════════════════════════════════════════════════════════
 //  ESTADO
 // ════════════════════════════════════════════════════════
-const COLORS={jorge:'#f0e040',diego:'#1e90ff',otro:'#ff6b2b'};
+const COLORS={jorge:'#f0e040',diego:'#1e90ff',jorge_noche:'#ff6b2b',diego_noche:'#b56cff'};
+const DRIVER_LABELS={jorge:'Jorge',diego:'Diego',jorge_noche:'Jorge Noche',diego_noche:'Diego Noche'};
+const ALL_DRIVERS=['jorge','diego','jorge_noche','diego_noche'];
+function driverLabel(driver){return DRIVER_LABELS[driver] || cap(driver);}
 let deliveries=[],calSummary={},currentFilter='all';
 let map,markers={},routeLines=[];
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
@@ -1441,7 +1462,7 @@ function addMarker(d){
     ${d.product?`<div class="pu-row"><span class="pu-lbl">📦</span><span class="pu-val">${d.product} ${d.amount}</span></div>`:''}
     ${d.payment?`<div class="pu-row"><span class="pu-lbl">💳</span><span class="pu-val">${d.payment}</span></div>`:''}
     <div class="pu-row"><span class="pu-lbl">⏰</span><span class="pu-val">${d.time_start}–${d.time_end}</span></div>
-    <div class="pu-row"><span class="pu-lbl">🚴</span><span class="pu-val" style="color:${COLORS[d.driver]}">${cap(d.driver)}</span></div>
+    <div class="pu-row"><span class="pu-lbl">🚴</span><span class="pu-val" style="color:${COLORS[d.driver]}">${driverLabel(d.driver)}</span></div>
     ${d.arrived_at?`<div class="pu-row"><span class="pu-lbl">✅</span><span class="pu-val">Llegó: ${d.arrived_at}</span></div>`:''}
     ${d.notes?`<div class="pu-row"><span class="pu-lbl">📝</span><span class="pu-val" style="color:var(--acc)">${d.notes}</span></div>`:''}
   `);
@@ -1907,9 +1928,7 @@ function renderAll(){renderList();renderRoutes();updateStats();}
 function renderList(){
   const el=document.getElementById('delivery-list');
   let list=deliveries;
-  if(currentFilter==='jorge')list=deliveries.filter(d=>d.driver==='jorge');
-  if(currentFilter==='diego')list=deliveries.filter(d=>d.driver==='diego');
-  if(currentFilter==='otro') list=deliveries.filter(d=>d.driver==='otro');
+  if(ALL_DRIVERS.includes(currentFilter)) list=deliveries.filter(d=>d.driver===currentFilter);
   if(currentFilter==='pending')list=deliveries.filter(d=>!d.completed);
   list = sortListByAppliedRouteOrder(list);
   document.getElementById('list-count').textContent=list.length;
@@ -1940,7 +1959,7 @@ function renderList(){
         ${d.amount?`<span class="tag">${d.amount}</span>`:''}
         ${d.payment?`<span class="tag pay">${d.payment}</span>`:''}
         <span class="tag time">⏰ ${d.time_start}–${d.time_end}</span>
-        <span class="tag driver ${d.driver}">${cap(d.driver)}</span>
+        <span class="tag driver ${d.driver}">${driverLabel(d.driver)}</span>
       </div>
       ${d.arrived_at?`<div class="arrived-mark">✅ Llegó ${d.arrived_at}</div>`:''}
       ${d.notes?`<div class="card-notes">📝 ${d.notes}</div>`:''}
@@ -2004,7 +2023,8 @@ function renderList(){
             <select id="${eid}-driver">
               <option value="jorge" ${d.driver==='jorge'?'selected':''}>Jorge</option>
               <option value="diego" ${d.driver==='diego'?'selected':''}>Diego</option>
-              <option value="otro"  ${d.driver==='otro'?'selected':''}>Otro</option>
+              <option value="jorge_noche" ${d.driver==='jorge_noche'?'selected':''}>Jorge Noche</option>
+              <option value="diego_noche" ${d.driver==='diego_noche'?'selected':''}>Diego Noche</option>
             </select>
           </div>
         </div>
@@ -2057,7 +2077,7 @@ function renderRoutes(){
         </div>
       </div>`;
     }).join('');
-    return`<div class="route-block"><div class="route-hd"><div class="rdriver ${drv}">${cap(drv)}</div><div class="rsub">${dd.filter(d=>!d.completed).length} pend · ${dd.length} total</div><button class="btn-nav-route" onclick="navigateRouteWaze('${drv}')">🧭 Navegar ruta</button></div>${stops}</div>`;
+    return`<div class="route-block"><div class="route-hd"><div class="rdriver ${drv}">${driverLabel(drv)}</div><div class="rsub">${dd.filter(d=>!d.completed).length} pend · ${dd.length} total</div><button class="btn-nav-route" onclick="navigateRouteWaze('${drv}')">🧭 Navegar ruta</button></div>${stops}</div>`;
   }).join('');
 }
 
@@ -2341,7 +2361,7 @@ async function runOptDiag(){
       el.textContent += `❌ No hay ruta: ${err.error||'sin datos'}\n`;
       // Intentar con todas las combinaciones de driver
       el.textContent += `\nBuscando en otros conductores...\n`;
-      for(const drv of ['','jorge','diego','otro']){
+      for(const drv of ['',...ALL_DRIVERS]){
         if(drv === driver) continue;
         const r2 = await fetch(`/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
         if(r2.ok){
@@ -2392,7 +2412,7 @@ async function _appendToOpt(newDelivery){
   // sin importar el conductor. Así aparece siempre en Optimizar.
   try {
     const date = newDelivery.delivery_date || selectedDate;
-    const allDrivers = ['', 'jorge', 'diego', 'otro'];
+    const allDrivers = ['', ...ALL_DRIVERS];
     let appendedToAny = false;
 
     for(const drv of allDrivers){
@@ -2446,7 +2466,7 @@ async function _loadOpt(){
 }
 // Busca en todos los conductores y retorna la primera ruta que encuentre
 async function _loadOptAny(){
-  const drivers = [selectedOptDriver||'', 'jorge', 'diego', 'otro', ''];
+  const drivers = [selectedOptDriver||'', ...ALL_DRIVERS, ''];
   const seen = new Set();
   for(const drv of drivers){
     if(seen.has(drv)) continue;
@@ -2789,7 +2809,7 @@ function _doDraw(result){
           const isCompleted = !!stop.completed;
           const m = L.marker(
             [leg.end_location.lat(), leg.end_location.lng()],
-            { icon: makeIcon(stop.driver || 'otro', i + 1, 38, !isCompleted) }
+            { icon: makeIcon(stop.driver || 'jorge_noche', i + 1, 38, !isCompleted) }
           )
           .bindPopup(`
             <div class="pu-name">${i + 1}. ${stop.name || 'Parada'}</div>
@@ -2835,7 +2855,7 @@ function _drawFallbackPolyline(result, ordered){
     const isCompleted = !!s.completed;
     const m = L.marker(
       [parseFloat(s.lat), parseFloat(s.lng)],
-      { icon: makeIcon(s.driver || 'otro', i + 1, 38, !isCompleted) }
+      { icon: makeIcon(s.driver || 'jorge_noche', i + 1, 38, !isCompleted) }
     )
     .bindPopup(`
       <div class="pu-name">${i + 1}. ${s.name || 'Parada'}</div>
@@ -2938,18 +2958,20 @@ async function saveSettings(){
 // ════════════════════════════════════════════════════════
 //  MÓDULO MI RUTA — Reparto manual por repartidor
 // ════════════════════════════════════════════════════════
-const REPARTO_DRIVERS = ['jorge','diego','otro'];
+const REPARTO_DRIVERS = ALL_DRIVERS;
 const REPARTO_DRIVER_DEFAULTS = {
-  jorge: { start_time:'14:00', speed_kmh:25, service_min:10 },
-  diego: { start_time:'14:00', speed_kmh:25, service_min:10 },
-  otro:  { start_time:'14:00', speed_kmh:25, service_min:10 },
+  jorge:       { start_time:'14:00', speed_kmh:25, service_min:10 },
+  diego:       { start_time:'14:00', speed_kmh:25, service_min:10 },
+  jorge_noche: { start_time:'19:00', speed_kmh:25, service_min:10 },
+  diego_noche: { start_time:'19:00', speed_kmh:25, service_min:10 },
 };
 
 // Estado independiente por repartidor
 let repartoState = {
-  jorge: { dp: null, orders: [], dirty: false },
-  diego: { dp: null, orders: [], dirty: false },
-  otro:  { dp: null, orders: [], dirty: false },
+  jorge:       { dp: null, orders: [], dirty: false },
+  diego:       { dp: null, orders: [], dirty: false },
+  jorge_noche: { dp: null, orders: [], dirty: false },
+  diego_noche: { dp: null, orders: [], dirty: false },
 };
 
 let repartoDriverConfig = JSON.parse(JSON.stringify(REPARTO_DRIVER_DEFAULTS));
@@ -3714,7 +3736,7 @@ let trackingInterval = null;   // polling del monitor
 let gpsMarkers       = {};     // marcadores GPS en el mapa {driver: marker}
 let gpsTrails        = {};     // polylines de rastro {driver: polyline}
 
-const DRIVER_LABELS = { jorge:'Jorge', diego:'Diego', otro:'Otro' };
+// DRIVER_LABELS se define al inicio junto con COLORS y ALL_DRIVERS
 
 function setTrackingDriver(driver, el){
   trackingDriver = driver;
@@ -3843,7 +3865,7 @@ async function clearAllTrails(){
   Object.values(gpsTrails).forEach(l => map.removeLayer(l));
   gpsMarkers = {}; gpsTrails = {};
   // Limpiar en el servidor para cada repartidor conocido
-  for(const driver of ['jorge','diego','otro']){
+  for(const driver of ALL_DRIVERS){
     await fetch('/api/gps/clear',{
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({driver})
