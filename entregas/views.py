@@ -441,49 +441,6 @@ def config(request):
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  GPS TRACKING (en memoria — sin cambios)
-# ═══════════════════════════════════════════════════════════════════════════════
-
-_gps_store = {}
-
-@csrf_exempt
-@require_http_methods(["POST"])
-def gps_update(request):
-    data   = json.loads(request.body)
-    driver = data.get("driver", "").lower().strip()
-    lat    = data.get("lat")
-    lng    = data.get("lng")
-
-    if not driver or lat is None or lng is None:
-        return JsonResponse({"error": "driver, lat y lng requeridos"}, status=400)
-
-    prev  = _gps_store.get(driver, {})
-    trail = prev.get("trail", [])
-    trail = (trail + [[lat, lng]])[-200:]
-
-    _gps_store[driver] = {
-        "driver": driver, "lat": lat, "lng": lng,
-        "trail": trail, "ts": datetime.now().isoformat(),
-    }
-    return JsonResponse({"ok": True})
-
-
-@require_http_methods(["GET"])
-def gps_status(request):
-    return JsonResponse(list(_gps_store.values()), safe=False)
-
-
-@csrf_exempt
-@require_http_methods(["POST"])
-def gps_clear(request):
-    data   = json.loads(request.body)
-    driver = data.get("driver", "").lower().strip()
-    if driver in _gps_store:
-        del _gps_store[driver]
-    return JsonResponse({"ok": True})
-
-
-# ═══════════════════════════════════════════════════════════════════════════════
 #  RUTA OPTIMIZADA GUARDADA
 # ═══════════════════════════════════════════════════════════════════════════════
 

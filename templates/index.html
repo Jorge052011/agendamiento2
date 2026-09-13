@@ -210,33 +210,6 @@ textarea{resize:vertical;min-height:50px;}
 .btn-cancel-edit:hover{color:var(--txt);}
 .ibtn.edit:hover{color:var(--acc2);}
 .ibtn.nav:hover{color:#40f090;}
-.btn-nav-route{background:var(--surf3);border:1px solid var(--brd);border-radius:7px;color:#40f090;font-size:.72rem;font-family:'DM Sans',sans-serif;padding:5px 12px;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:5px;white-space:nowrap;}
-.btn-nav-route:hover{border-color:#40f090;background:rgba(64,240,144,.08);}
-
-
-/* ── ROUTES ── */
-.route-block{background:var(--surf2);border:1px solid var(--brd);border-radius:9px;padding:.8rem;margin-bottom:.6rem;}
-.route-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;}
-.rdriver{font-family:'Syne',sans-serif;font-weight:700;font-size:.84rem;}
-.rdriver.jorge{color:var(--jorge);}.rdriver.diego{color:var(--diego);}.rdriver.jorge_noche{color:var(--jorge-noche);}.rdriver.diego_noche{color:var(--diego-noche);}
-.rsub{font-size:.68rem;color:var(--mut);}
-.stop{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-top:1px solid var(--brd);}
-.snum{width:20px;height:20px;border-radius:50%;font-size:.58rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.sbody{flex:1;min-width:0;}
-.sname{font-size:.76rem;font-weight:600;}
-.saddr{font-size:.66rem;color:var(--mut);word-break:break-word;}
-.sref{font-size:.64rem;color:var(--acc2);}
-.stime{font-size:.64rem;color:var(--acc);margin-top:2px;font-weight:600;}
-.stimes{display:flex;gap:4px;margin-top:3px;}
-.stimes input{flex:1;font-size:.66rem;padding:4px 6px;}
-.slabels{display:flex;gap:4px;margin-top:1px;}
-.slabels span{flex:1;font-size:.56rem;color:var(--mut);}
-.btn-nav-stop{background:none;border:1px solid rgba(64,240,144,.35);border-radius:6px;color:#40f090;
-  font-size:.65rem;font-family:'DM Sans',sans-serif;padding:4px 9px;cursor:pointer;
-  transition:all .18s;display:flex;align-items:center;gap:4px;margin-top:5px;width:100%;}
-.btn-nav-stop:hover{background:rgba(64,240,144,.1);border-color:#40f090;}
-.stop.completed-stop{opacity:.4;}
-.stop.completed-stop .btn-nav-stop{display:none;}
 .btn-apply-order{background:var(--grn);color:#000;font-family:'Syne',sans-serif;font-weight:700;
   font-size:.86rem;border:none;border-radius:9px;padding:11px;cursor:pointer;width:100%;
   margin-top:.4rem;transition:all .2s;letter-spacing:.3px;}
@@ -252,7 +225,6 @@ textarea{resize:vertical;min-height:50px;}
 .btn-ir-gmaps:hover{filter:brightness(1.15);}
 .btn-ir-waze{background:#05c8f0;color:#000;}
 .btn-ir-waze:hover{filter:brightness(1.1);}
-.stop.completed-stop .btn-nav-row{display:none;}
 
 /* ── OPTIMIZER ── */
 .opt-section{margin-bottom:.9rem;}
@@ -298,14 +270,12 @@ textarea{resize:vertical;min-height:50px;}
 .opt-sref{font-size:.63rem;color:var(--mut);margin-top:2px;}
 .opt-eta{font-size:.65rem;font-weight:700;color:var(--acc2);background:rgba(64,200,240,.12);border-radius:4px;padding:1px 6px;display:inline-block;margin-top:2px;}
 .opt-eta-orig{font-size:.65rem;font-weight:700;color:var(--grn);background:rgba(64,240,144,.12);border-radius:4px;padding:1px 6px;display:inline-block;margin-top:2px;}
-.seta{font-size:.65rem;font-weight:700;color:var(--acc2);margin-bottom:1px;}
 .opt-eta-summary{background:var(--surf3);border:1px solid var(--brd);border-radius:7px;padding:.4rem .7rem;margin:.4rem 0;font-size:.7rem;display:flex;gap:.75rem;flex-wrap:wrap;}
 .opt-eta-summary span{color:var(--mut);}
 .opt-eta-summary b{color:var(--txt);}
 .opt-new-badge{display:inline-block;font-size:.58rem;font-weight:700;background:#f59e0b;color:#fff;border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:middle;letter-spacing:.03em;}
 .opt-order{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;}
 .opt-order-chip{font-size:.62rem;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap;}
-.sinfo-chips{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 2px;}
 .opt-order-chip.product{background:rgba(240,224,64,.12);color:var(--acc);}
 .opt-order-chip.amount{background:rgba(64,240,144,.12);color:var(--grn);}
 .opt-order-chip.payment{background:rgba(64,200,240,.12);color:var(--acc2);}
@@ -374,13 +344,6 @@ textarea{resize:vertical;min-height:50px;}
 .reparto-save-btn.dirty{border-color:var(--acc);color:var(--acc);background:rgba(240,224,64,.07);}
 .reparto-apply-btn{width:100%;padding:.5rem;background:rgba(64,240,144,.08);border:1.5px solid rgba(64,240,144,.35);border-radius:8px;color:var(--grn);font-size:.72rem;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;margin-top:.35rem;transition:all .2s;}
 .reparto-apply-btn:hover{filter:brightness(1.08);border-color:var(--grn);}
-/* ── Tracking GPS ── */
-.tracking-card{background:var(--bg);border:1px solid var(--brd);border-radius:8px;padding:.6rem .8rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.7rem;}
-.tracking-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;animation:markerPulse 1.2s ease-out infinite;}
-.tracking-info{flex:1;min-width:0;}
-.tracking-name{font-size:.78rem;font-weight:700;}
-.tracking-coords{font-size:.62rem;color:var(--mut);}
-.tracking-time{font-size:.6rem;color:var(--mut2);white-space:nowrap;}
 .btn-secondary{background:var(--surf3);border:1px solid var(--brd);color:var(--mut);font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;border-radius:8px;padding:9px;cursor:pointer;transition:all .2s;}
 .btn-secondary:hover{border-color:var(--acc3);color:var(--acc3);}
 /* ── Marcadores mapa ── */
@@ -494,14 +457,6 @@ textarea{resize:vertical;min-height:50px;}
 
   /* Búsqueda y sort en clientes */
   #cli-search, #cli-sort{ font-size:.82rem !important; padding:.5rem .75rem !important; }
-
-  /* Rutas */
-  .sname{ font-size:.88rem !important; }
-  .saddr{ font-size:.78rem !important; }
-  .seta{ font-size:.75rem !important; }
-  .route-hd{ font-size:.85rem; }
-  .rdriver{ font-size:.82rem !important; }
-  .rsub{ font-size:.75rem !important; }
 
   /* Popup mapa */
   .pu-name{ font-size:.95rem !important; }
@@ -639,7 +594,6 @@ textarea{resize:vertical;min-height:50px;}
   <div class="desk-nav">
     <button class="nb active" onclick="switchPanel('list',this)">📋 Pedidos</button>
     <button class="nb" onclick="switchPanel('form',this)">➕ Nuevo</button>
-    <button class="nb" onclick="switchPanel('routes',this)">🗺️ Rutas</button>
     <!-- <button class="nb" onclick="switchPanel('optimizer',this)">⚡ Optimizar</button> -->
     <button class="nb" onclick="switchPanel('reparto',this)">📍 Mi Ruta</button>
     <button class="nb" onclick="switchPanel('clients',this)">👥 Clientes</button>
@@ -857,59 +811,6 @@ textarea{resize:vertical;min-height:50px;}
 
           <button class="btn-primary" id="btn-add" onclick="addDelivery()">+ AGREGAR ENTREGA</button>
         </div>
-      </div>
-    </div>
-
-    <!-- RUTAS -->
-    <div id="page-routes" class="page">
-      <div class="panel-hd"><div class="panel-title">🗺️ Rutas del día</div></div>
-      <div class="scrollable">
-
-        <!-- Lista de rutas del día -->
-        <div id="routes-body"></div>
-
-        <!-- PANEL GPS — separador visual -->
-        <div style="border-top:1px solid var(--brd);margin:.75rem 0 .5rem;"></div>
-
-        <!-- PANEL REPARTIDOR (celular) -->
-        <div class="cfg-block" id="tracking-driver-panel">
-          <div class="cfg-title">📍 Compartir mi ubicación</div>
-          <div style="font-size:.72rem;color:var(--mut);margin-bottom:.6rem;">
-            Selecciona quién eres y activa el GPS para que se vea en el mapa.
-          </div>
-          <div style="display:flex;gap:6px;margin-bottom:.7rem;" id="tracking-who">
-            <button class="dchip jorge" onclick="setTrackingDriver('jorge',this)">Jorge</button>
-            <button class="dchip diego" onclick="setTrackingDriver('diego',this)">Diego</button>
-            <button class="dchip jorge_noche" onclick="setTrackingDriver('jorge_noche',this)">Jorge Noche</button>
-            <button class="dchip diego_noche" onclick="setTrackingDriver('diego_noche',this)">Diego Noche</button>
-          </div>
-          <button class="btn-primary" id="btn-tracking" onclick="toggleTracking()" disabled>
-            📍 ACTIVAR SEGUIMIENTO
-          </button>
-          <div id="tracking-status" style="font-size:.68rem;color:var(--mut);margin-top:.5rem;text-align:center;"></div>
-        </div>
-
-        <!-- PANEL MONITOR (escritorio) -->
-        <div class="cfg-block">
-          <div class="cfg-title">👁️ Monitor en tiempo real</div>
-          <div style="font-size:.72rem;color:var(--mut);margin-bottom:.7rem;">
-            Posición actual de los repartidores activos.
-          </div>
-          <div id="tracking-monitor">
-            <div style="font-size:.72rem;color:var(--mut);text-align:center;padding:.5rem;">
-              Sin repartidores activos
-            </div>
-          </div>
-          <div style="display:flex;gap:6px;margin-top:.7rem;">
-            <button class="btn-primary" onclick="loadGpsStatus()" style="flex:1;">
-              🔄 Actualizar
-            </button>
-            <button class="btn-secondary" onclick="clearAllTrails()" style="flex:1;background:var(--surf3);border:1px solid var(--brd);color:var(--mut);">
-              🗑️ Limpiar rastros
-            </button>
-          </div>
-        </div>
-
       </div>
     </div>
 
@@ -1133,7 +1034,6 @@ textarea{resize:vertical;min-height:50px;}
     <button class="mnb active" data-tab="list"      onclick="mobSwitch('list',this)"><span class="ico">📋</span>Pedidos</button>
     <button class="mnb"        data-tab="form"      onclick="mobSwitch('form',this)"><span class="ico">➕</span>Nuevo</button>
     <button class="mnb"        data-tab="map"       onclick="mobSwitch('map',this)"><span class="ico">🗺️</span>Mapa</button>
-    <button class="mnb"        data-tab="routes"    onclick="mobSwitch('routes',this)"><span class="ico">📍</span>Rutas</button>
     <!-- <button class="mnb"        data-tab="optimizer" onclick="mobSwitch('optimizer',this)"><span class="ico">⚡</span>Ruta opt.</button> -->
     <button class="mnb"        data-tab="reparto"   onclick="mobSwitch('reparto',this)"><span class="ico">📍</span>Mi Ruta</button>
     <button class="mnb"        data-tab="carga"     onclick="mobSwitch('carga',this)"><span class="ico">📦</span>Carga</button>
@@ -1347,25 +1247,6 @@ function navigateWaze(id){
   // Coordenadas → más preciso; si no, usa dirección de texto
   const dest = (d.lat && d.lng) ? `${d.lat},${d.lng}` : encodeURIComponent(d.address);
   window.open(`https://www.google.com/maps/dir/?api=1&destination=${dest}&travelmode=driving`, '_blank');
-}
-
-function navigateRouteWaze(driver){
-  const stops = deliveries.filter(d => d.driver === driver && !d.completed && d.lat && d.lng);
-  const all   = deliveries.filter(d => d.driver === driver && d.lat && d.lng);
-  const pool  = stops.length ? stops : all;
-  if(!pool.length){ toast('⚠️ Sin coordenadas para navegar'); return; }
-
-  if(pool.length === 1){
-    window.open(`https://www.google.com/maps/dir/?api=1&destination=${pool[0].lat},${pool[0].lng}&travelmode=driving`, '_blank');
-    return;
-  }
-  // Google Maps multi-parada: origen/wp1/wp2/.../destino
-  // Separamos destino final del resto (intermedios van como waypoints)
-  const dest      = `${pool[pool.length-1].lat},${pool[pool.length-1].lng}`;
-  const waypoints = pool.slice(0, -1).map(d=>`${d.lat},${d.lng}`).join('|');
-  const url = `https://www.google.com/maps/dir/?api=1&destination=${dest}&waypoints=${encodeURIComponent(waypoints)}&travelmode=driving`;
-  window.open(url, '_blank');
-  toast(`🗺️ Abriendo ${pool.length} paradas en Google Maps`);
 }
 
 function getMapTileLayer(isLight){
@@ -1923,7 +1804,7 @@ async function saveEdit(id){
 // ════════════════════════════════════════════════════════
 //  RENDER
 // ════════════════════════════════════════════════════════
-function renderAll(){renderList();renderRoutes();updateStats();}
+function renderAll(){renderList();updateStats();}
 
 function renderList(){
   const el=document.getElementById('delivery-list');
@@ -2039,45 +1920,6 @@ function renderList(){
         </div>
       </div>
     </div>`;
-  }).join('');
-}
-
-function renderRoutes(){
-  const el=document.getElementById('routes-body');
-  const drivers=[...new Set(deliveries.map(d=>d.driver))];
-  if(!drivers.length){el.innerHTML=`<div class="empty"><div class="empty-icon">🗺️</div><div class="empty-txt">Sin rutas para este día.</div></div>`;return;}
-  el.innerHTML=drivers.map(drv=>{
-    const dd = getSortedStops(drv);
-    const origin = getResolvedRepartoDP(drv);
-    const drvEtas = calcRepartoETAs(origin, dd, drv);
-    const stops=dd.map((d,i)=>{
-      const ref=d.reference||(d._client&&d._client.reference)||'';
-      const navDest = (d.lat && d.lng) ? `${d.lat},${d.lng}` : encodeURIComponent(d.address);
-      const navUrl  = `https://www.google.com/maps/dir/?api=1&destination=${navDest}&travelmode=driving&dir_action=navigate`;
-      const eta = drvEtas[i];
-      return`<div class="stop ${d.completed?'completed-stop':''}">
-        <div class="snum" style="background:${COLORS[drv]};color:#000">${i+1}</div>
-        <div class="sbody">
-          <div class="sname">${d.name} ${d.completed?'✅':''}</div>
-          ${eta?.arr ? `<div class="seta">🕐 Llegada estimada: ~${eta.arr}</div>` : ''}
-          <div class="saddr">${d.address}</div>
-          ${ref?`<div class="sref">🔖 ${ref}</div>`:''}
-          ${d.client_phone?`<div class="saddr">📞 ${d.client_phone}</div>`:''}
-          ${(d.product||d.amount||d.payment)?`<div class="sinfo-chips">
-            ${(d.product||d.amount)?`<span class="opt-order-chip amount">📦 ${[d.product,d.amount].filter(Boolean).join(' × ')}</span>`:''}
-            ${d.payment?`<span class="opt-order-chip payment">💳 ${d.payment}</span>`:''}
-          ${d.notes ? `<div class="route-notes">📝 ${d.notes}</div>` : ''}
-          </div>`:''}
-          ${(d.time_start||d.time_end)?`<div class="stime"><span class="tag time">⏰ ${d.time_start&&d.time_end?d.time_start+' – '+d.time_end:(d.time_start||d.time_end)}</span></div>`:''}
-
-          ${!d.completed?`<div class="btn-nav-row">
-            <button class="btn-ir-gmaps" onclick="window.open('${navUrl}','_blank')">🗺️ Google Maps</button>
-            <button class="btn-ir-waze"  onclick="window.open('https://waze.com/ul?ll=${d.lat&&d.lng?d.lat+','+d.lng:''}&q=${encodeURIComponent(d.address)}&navigate=yes','_blank')">🚗 Waze</button>
-          </div>`:''}
-        </div>
-      </div>`;
-    }).join('');
-    return`<div class="route-block"><div class="route-hd"><div class="rdriver ${drv}">${driverLabel(drv)}</div><div class="rsub">${dd.filter(d=>!d.completed).length} pend · ${dd.length} total</div><button class="btn-nav-route" onclick="navigateRouteWaze('${drv}')">🧭 Navegar ruta</button></div>${stops}</div>`;
   }).join('');
 }
 
@@ -3513,7 +3355,6 @@ async function applyRepartoOrderToViews(driver){
   } catch(e){}
 
   renderList();
-  renderRoutes();
   renderDriverColBody(driver);
   refreshMarkers();
   if(currentRepartoMapDriver === driver){
@@ -3554,9 +3395,8 @@ function switchPanel(tab,el){
   if(tab==='clients')loadClients();
   if(tab==='carga'){ initCarga(); }
   if(tab==='reparto'){ initReparto(); }
-  if(tab==='routes'){ startTrackingMonitor(); } else { stopTrackingMonitor(); }
   // Redibujar mapa al volver a tabs que lo muestran
-  if(map && ['list','routes'].includes(tab)){ setTimeout(()=>map.invalidateSize(),150); }
+  if(map && ['list'].includes(tab)){ setTimeout(()=>map.invalidateSize(),150); }
   if(tab==='optimizer'){
     // Limpiar TODO el mapa al entrar a optimizar
     clearRouteLines();
@@ -3633,7 +3473,6 @@ function mobSwitch(tab,el){
   el.classList.add('active');
   if(tab==='clients')loadClients();
   if(tab==='carga'){ initCarga(); }
-  if(tab==='routes')startTrackingMonitor();
   if(tab==='reparto'){ initReparto(); }
   if(tab==='calendar-mob') renderMobCal();
 }
@@ -3725,167 +3564,6 @@ function toggleTheme(){
     });
   }
 })();
-
-// ════════════════════════════════════════════════════════
-//  GPS TRACKING
-// ════════════════════════════════════════════════════════
-let trackingDriver   = null;   // repartidor seleccionado en este dispositivo
-let trackingActive   = false;  // seguimiento activo
-let trackingWatchId  = null;   // ID de watchPosition
-let trackingInterval = null;   // polling del monitor
-let gpsMarkers       = {};     // marcadores GPS en el mapa {driver: marker}
-let gpsTrails        = {};     // polylines de rastro {driver: polyline}
-
-// DRIVER_LABELS se define al inicio junto con COLORS y ALL_DRIVERS
-
-function setTrackingDriver(driver, el){
-  trackingDriver = driver;
-  document.querySelectorAll('#tracking-who .dchip').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  const btn = document.getElementById('btn-tracking');
-  btn.disabled = false;
-}
-
-function toggleTracking(){
-  if(trackingActive){ stopTracking(); } else { startTracking(); }
-}
-
-function startTracking(){
-  if(!trackingDriver){ toast('⚠️ Selecciona quién eres primero'); return; }
-  if(!navigator.geolocation){ toast('❌ Este dispositivo no tiene GPS'); return; }
-
-  trackingActive = true;
-  const btn = document.getElementById('btn-tracking');
-  btn.textContent = '⏹ DETENER SEGUIMIENTO';
-  btn.style.background = 'var(--acc3)';
-  document.getElementById('tracking-status').textContent = '📡 Enviando ubicación...';
-
-  trackingWatchId = navigator.geolocation.watchPosition(
-    pos => sendGps(pos.coords.latitude, pos.coords.longitude),
-    err => { toast('❌ Error GPS: ' + err.message); stopTracking(); },
-    { enableHighAccuracy: true, maximumAge: 3000, timeout: 10000 }
-  );
-}
-
-function stopTracking(){
-  trackingActive = false;
-  if(trackingWatchId !== null){
-    navigator.geolocation.clearWatch(trackingWatchId);
-    trackingWatchId = null;
-  }
-  const btn = document.getElementById('btn-tracking');
-  btn.textContent = '📍 ACTIVAR SEGUIMIENTO';
-  btn.style.background = '';
-  document.getElementById('tracking-status').textContent = '⏹ Seguimiento detenido';
-}
-
-async function sendGps(lat, lng){
-  try{
-    await fetch('/api/gps/update',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ driver: trackingDriver, lat, lng })
-    });
-    const ts = new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-    document.getElementById('tracking-status').textContent =
-      `📡 Última actualización: ${ts}`;
-  } catch(e){
-    document.getElementById('tracking-status').textContent = '⚠️ Sin conexión';
-  }
-}
-
-async function loadGpsStatus(){
-  try{
-    const res  = await fetch('/api/gps/status');
-    const data = await res.json();
-    renderTrackingMonitor(data);
-    updateGpsOnMap(data);
-  } catch(e){ console.error('GPS status error', e); }
-}
-
-function renderTrackingMonitor(drivers){
-  const el = document.getElementById('tracking-monitor');
-  if(!drivers.length){
-    el.innerHTML = '<div style="font-size:.72rem;color:var(--mut);text-align:center;padding:.5rem;">Sin repartidores activos</div>';
-    return;
-  }
-  el.innerHTML = drivers.map(d => {
-    const color = COLORS[d.driver] || '#fff';
-    const ts    = d.ts ? new Date(d.ts).toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit',second:'2-digit'}) : '';
-    return `
-      <div class="tracking-card">
-        <div class="tracking-dot" style="background:${color};box-shadow:0 0 0 3px ${color}33;"></div>
-        <div class="tracking-info">
-          <div class="tracking-name" style="color:${color};">${DRIVER_LABELS[d.driver]||d.driver}</div>
-          <div class="tracking-coords">${Number(d.lat).toFixed(5)}, ${Number(d.lng).toFixed(5)}</div>
-        </div>
-        <div class="tracking-time">${ts}</div>
-      </div>`;
-  }).join('');
-}
-
-function updateGpsOnMap(drivers){
-  drivers.forEach(d => {
-    const color = COLORS[d.driver] || '#fff';
-    const lat   = parseFloat(d.lat);
-    const lng   = parseFloat(d.lng);
-
-    // Marcador de posición actual
-    if(gpsMarkers[d.driver]){
-      gpsMarkers[d.driver].setLatLng([lat, lng]);
-    } else {
-      const icon = L.divIcon({
-        html: `<div style="
-          background:${color};border:3px solid #fff;border-radius:50%;
-          width:20px;height:20px;box-shadow:0 0 0 4px ${color}55;
-          display:flex;align-items:center;justify-content:center;
-          font-size:10px;font-weight:800;color:#000;">
-          ${(DRIVER_LABELS[d.driver]||'?')[0]}
-        </div>`,
-        className:'', iconSize:[20,20], iconAnchor:[10,10]
-      });
-      gpsMarkers[d.driver] = L.marker([lat,lng], {icon})
-        .bindPopup(`<div class="pu-name">${DRIVER_LABELS[d.driver]||d.driver}</div>`)
-        .addTo(map);
-    }
-
-    // Rastro recorrido
-    if(d.trail && d.trail.length > 1){
-      if(gpsTrails[d.driver]){ map.removeLayer(gpsTrails[d.driver]); }
-      gpsTrails[d.driver] = L.polyline(d.trail, {
-        color, weight:3, opacity:.6, dashArray:'4 4'
-      }).addTo(map);
-    }
-  });
-}
-
-async function clearAllTrails(){
-  // Limpiar del mapa
-  Object.values(gpsMarkers).forEach(m => map.removeLayer(m));
-  Object.values(gpsTrails).forEach(l => map.removeLayer(l));
-  gpsMarkers = {}; gpsTrails = {};
-  // Limpiar en el servidor para cada repartidor conocido
-  for(const driver of ALL_DRIVERS){
-    await fetch('/api/gps/clear',{
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({driver})
-    });
-  }
-  document.getElementById('tracking-monitor').innerHTML =
-    '<div style="font-size:.72rem;color:var(--mut);text-align:center;padding:.5rem;">Sin repartidores activos</div>';
-  toast('🗑️ Rastros eliminados');
-}
-
-// Al entrar a la pestaña Rutas, arrancar polling automático cada 5 seg
-function startTrackingMonitor(){
-  loadGpsStatus();
-  if(!trackingInterval){
-    trackingInterval = setInterval(loadGpsStatus, 5000);
-  }
-}
-function stopTrackingMonitor(){
-  if(trackingInterval){ clearInterval(trackingInterval); trackingInterval = null; }
-}
 
 // ════════════════════════════════════════════════════════
 //  CARGA DEL DÍA
