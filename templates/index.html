@@ -226,70 +226,6 @@ textarea{resize:vertical;min-height:50px;}
 .btn-ir-waze{background:#05c8f0;color:#000;}
 .btn-ir-waze:hover{filter:brightness(1.1);}
 
-/* ── OPTIMIZER ── */
-.opt-section{margin-bottom:.9rem;}
-.opt-stitle{font-family:'Syne',sans-serif;font-weight:700;font-size:.74rem;color:var(--mut);text-transform:uppercase;letter-spacing:.7px;margin-bottom:.45rem;}
-.dp-grid{display:grid;grid-template-columns:1fr 1fr;gap:.35rem;margin-bottom:.35rem;}
-.dp-btn{background:var(--surf2);border:2px solid var(--brd);border-radius:8px;padding:.5rem .65rem;cursor:pointer;transition:all .18s;text-align:left;touch-action:manipulation;}
-.dp-btn:hover{border-color:var(--acc2);}
-.dp-btn.selected{border-color:var(--acc);background:rgba(240,224,64,.07);}
-.dp-btn-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.75rem;color:var(--txt);}
-.dp-btn-addr{font-size:.62rem;color:var(--mut);margin-top:1px;line-height:1.3;}
-.custom-dp{background:var(--surf2);border:2px dashed var(--brd);border-radius:8px;padding:.6rem .75rem;cursor:pointer;transition:all .18s;margin-bottom:.45rem;}
-.custom-dp:hover{border-color:var(--acc2);}
-.custom-dp.selected{border-color:var(--acc);border-style:solid;background:rgba(240,224,64,.07);}
-.custom-dp-label{font-size:.7rem;color:var(--mut);margin-bottom:.35rem;display:flex;align-items:center;gap:4px;}
-.custom-dp-fields{display:grid;gap:.35rem;}
-.driver-row{display:flex;gap:.35rem;flex-wrap:wrap;}
-.dchip{background:var(--surf2);border:1px solid var(--brd);border-radius:20px;padding:3px 11px;font-size:.7rem;cursor:pointer;color:var(--mut);transition:all .15s;touch-action:manipulation;}
-.dchip:hover{color:var(--txt);}
-.dchip.active{border-color:var(--acc);color:var(--acc);}
-.dchip.jorge.active{border-color:var(--jorge);color:var(--jorge);}
-.dchip.diego.active{border-color:var(--diego);color:var(--diego);}
-.dchip.jorge_noche.active{border-color:var(--jorge-noche);color:var(--jorge-noche);}
-.dchip.diego_noche.active{border-color:var(--diego-noche);color:var(--diego-noche);}
-.opt-result{background:var(--surf2);border:1px solid var(--brd);border-radius:9px;padding:.85rem;margin-top:.75rem;}
-.opt-rh{display:flex;justify-content:space-between;align-items:center;margin-bottom:.65rem;}
-.opt-rtitle{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--grn);}
-.opt-stats{display:flex;gap:.4rem;}
-.opt-stat{background:var(--bg);border:1px solid var(--brd);border-radius:6px;padding:3px 9px;text-align:center;}
-.opt-stat-n{font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;color:var(--acc);}
-.opt-stat-l{font-size:.58rem;color:var(--mut);}
-.opt-stop{display:flex;gap:7px;align-items:flex-start;padding:5px 0;border-top:1px solid var(--brd);}
-.opt-stop.draggable{cursor:grab;transition:background .15s;}
-.opt-stop.draggable:active{cursor:grabbing;}
-.opt-stop.sortable-ghost{opacity:.35;background:var(--surf3);border-radius:7px;}
-.opt-stop.sortable-chosen{background:rgba(240,224,64,.06);border-radius:7px;}
-.opt-drag-handle{display:flex;align-items:center;color:var(--mut);font-size:.85rem;padding:2px 1px 0;flex-shrink:0;cursor:grab;user-select:none;touch-action:none;}
-.opt-drag-hint{font-size:.62rem;color:var(--mut);text-align:center;margin:.35rem 0 .1rem;opacity:.7;}
-.opt-snum{width:21px;height:21px;border-radius:50%;background:var(--acc);color:#000;font-size:.62rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-.opt-snum.origin{background:var(--acc2);}
-.opt-sbody{flex:1;min-width:0;}
-.opt-sname{font-size:.78rem;font-weight:600;}
-.opt-saddr{font-size:.66rem;color:var(--mut);}
-.opt-sref{font-size:.63rem;color:var(--mut);margin-top:2px;}
-.opt-eta{font-size:.65rem;font-weight:700;color:var(--acc2);background:rgba(64,200,240,.12);border-radius:4px;padding:1px 6px;display:inline-block;margin-top:2px;}
-.opt-eta-orig{font-size:.65rem;font-weight:700;color:var(--grn);background:rgba(64,240,144,.12);border-radius:4px;padding:1px 6px;display:inline-block;margin-top:2px;}
-.opt-eta-summary{background:var(--surf3);border:1px solid var(--brd);border-radius:7px;padding:.4rem .7rem;margin:.4rem 0;font-size:.7rem;display:flex;gap:.75rem;flex-wrap:wrap;}
-.opt-eta-summary span{color:var(--mut);}
-.opt-eta-summary b{color:var(--txt);}
-.opt-new-badge{display:inline-block;font-size:.58rem;font-weight:700;background:#f59e0b;color:#fff;border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:middle;letter-spacing:.03em;}
-.opt-order{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;}
-.opt-order-chip{font-size:.62rem;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap;}
-.opt-order-chip.product{background:rgba(240,224,64,.12);color:var(--acc);}
-.opt-order-chip.amount{background:rgba(64,240,144,.12);color:var(--grn);}
-.opt-order-chip.payment{background:rgba(64,200,240,.12);color:var(--acc2);}
-.opt-sdist{font-size:.61rem;color:var(--mut);margin-top:1px;}
-.opt-stime{margin:3px 0 2px;}
-.opt-stop.opt-completed{opacity:.55;background:rgba(0,200,83,.04);border-radius:8px;padding:6px 5px;}
-.opt-stop.opt-completed .opt-snum{background:#00c853;color:#000;}
-.opt-stop.opt-completed .opt-sname{text-decoration:line-through;color:var(--mut);}
-.opt-stop.opt-completed .btn-nav-row{display:none;}
-.opt-completed-badge{display:inline-block;font-size:.58rem;font-weight:700;background:#00c853;color:#000;border-radius:4px;padding:1px 6px;margin-left:5px;vertical-align:middle;letter-spacing:.03em;}
-.btn-gmaps{background:linear-gradient(135deg,#4285f4,#34a853);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;border:none;border-radius:9px;padding:11px;cursor:pointer;width:100%;margin-top:.65rem;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;touch-action:manipulation;}
-.btn-gmaps:hover{opacity:.9;}
-.btn-ver-mapa{background:var(--surf3);border:1.5px solid var(--acc);color:var(--acc);font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;border-radius:9px;padding:11px;cursor:pointer;width:100%;margin-top:.5rem;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;touch-action:manipulation;}
-.btn-ver-mapa:hover{background:rgba(240,224,64,.1);}
 /* ── MI RUTA (Módulo Reparto) ── */
 .reparto-dp-section{padding:.6rem .8rem .4rem;flex-shrink:0;border-bottom:1px solid var(--brd);}
 .reparto-dp-title{font-size:.68rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem;}
@@ -346,6 +282,31 @@ textarea{resize:vertical;min-height:50px;}
 .reparto-apply-btn:hover{filter:brightness(1.08);border-color:var(--grn);}
 .btn-secondary{background:var(--surf3);border:1px solid var(--brd);color:var(--mut);font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;border-radius:8px;padding:9px;cursor:pointer;transition:all .2s;}
 .btn-secondary:hover{border-color:var(--acc3);color:var(--acc3);}
+/* ── TIEMPOS ── */
+.tiempos-scroll{padding:.75rem;overflow-y:auto;flex:1;}
+.tiempos-card{background:var(--surf2);border:1px solid var(--brd);border-radius:10px;margin-bottom:.75rem;overflow:hidden;}
+.tiempos-card-hd{display:flex;align-items:center;gap:.5rem;padding:.65rem .85rem;border-bottom:1px solid var(--brd);flex-wrap:wrap;}
+.tiempos-driver-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;}
+.tiempos-driver-name.jorge{color:var(--jorge);}
+.tiempos-driver-name.diego{color:var(--diego);}
+.tiempos-driver-name.jorge_noche{color:var(--jorge-noche);}
+.tiempos-driver-name.diego_noche{color:var(--diego-noche);}
+.tiempos-badge{font-size:.65rem;font-weight:700;background:var(--surf3);border-radius:20px;padding:2px 8px;color:var(--mut);}
+.tiempos-badge.has-stops{background:rgba(240,224,64,.12);color:var(--acc);}
+.tiempos-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.35rem;padding:.6rem .85rem;background:var(--surf);border-bottom:1px solid var(--brd);}
+.tiempos-stat{display:flex;flex-direction:column;gap:1px;}
+.tiempos-stat-label{font-size:.58rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;}
+.tiempos-stat-value{font-family:'Syne',sans-serif;font-weight:800;font-size:.88rem;color:var(--txt);}
+.tiempos-stat-value.highlight{color:var(--acc);}
+.tiempos-stops{padding:.4rem .65rem;}
+.tiempos-stop{display:flex;gap:8px;align-items:flex-start;padding:6px 4px;border-top:1px solid var(--brd);}
+.tiempos-stop:first-child{border-top:none;}
+.tiempos-snum{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;color:#000;flex-shrink:0;margin-top:1px;background:var(--acc);}
+.tiempos-sbody{flex:1;min-width:0;}
+.tiempos-sname{font-size:.82rem;font-weight:600;}
+.tiempos-saddr{font-size:.75rem;color:var(--mut);margin-top:1px;}
+.tiempos-eta{font-size:.7rem;font-weight:700;color:var(--acc2);margin-top:2px;}
+.tiempos-empty{padding:1.5rem;text-align:center;color:var(--mut);font-size:.82rem;}
 /* ── Marcadores mapa ── */
 @keyframes markerPulse{
   0%  {transform:scale(1);   opacity:.7;}
@@ -395,7 +356,7 @@ textarea{resize:vertical;min-height:50px;}
 .mnb .ico{font-size:1.1rem;line-height:1;}
 .mnb.active{color:var(--acc);}
 @media(max-width:900px){.cal-col{display:none;}#btn-mob-cal{display:block!important;}.map-col{display:none;}.map-col.mob-show{display:flex;}.desk-nav{display:none;}.mob-nav{display:flex;}.main{padding-bottom:var(--tab-h);}.panel{flex:1;max-width:100%;}#toast{bottom:calc(var(--tab-h) + max(8px,env(safe-area-inset-bottom,0px)));} html{font-size:15px;}}
-@media(max-width:600px){header{padding:0 .75rem;}.hdr-date{font-size:.7rem;padding:3px 8px;}.panel-hd{padding:.65rem .9rem .4rem;}.scrollable{padding:.65rem .9rem;}.filter-bar{padding:.35rem .9rem;}.form-row{grid-template-columns:1fr;}.dp-grid{grid-template-columns:1fr;}}
+@media(max-width:600px){header{padding:0 .75rem;}.hdr-date{font-size:.7rem;padding:3px 8px;}.panel-hd{padding:.65rem .9rem .4rem;}.scrollable{padding:.65rem .9rem;}.filter-bar{padding:.35rem .9rem;}.form-row{grid-template-columns:1fr;}}
 
 /* ══ MEJORAS MÓVIL ══════════════════════════════════════
    Aplica solo en pantallas ≤480px (teléfonos)
@@ -596,6 +557,7 @@ textarea{resize:vertical;min-height:50px;}
     <button class="nb" onclick="switchPanel('form',this)">➕ Nuevo</button>
     <!-- <button class="nb" onclick="switchPanel('optimizer',this)">⚡ Optimizar</button> -->
     <button class="nb" onclick="switchPanel('reparto',this)">📍 Mi Ruta</button>
+    <button class="nb" onclick="switchPanel('tiempos',this)">⏱ Tiempos</button>
     <button class="nb" onclick="switchPanel('clients',this)">👥 Clientes</button>
     <button class="nb" onclick="switchPanel('carga',this)">📦 Carga</button>
     <button class="nb" onclick="switchPanel('settings',this)">⚙️</button>
@@ -814,6 +776,14 @@ textarea{resize:vertical;min-height:50px;}
       </div>
     </div>
 
+    <!-- TIEMPOS -->
+    <div id="page-tiempos" class="page" style="flex-direction:column;overflow:hidden;height:100%;">
+      <div class="panel-hd" style="flex-shrink:0;">
+        <div class="panel-title">⏱ Tiempos</div>
+      </div>
+      <div class="tiempos-scroll" id="tiempos-scroll"></div>
+    </div>
+
     <!-- OPTIMIZADOR -->
     <div id="page-calendar-mob" class="page">
       <div style="padding:.75rem .5rem 0;">
@@ -838,70 +808,6 @@ textarea{resize:vertical;min-height:50px;}
         </div>
       </div>
     </div>
-    <div id="page-optimizer" class="page">
-      <div class="panel-hd"><div class="panel-title">⚡ Optimizar Ruta</div></div>
-      <div class="scrollable">
-        <!-- Panel diagnóstico visible en móvil -->
-        <div id="opt-debug" style="background:#1a1a2e;color:#0f0;font-size:11px;padding:6px 10px;border-radius:6px;margin:6px 0;display:none;white-space:pre-wrap;font-family:monospace;"></div>
-        <button onclick="runOptDiag()" style="font-size:11px;padding:4px 10px;margin-bottom:6px;background:#333;color:#aaa;border:1px solid #555;border-radius:5px;width:100%">🔍 Diagnóstico servidor</button>
-        <div class="opt-section">
-          <div class="opt-stitle">1 · Punto de partida</div>
-          <div class="dp-grid" id="dp-buttons"></div>
-          <div class="custom-dp" id="custom-dp-card" onclick="selectCustomDP()">
-            <div class="custom-dp-label">📍 Dirección personalizada</div>
-            <div class="custom-dp-fields" id="custom-dp-fields" style="display:none">
-              <div class="field">
-                <label>Nombre</label>
-                <input id="cdp-name" type="text" placeholder="Mi casa" onclick="event.stopPropagation()">
-              </div>
-              <div class="field">
-                <label>Dirección</label>
-                <input id="cdp-addr" type="text" placeholder="Escribe para buscar..." onclick="event.stopPropagation()" autocomplete="off">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="opt-section">
-          <div class="opt-stitle">2 · Repartidor (opcional)</div>
-          <div class="driver-row">
-            <div class="dchip active" onclick="setOptDriver('',this)">Todos</div>
-            <div class="dchip jorge"  onclick="setOptDriver('jorge',this)">Jorge</div>
-            <div class="dchip diego"  onclick="setOptDriver('diego',this)">Diego</div>
-            <div class="dchip jorge_noche" onclick="setOptDriver('jorge_noche',this)">Jorge Noche</div>
-            <div class="dchip diego_noche" onclick="setOptDriver('diego_noche',this)">Diego Noche</div>
-          </div>
-        </div>
-        <div class="divider"></div>
-        <!-- Configuración ETA -->
-        <div style="background:var(--surf2);border:1px solid var(--brd);border-radius:9px;padding:.65rem .8rem;margin-bottom:.5rem;">
-          <div style="font-size:.7rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;">⏱ Parámetros de tiempo</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;">
-            <div>
-              <label style="font-size:.65rem;color:var(--mut);display:block;margin-bottom:2px;">🕐 Hora salida</label>
-              <input type="time" id="eta-start" value="14:00"
-                style="width:100%;background:var(--surf3);border:1px solid var(--brd2);border-radius:5px;color:var(--txt);font-size:.78rem;padding:4px 5px;"
-                onchange="ETA_START_TIME=this.value; if(currentOptResult) renderOptResult(currentOptResult);">
-            </div>
-            <div>
-              <label style="font-size:.65rem;color:var(--mut);display:block;margin-bottom:2px;">🚗 km/h ciudad</label>
-              <input type="number" id="eta-speed" value="25" min="10" max="80"
-                style="width:100%;background:var(--surf3);border:1px solid var(--brd2);border-radius:5px;color:var(--txt);font-size:.78rem;padding:4px 5px;"
-                onchange="ETA_SPEED_KMH=parseInt(this.value)||30; if(currentOptResult) renderOptResult(currentOptResult);">
-            </div>
-            <div>
-              <label style="font-size:.65rem;color:var(--mut);display:block;margin-bottom:2px;">⏳ Min/cliente</label>
-              <input type="number" id="eta-service" value="10" min="1" max="60"
-                style="width:100%;background:var(--surf3);border:1px solid var(--brd2);border-radius:5px;color:var(--txt);font-size:.78rem;padding:4px 5px;"
-                onchange="ETA_SERVICE_MIN=parseInt(this.value)||10; if(currentOptResult) renderOptResult(currentOptResult);">
-            </div>
-          </div>
-        </div>
-        <button class="btn-primary" id="btn-optimize" onclick="runOptimizer()">⚡ CALCULAR RUTA ÓPTIMA</button>
-        <div id="opt-result"></div>
-      </div>
-    </div>
-
     <!-- MI RUTA — Módulo de reparto manual por repartidor -->
     <div id="page-reparto" class="page" style="flex-direction:column;overflow:hidden;height:100%;">
       <div class="panel-hd" style="flex-shrink:0;">
@@ -1036,6 +942,7 @@ textarea{resize:vertical;min-height:50px;}
     <button class="mnb"        data-tab="map"       onclick="mobSwitch('map',this)"><span class="ico">🗺️</span>Mapa</button>
     <!-- <button class="mnb"        data-tab="optimizer" onclick="mobSwitch('optimizer',this)"><span class="ico">⚡</span>Ruta opt.</button> -->
     <button class="mnb"        data-tab="reparto"   onclick="mobSwitch('reparto',this)"><span class="ico">📍</span>Mi Ruta</button>
+    <button class="mnb"        data-tab="tiempos"   onclick="mobSwitch('tiempos',this)"><span class="ico">⏱</span>Tiempos</button>
     <button class="mnb"        data-tab="carga"     onclick="mobSwitch('carga',this)"><span class="ico">📦</span>Carga</button>
     <button class="mnb"        data-tab="clients"   onclick="mobSwitch('clients',this)"><span class="ico">👥</span>Clientes</button>
     <button class="mnb"        data-tab="settings"  onclick="mobSwitch('settings',this)"><span class="ico">⚙️</span>Config</button>
@@ -1057,7 +964,7 @@ let map,markers={},routeLines=[];
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 let selectedDate=todayStr();
 let appConfig={google_maps_key:'',departure_points:[]};
-let selectedDP=null,customDPSelected=false,selectedOptDriver='';
+
 let lookupTimer=null,currentClient=null,currentAddress=null,addingAddress=false;
 
 // Google Places state
@@ -1076,9 +983,6 @@ async function init(){
   loadCalSummary();
   await selectDate(selectedDate);
   syncFormDate();
-  // Cargar ruta optimizada — buscar en todos los conductores
-  const saved = await _loadOptAny();
-  if(saved){ renderOptResult(saved); }
 }
 init();
 
@@ -1403,15 +1307,34 @@ function renderCalendar(){
   }
 }
 async function selectDate(ds){
-  selectedDate=ds;syncFormDate();
-  document.getElementById('hdr-date').textContent=(ds===todayStr()?'Hoy · ':'')+fmtDate(ds);
+  selectedDate = ds;
+  syncFormDate();
+  repartoLoadedDate = null;
+
+  document.getElementById('hdr-date').textContent =
+    (ds===todayStr()?'Hoy · ':'')+fmtDate(ds);
+
   renderCalendar();
-  const r=await fetch(`/api/deliveries?date=${ds}&_=${Date.now()}`);
-  deliveries=await r.json();
-  renderAll();refreshMarkers();
-  // Si el módulo Mi Ruta está visible, refrescar
+
+  const requestDate = ds;
+  const r = await fetch(`/api/deliveries?date=${requestDate}&_=${Date.now()}`);
+  const data = await r.json();
+
+  if(selectedDate !== requestDate) return;
+
+  deliveries = data;
+  renderAll();
+  refreshMarkers();
+
   if(document.getElementById('page-reparto')?.classList.contains('active')){
-    refreshReparto();
+    await refreshReparto();
+    if(selectedDate !== requestDate) return;
+  }
+
+  if(document.getElementById('page-tiempos')?.classList.contains('active')){
+    await loadRepartoStateForDate();
+    if(selectedDate !== requestDate) return;
+    renderTiempos();
   }
 }
 
@@ -1626,8 +1549,6 @@ async function addDelivery(){
       const[y,m]=date.split('-').map(Number);
       if(y===calYear&&m===calMonth+1)await loadCalSummary();
       renderAll();
-      // Agregar el nuevo pedido al final de la ruta guardada (sin re-optimizar)
-      await _appendToOpt(nd);
       ['f-phone','f-name','f-address','f-reference','f-amount','f-notes'].forEach(id=>document.getElementById(id).value='');
       ['f-product','f-payment','f-driver'].forEach(id=>document.getElementById(id).value='');
       ['si-LAV-8','si-LAV-20','si-LAV-CA-8','si-LAV-CA-20','si-CA-TB-20','si-CAF-20'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value='0'; });
@@ -1676,18 +1597,6 @@ async function patchDelivery(id,data){
       const i=deliveries.findIndex(x=>x.id===id);
       if(i>-1)deliveries[i]=u;
       renderAll();refreshMarkers();
-      // Actualizar estado en ruta optimizada sin reordenar
-      if(currentOptResult?.ordered){
-        console.log('[OPT] Buscando id:', id, 'phone:', u.client_phone);
-        console.log('[OPT] ordered ids:', currentOptResult.ordered.map(s=>s.id));
-        const oi=currentOptResult.ordered.findIndex(s=>String(s.id)===String(id)||s.client_phone===u.client_phone);
-        console.log('[OPT] encontrado en índice:', oi);
-        if(oi>-1){
-          currentOptResult.ordered[oi].completed=u.completed;
-          currentOptResult.ordered[oi].arrived_at=u.arrived_at;
-          renderOptResult(currentOptResult);
-        }
-      }
       // Actualizar columna del repartidor en Mi Ruta si está visible
       if(document.getElementById('page-reparto')?.classList.contains('active')){
         renderAllDriverCols();
@@ -2083,467 +1992,7 @@ async function loadConfig(){
   if(appConfig.google_maps_key){
     loadGoogleMaps(appConfig.google_maps_key);
   }
-  renderDPButtons();renderSettingsDP();
-}
-function renderDPButtons(){
-  const c=document.getElementById('dp-buttons');if(!c)return;
-  c.innerHTML=(appConfig.departure_points||[]).map(dp=>`
-    <div class="dp-btn" id="dpbtn-${dp.id}" onclick="selectDP('${dp.id}')">
-      <div class="dp-btn-name">📍 ${dp.name}</div>
-      <div class="dp-btn-addr">${dp.address}</div>
-    </div>`).join('');
-}
-function selectDP(id){
-  customDPSelected=false;
-  selectedDP=(appConfig.departure_points||[]).find(p=>p.id===id)||null;
-  document.querySelectorAll('.dp-btn').forEach(b=>b.classList.remove('selected'));
-  const btn=document.getElementById('dpbtn-'+id);if(btn)btn.classList.add('selected');
-  document.getElementById('custom-dp-card').classList.remove('selected');
-  document.getElementById('custom-dp-fields').style.display='none';
-}
-function selectCustomDP(){
-  customDPSelected=true;selectedDP=null;
-  document.querySelectorAll('.dp-btn').forEach(b=>b.classList.remove('selected'));
-  document.getElementById('custom-dp-card').classList.add('selected');
-  document.getElementById('custom-dp-fields').style.display='grid';
-}
-function setOptDriver(drv,el){
-  selectedOptDriver=drv;
-  document.querySelectorAll('.dchip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-}
-
-async function runOptimizer(){
-  let origin = selectedDP;
-  console.log('[OPT] selectedDP al optimizar:', selectedDP?.name, '| customDPSelected:', customDPSelected);
-
-  if(customDPSelected){
-    const name = document.getElementById('cdp-name').value.trim() || 'Punto de partida';
-    const addrInput = document.getElementById('cdp-addr');
-    const addr = addrInput.value.trim();
-
-    if(!addr){
-      toast('⚠️ Ingresa la dirección de partida');
-      return;
-    }
-
-    const placeData = addrInput._placeData || null;
-
-    if(!placeData || !placeData.lat){
-      toast('⚠️ Selecciona la dirección de partida desde las sugerencias de Google Maps');
-      return;
-    }
-
-    origin = {
-      id:                'custom',
-      name,
-      address:           placeData.formatted_address || addr,
-      formatted_address: placeData.formatted_address || addr,
-      place_id:          placeData.place_id || '',
-      lat:               placeData.lat,
-      lng:               placeData.lng,
-    };
-  }
-
-  if(!origin){
-    toast('⚠️ Selecciona un punto de partida');
-    return;
-  }
-
-  const btn = document.getElementById('btn-optimize');
-  btn.textContent = '⏳ Calculando...';
-  btn.disabled = true;
-
-  const res = await fetch('/api/optimize', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      origin,
-      date: selectedDate,
-      driver: selectedOptDriver,
-      driver_filter: !!selectedOptDriver
-    })
-  });
-
-  btn.textContent = '⚡ CALCULAR RUTA ÓPTIMA';
-  btn.disabled = false;
-
-  if(!res.ok){
-    const e = await res.json();
-    toast('❌ ' + e.error);
-    return;
-  }
-
-  const result = await res.json();
-  renderOptResult(result);
-  await _saveOpt(); // ← guardar en servidor
-  // El usuario dibuja manualmente con "Ver ruta en mapa"
-}
-
-// ── Diagnóstico visible en móvil ─────────────────────────────────────────
-async function runOptDiag(){
-  const el = document.getElementById('opt-debug');
-  el.style.display = 'block';
-  el.textContent = '⏳ Consultando servidor...\n';
-  el.textContent += `Fecha: ${selectedDate}\nConductor: "${selectedOptDriver || ''}"\n`;
-  el.textContent += `opt-result tiene contenido: ${document.getElementById('opt-result')?.innerHTML?.trim()?.length > 0 ? 'SÍ' : 'NO'}\n`;
-  try {
-    const driver = selectedOptDriver || '';
-    const url = `/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(driver)}&_=${Date.now()}`;
-    el.textContent += `URL: ${url}\n`;
-    const res = await fetch(url);
-    el.textContent += `Status: ${res.status}\n`;
-    if(res.ok){
-      const data = await res.json();
-      el.textContent += `✅ Ruta encontrada: ${data?.ordered?.length} paradas\nOrigen: ${data?.origin?.name||'?'}\n`;
-      renderOptResult(data);
-      toast('✅ Ruta restaurada desde servidor');
-    } else {
-      const err = await res.json().catch(()=>({}));
-      el.textContent += `❌ No hay ruta: ${err.error||'sin datos'}\n`;
-      // Intentar con todas las combinaciones de driver
-      el.textContent += `\nBuscando en otros conductores...\n`;
-      for(const drv of ['',...ALL_DRIVERS]){
-        if(drv === driver) continue;
-        const r2 = await fetch(`/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
-        if(r2.ok){
-          const d2 = await r2.json();
-          el.textContent += `✅ Encontrada con conductor="${drv}": ${d2?.ordered?.length} paradas\n`;
-          renderOptResult(d2);
-          toast('✅ Ruta restaurada');
-          break;
-        } else {
-          el.textContent += `  conductor="${drv}": 404\n`;
-        }
-      }
-    }
-  } catch(e){
-    el.textContent += `❌ Error: ${e.message}`;
-  }
-}
-// ─────────────────────────────────────────────────────────────────────────
-let currentOptResult = null;
-let _drawGen = 0; // incrementa cada vez que se pide un nuevo dibujado
-
-// ── Persistencia del optimizador en el SERVIDOR (espejo) ─────────────────
-async function _saveOpt(){
-  if(!currentOptResult) return;
-  try {
-    const body = {
-      date:   selectedDate,
-      driver: selectedOptDriver || '',
-      result: currentOptResult,
-    };
-    console.log('[OPT] Guardando en servidor:', body.date, body.driver, body.result?.ordered?.length, 'paradas');
-    const res = await fetch('/api/opt-route', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(body)
-    });
-    const json = await res.json();
-    console.log('[OPT] Guardado OK:', json);
-    // Limpiar flag _new una vez que se guardó
-    if(currentOptResult?.ordered){
-      currentOptResult.ordered.forEach(s => { delete s._new; });
-    }
-    toast('💾 Ruta guardada en servidor');
-  } catch(e){ console.warn('[OPT] Error guardando ruta en servidor', e); toast('⚠️ Error al guardar ruta'); }
-}
-async function _appendToOpt(newDelivery){
-  // Agrega el nuevo pedido al FINAL de TODAS las rutas guardadas del día,
-  // sin importar el conductor. Así aparece siempre en Optimizar.
-  try {
-    const date = newDelivery.delivery_date || selectedDate;
-    const allDrivers = ['', ...ALL_DRIVERS];
-    let appendedToAny = false;
-
-    for(const drv of allDrivers){
-      const r = await fetch(`/api/opt-route?date=${date}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
-      if(!r.ok) continue;
-      const savedResult = await r.json();
-      if(!savedResult?.ordered?.length) continue;
-
-      // Verificar que el pedido no esté ya en esta ruta
-      const alreadyIn = savedResult.ordered.some(s => s.id === newDelivery.id);
-      if(alreadyIn) continue;
-
-      // Agregar al final
-      const newStop = {
-        ...newDelivery,
-        route_ref: newDelivery.place_id || newDelivery.formatted_address || newDelivery.address || '',
-        _new: true,
-      };
-      savedResult.ordered.push(newStop);
-      savedResult.stops = savedResult.ordered.length;
-
-      // Guardar en servidor con el mismo conductor que tenía
-      await fetch('/api/opt-route', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ date, driver: drv, result: savedResult })
-      });
-      appendedToAny = true;
-
-      // Si este es el que está en pantalla ahora, actualizar la vista
-      if(currentOptResult){
-        currentOptResult = savedResult;
-        renderOptResult(savedResult);
-      }
-    }
-
-    if(appendedToAny){
-      toast('📍 Pedido agregado al final de la ruta — arrástralo donde quieras');
-    }
-  } catch(e){
-    console.warn('[OPT] Error al agregar pedido a ruta:', e);
-  }
-}
-async function _loadOpt(){
-  try {
-    const driver = selectedOptDriver || '';
-    const res = await fetch(`/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(driver)}&_=${Date.now()}`);
-    if(!res.ok) return null;
-    return await res.json();
-  } catch(e){ return null; }
-}
-// Busca en todos los conductores y retorna la primera ruta que encuentre
-async function _loadOptAny(){
-  const drivers = [selectedOptDriver||'', ...ALL_DRIVERS, ''];
-  const seen = new Set();
-  for(const drv of drivers){
-    if(seen.has(drv)) continue;
-    seen.add(drv);
-    try {
-      const res = await fetch(`/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
-      if(res.ok){
-        const data = await res.json();
-        if(data?.ordered?.length > 0) return data;
-      }
-    } catch(e){}
-  }
-  return null;
-}
-// ─────────────────────────────────────────────────────────────────────────
-
-
-// ════════════════════════════════════════════════════════
-//  ETA — Tiempos estimados de llegada
-// ════════════════════════════════════════════════════════
-let ETA_SPEED_KMH   = 30;    // velocidad promedio ciudad (editable)
-let ETA_SERVICE_MIN = 10;    // minutos de atención por cliente (editable)
-let ETA_START_TIME  = '09:00'; // hora de salida (editable)
-
-function calcETAs(origin, ordered){
-  // Leer siempre los valores actuales de los inputs
-  ETA_START_TIME  = document.getElementById('eta-start')?.value  || ETA_START_TIME;
-  ETA_SPEED_KMH   = parseInt(document.getElementById('eta-speed')?.value)   || ETA_SPEED_KMH;
-  ETA_SERVICE_MIN = parseInt(document.getElementById('eta-service')?.value)  || ETA_SERVICE_MIN;
-  // Devuelve array de {arrivalMin, departMin} en minutos desde medianoche
-  const [sh, sm] = ETA_START_TIME.split(':').map(Number);
-  let cursor = sh * 60 + sm; // minutos desde medianoche
-
-  const haversineMin = (a, b) => {
-    if(!a.lat||!a.lng||!b.lat||!b.lng) return 15; // fallback 15 min
-    const R=6371, dLat=(b.lat-a.lat)*Math.PI/180, dLng=(b.lng-a.lng)*Math.PI/180;
-    const x=Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
-    const km=R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
-    return Math.round(km/ETA_SPEED_KMH*60);
-  };
-
-  const fmt = (mins) => {
-    const h=Math.floor(mins/60)%24, m=mins%60;
-    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
-  };
-
-  const etas = [];
-  let prev = origin;
-  for(const stop of ordered){
-    const travelMin = haversineMin(prev, stop);
-    const arrivalMin = cursor + travelMin;
-    const departMin  = arrivalMin + ETA_SERVICE_MIN;
-    etas.push({ arrivalMin, departMin, travelMin, arrivalStr: fmt(arrivalMin), departStr: fmt(departMin) });
-    cursor = departMin;
-    prev = stop;
-  }
-  return etas;
-}
-
-function fmtMin(mins){
-  const h=Math.floor(mins/60)%24, m=mins%60;
-  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
-}
-
-function renderOptResult(result){
-  currentOptResult = result;
-  const el = document.getElementById('opt-result');
-
-  const originHTML = `
-    <div class="opt-stop">
-      <div class="opt-snum origin">★</div>
-      <div class="opt-sbody">
-        <div class="opt-sname">${result.origin.name || 'Origen'}</div>
-        <div class="opt-saddr">${result.origin.formatted_address || result.origin.address || ''}</div>
-      </div>
-    </div>
-  `;
-
-  const etas = calcETAs(result.origin, result.ordered);
-  const totalMins = etas.length ? etas[etas.length-1].departMin - (()=>{const[h,m]=ETA_START_TIME.split(':').map(Number);return h*60+m;})() : 0;
-  const totalHrs  = Math.floor(totalMins/60), totalMin2 = totalMins%60;
-  const etaSummaryHTML = etas.length ? `
-    <div class="opt-eta-summary">
-      <div><span>🕐 Salida </span><b>${ETA_START_TIME}</b></div>
-      <div><span>🏁 Fin estimado </span><b>${etas[etas.length-1].departStr}</b></div>
-      <div><span>⏱ Duración total </span><b>${totalHrs}h ${totalMin2}min</b></div>
-      <div><span>📍 ${result.stops} paradas · 🚗 ${ETA_SPEED_KMH}km/h · ⏳ ${ETA_SERVICE_MIN}min/cliente</span></div>
-    </div>` : '';
-
-  const stopsHTML = result.ordered.map((s, i) => {
-    const eta = etas[i];
-    const chips = [
-      s.amount  ? `<span class="opt-order-chip amount">💵 ${s.amount}</span>`   : '',
-      s.product ? `<span class="opt-order-chip product">📦 ${s.product}</span>` : '',
-      s.payment ? `<span class="opt-order-chip payment">💳 ${s.payment}</span>` : '',
-    ].filter(Boolean).join('');
-    const navDest = (s.lat && s.lng) ? `${s.lat},${s.lng}` : encodeURIComponent(s.formatted_address || s.address || '');
-    const navUrl  = `https://www.google.com/maps/dir/?api=1&destination=${navDest}&travelmode=driving&dir_action=navigate`;
-    return `
-    <div class="opt-stop draggable${s.completed ? ' opt-completed' : ''}" data-idx="${i}">
-      <div class="opt-drag-handle" title="Arrastra para reordenar">⠿</div>
-      <div class="opt-snum">${i + 1}</div>
-      <div class="opt-sbody">
-        <div class="opt-sname">${s.name || 'Parada'}${s.completed ? '<span class="opt-completed-badge">✓ Entregado</span>' : ''}${s._new ? '<span class="opt-new-badge">NUEVO</span>' : ''}</div>
-        ${eta ? `<div class="opt-eta">🕐 Llegada ~${eta.arrivalStr} · viaje ${eta.travelMin}min</div>` : ''}
-        <div class="opt-saddr">${s.formatted_address || s.address || ''}</div>
-        ${s.reference ? `<div class="opt-sref">🔖 ${s.reference}</div>` : ''}
-        ${chips ? `<div class="opt-order">${chips}</div>` : ''}
-        ${(s.time_start||s.time_end) ? `<div class="opt-stime"><span class="tag time">⏰ ${s.time_start&&s.time_end ? s.time_start+' – '+s.time_end : (s.time_start||s.time_end)}</span></div>` : ''}
-        <div class="btn-nav-row">
-          <button class="btn-ir-gmaps" onclick="window.open('${navUrl}','_blank')">🗺️ Google Maps</button>
-          <button class="btn-ir-waze"  onclick="window.open('https://waze.com/ul?ll=${s.lat&&s.lng?s.lat+','+s.lng:''}&q=${encodeURIComponent(s.formatted_address||s.address||'')}&navigate=yes','_blank')">🚗 Waze</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-
-  el.innerHTML = `
-    <div class="opt-result">
-      <div class="opt-rh">
-        <div class="opt-rtitle">✅ Ruta preparada</div>
-        <div class="opt-stats">
-          <div class="opt-stat">
-            <div class="opt-stat-n">${result.stops}</div>
-            <div class="opt-stat-l">Paradas</div>
-          </div>
-          ${result.total_km ? `<div class="opt-stat">
-            <div class="opt-stat-n">${result.total_km}</div>
-            <div class="opt-stat-l">km aprox</div>
-          </div>` : ''}
-        </div>
-      </div>
-      ${originHTML}
-      ${etaSummaryHTML}
-      <div class="opt-drag-hint">⠿ Arrastra las paradas para cambiar el orden</div>
-      <div id="opt-sortable-list">${stopsHTML}</div>
-      <button class="btn-apply-order" onclick="applyOptOrder()">
-        ✅ APLICAR ESTE ORDEN A TODAS LAS VISTAS
-      </button>
-      <button class="btn-ver-mapa" onclick="verRutaEnMapa()">
-        🗺️ VER RUTA EN MAPA
-      </button>
-      <button class="btn-gmaps" id="btn-open-gmaps" onclick="openOptInGmaps()">
-        <svg width="18" height="18" viewBox="0 0 48 48"><path d="M24 4C15.16 4 8 11.16 8 20c0 12 16 28 16 28s16-16 16-28c0-8.84-7.16-16-16-16z" fill="#4285f4"/><circle cx="24" cy="20" r="6" fill="white"/></svg>
-        ABRIR EN GOOGLE MAPS
-      </button>
-    </div>
-  `;
-
-  // Inicializar SortableJS sobre la lista
-  const listEl = document.getElementById('opt-sortable-list');
-  if(listEl && window.Sortable){
-    Sortable.create(listEl, {
-      handle:    '.opt-drag-handle',
-      animation: 150,
-      ghostClass:  'sortable-ghost',
-      chosenClass: 'sortable-chosen',
-      onEnd(evt){
-        // Leer el orden actual del DOM ANTES de re-renderizar
-        const snapshot = Array.from(
-          listEl.querySelectorAll('.opt-stop[data-idx]')
-        ).map(row => currentOptResult.ordered[parseInt(row.dataset.idx)]);
-
-        // Actualizar datos y re-renderizar completo para recalcular ETAs
-        currentOptResult = { ...currentOptResult, ordered: snapshot };
-        renderOptResult(currentOptResult); // recalcula ETAs con nuevo orden
-        _saveOpt(); // guardar en servidor
-      }
-    });
-  }
-}
-
-function applyOptOrder(){
-  if(!currentOptResult || !currentOptResult.ordered.length){
-    toast('⚠️ Primero calcula una ruta optimizada');
-    return;
-  }
-  const ordered = currentOptResult.ordered;
-
-  // Reordenar el array deliveries según el orden de Optimizar
-  const orderedIds = ordered.map(s => s.id).filter(Boolean);
-  const inOrder    = orderedIds.map(id => deliveries.find(d => d.id === id)).filter(Boolean);
-  const rest       = deliveries.filter(d => !orderedIds.includes(d.id));
-  deliveries       = [...inOrder, ...rest];
-
-  // Guardar número de orden en cada entrega y persistir
-  const patches = [];
-  inOrder.forEach((d, i) => {
-    d.route_order = i + 1;
-    patches.push(patchDelivery(d.id, {route_order: i + 1}));
-  });
-  // Las que no están en la ruta optimizada pierden su número
-  rest.forEach(d => { d.route_order = null; });
-  Promise.all(patches).catch(()=>{});
-
-  renderAll();
-  toast('✅ Orden aplicado — Pedidos y Rutas actualizados');
-}
-
-function verRutaEnMapa(){
-  if(!currentOptResult) return;
-  // Limpiar solo la ruta anterior, mantener marcadores del día
-  clearRouteLines();
-  Object.keys(markers)
-    .filter(k => k.startsWith('opt_'))
-    .forEach(k => { map.removeLayer(markers[k]); delete markers[k]; });
-  _doDraw(currentOptResult);
-}
-
-function openOptInGmaps(){
-  if(!currentOptResult) return;
-  // Reconstruir URL con el orden actual
-  const origin  = currentOptResult.origin;
-  const ordered = currentOptResult.ordered;
-
-  function locStr(item){
-    if(item.lat && item.lng) return `${item.lat},${item.lng}`;
-    return encodeURIComponent(item.formatted_address || item.address || '');
-  }
-
-  let url = `https://www.google.com/maps/dir/?api=1`
-    + `&origin=${locStr(origin)}`
-    + `&destination=${locStr(ordered[ordered.length - 1])}`
-    + `&travelmode=driving`;
-
-  if(ordered.length > 1){
-    const wps = ordered.slice(0, -1).map(locStr).join('|');
-    url += `&waypoints=${wps}`;
-  }
-  window.open(url, '_blank');
-}
-function calcKm(lat1,lng1,lat2,lng2){
-  const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;
-  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
-  return (R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))).toFixed(1);
+  renderSettingsDP();
 }
 function drawRouteOnMap(result){
   // Limpiar SIEMPRE de forma síncrona antes de cualquier cosa
@@ -2792,7 +2241,7 @@ async function saveSettings(){
   await fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({departure_points:dps})});
   appConfig.departure_points=dps;
-  renderDPButtons();renderSettingsDP();
+  renderSettingsDP();
   btn.textContent='💾 GUARDAR';btn.disabled=false;
   toast('✅ Guardado');
 }
@@ -2818,6 +2267,9 @@ let repartoState = {
 
 let repartoDriverConfig = JSON.parse(JSON.stringify(REPARTO_DRIVER_DEFAULTS));
 let currentRepartoMapDriver = null;
+let repartoLoadPromise = null;
+let repartoLoadingDate = null;
+let repartoLoadedDate  = null;
 
 function loadRepartoDriverConfigs(){
   try{
@@ -2899,8 +2351,28 @@ function findMatchingDeparturePoint(dpLike){
   return null;
 }
 
+function getDefaultRepartoDP(driver){
+  const points = appConfig.departure_points || [];
+  if(!points.length) return null;
+
+  const nameMap = {
+    jorge:       'Casa Jorge',
+    jorge_noche: 'Casa Jorge',
+    diego:       'Casa Diego',
+    diego_noche: 'Casa Diego',
+  };
+  const target = nameMap[driver];
+  if(!target) return null;
+
+  const norm = _normDPText(target);
+  return points.find(p => _normDPText(p.name) === norm) || null;
+}
+
 function getResolvedRepartoDP(driver){
   let dp = repartoState[driver]?.dp || null;
+  if(!dp){
+    dp = getDefaultRepartoDP(driver);
+  }
   if(!dp) return null;
 
   const found = findMatchingDeparturePoint(dp);
@@ -2914,32 +2386,92 @@ function getResolvedRepartoDP(driver){
   return dp;
 }
 
+// ── Carga compartida de repartoState para la fecha seleccionada ─────────
+async function loadRepartoStateForDate(){
+  if(repartoLoadedDate === selectedDate) return;
+  if(repartoLoadPromise && repartoLoadingDate === selectedDate){
+    return repartoLoadPromise;
+  }
+
+  const loadDate = selectedDate;
+  let hasError = false;
+
+  const thisPromise = (async()=>{
+    // Asegurar deliveries para esta fecha
+    if(!deliveries || deliveries.length === 0 ||
+       deliveries[0]?.delivery_date?.substring(0,10) !== loadDate){
+      try{
+        const r = await fetch(`/api/deliveries?date=${loadDate}&_=${Date.now()}`);
+        if(r.ok){
+          const data = await r.json();
+          if(selectedDate !== loadDate) return;
+          deliveries = data;
+        }
+      }catch(e){
+        console.warn(`[REPARTO] Error de red cargando deliveries para ${loadDate}`, e);
+        hasError = true;
+      }
+    }
+
+    // Cargar rutas guardadas en un batch temporal
+    const batch = {};
+    for(const drv of REPARTO_DRIVERS){
+      batch[drv] = { orders: [], dp: null };
+      try{
+        const r = await fetch(`/api/opt-route?date=${loadDate}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
+        if(r.ok){
+          const data = await r.json();
+          if(selectedDate !== loadDate) return;
+          batch[drv].orders = data?.ordered?.length
+            ? data.ordered.map(s=>s.id) : [];
+          batch[drv].dp = data?.origin
+            ? (findMatchingDeparturePoint(data.origin) || data.origin) : null;
+        } else if(r.status === 404){
+          if(selectedDate !== loadDate) return;
+          batch[drv] = { orders: [], dp: null };
+        } else {
+          console.warn(`[REPARTO] HTTP ${r.status} cargando ruta de ${drv} para ${loadDate}`);
+          hasError = true;
+        }
+      }catch(e){
+        console.warn(`[REPARTO] Error de red cargando ruta de ${drv}`, e);
+        hasError = true;
+      }
+    }
+
+    // Escritura atómica de repartoState
+    if(selectedDate === loadDate && !hasError){
+      for(const drv of REPARTO_DRIVERS){
+        repartoState[drv].orders = batch[drv].orders;
+        repartoState[drv].dp     = batch[drv].dp;
+      }
+    }
+  })();
+
+  repartoLoadPromise = thisPromise;
+  repartoLoadingDate = loadDate;
+
+  try{
+    await thisPromise;
+  }finally{
+    if(repartoLoadPromise === thisPromise){
+      if(selectedDate === loadDate && !hasError){
+        repartoLoadedDate = loadDate;
+      }
+      repartoLoadPromise = null;
+      repartoLoadingDate = null;
+    }
+  }
+}
+
 // ── Inicializar módulo ────────────────────────────────────────────────────
 async function initReparto(){
   loadRepartoDriverConfigs();
-  // Asegurar deliveries cargados
-  if(!deliveries || deliveries.length === 0){
-    try{
-      const r = await fetch(`/api/deliveries?date=${selectedDate}&_=${Date.now()}`);
-      if(r.ok) deliveries = await r.json();
-    } catch(e){}
-  }
-  // Cargar orden y punto de partida guardados por cada repartidor
-  for(const drv of REPARTO_DRIVERS){
-    try{
-      const r = await fetch(`/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
-      if(r.ok){
-        const data = await r.json();
-        if(data?.ordered?.length){
-          repartoState[drv].orders = data.ordered.map(s => s.id);
-        }
-        if(data?.origin){
-          repartoState[drv].dp = findMatchingDeparturePoint(data.origin) || data.origin;
-        }
-      }
-    } catch(e){}
-  }
+  await loadRepartoStateForDate();
   renderAllDriverCols();
+  if(document.getElementById('page-tiempos')?.classList.contains('active')){
+    renderTiempos();
+  }
 }
 
 // ── Seleccionar punto de partida para UN repartidor específico ────────────
@@ -2989,6 +2521,14 @@ function _buildDPButtonsHTML(driver){
        style="color:var(--mut);">✏️ Otro</div>`;
 }
 
+// ── Distancia Haversine en km ──────────────────────────────────────────────
+function haversine_km(a, b){
+  if(!a?.lat||!b?.lat) return 0;
+  const R=6371, dLat=(b.lat-a.lat)*Math.PI/180, dLng=(b.lng-a.lng)*Math.PI/180;
+  const x=Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
+}
+
 // ── ETAs para un repartidor desde su propio DP ────────────────────────────
 function calcRepartoETAs(origin, stops, driver){
   if(!origin?.lat) return stops.map(()=>null);
@@ -2997,19 +2537,109 @@ function calcRepartoETAs(origin, stops, driver){
   let cursor = (Number.isFinite(sh)?sh:14)*60 + (Number.isFinite(sm)?sm:0);
   const speed = Math.max(5, parseInt(cfg.speed_kmh) || 25);
   const service = Math.max(1, parseInt(cfg.service_min) || 10);
-  const hav = (a,b)=>{
-    if(!a?.lat||!b?.lat) return 15;
-    const R=6371, dLat=(b.lat-a.lat)*Math.PI/180, dLng=(b.lng-a.lng)*Math.PI/180;
-    const x=Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
-    return Math.round(R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))/speed*60);
-  };
   const fmt = m=>`${String(Math.floor(m/60)%24).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
   const etas=[]; let prev=origin;
   for(const s of stops){
-    const t=hav(prev,s); const arr=cursor+t;
+    const km = haversine_km(prev, s);
+    const t = km > 0 ? Math.round(km/speed*60) : 15;
+    const arr=cursor+t;
     etas.push({arr:fmt(arr), trav:t}); cursor=arr+service; prev=s;
   }
   return etas;
+}
+
+// ── Resumen de ruta por repartidor ────────────────────────────────────────
+function calcRouteSummary(driver){
+  const cfg    = getDriverRouteConfig(driver);
+  const stops  = getSortedStops(driver);
+  const origin = getResolvedRepartoDP(driver);
+  const etas   = calcRepartoETAs(origin, stops, driver);
+
+  const speed    = Math.max(5, parseInt(cfg.speed_kmh) || 25);
+  const service  = Math.max(1, parseInt(cfg.service_min) || 10);
+
+  let totalKm = 0;
+  if(origin?.lat){
+    let prev = origin;
+    for(const s of stops){ totalKm += haversine_km(prev, s); prev = s; }
+  }
+
+  const drivingMin      = etas.reduce((sum, e) => sum + (e?.trav || 0), 0);
+  const serviceTotalMin = stops.length * service;
+  const totalMin        = drivingMin + serviceTotalMin;
+
+  const [sh, sm] = (cfg.start_time || '14:00').split(':').map(Number);
+  const startMin = (Number.isFinite(sh)?sh:14)*60 + (Number.isFinite(sm)?sm:0);
+  const fmt = m => `${String(Math.floor(m/60)%24).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+
+  return {
+    driver,
+    stops,
+    stopCount:     stops.length,
+    origin,
+    start_time:    cfg.start_time || '14:00',
+    speed_kmh:     speed,
+    service_min:   service,
+    totalKm:       Math.round(totalKm * 10) / 10,
+    drivingMin,
+    serviceTotalMin,
+    totalMin,
+    end_time:      fmt(startMin + totalMin),
+    etas
+  };
+}
+
+// ── Pestaña Tiempos ──────────────────────────────────────────────────────
+async function initTiempos(){
+  await loadRepartoStateForDate();
+  renderTiempos();
+}
+
+function renderTiempos(){
+  const el = document.getElementById('tiempos-scroll');
+  if(!el) return;
+  el.innerHTML = REPARTO_DRIVERS.map(driver => {
+    const s = calcRouteSummary(driver);
+    if(s.stopCount === 0){
+      return `<div class="tiempos-card">
+        <div class="tiempos-card-hd">
+          <span class="tiempos-driver-name ${driver}">${driver.charAt(0).toUpperCase()+driver.slice(1)}</span>
+          <span class="tiempos-badge">Sin pedidos</span>
+        </div>
+        <div class="tiempos-empty">📭 Sin pedidos asignados</div>
+      </div>`;
+    }
+    const stopsHTML = s.stops.map((stop, i) => {
+      const eta = s.etas[i];
+      const addr = stop.formatted_address || stop.address || '';
+      return `<div class="tiempos-stop">
+        <div class="tiempos-snum">${i + 1}</div>
+        <div class="tiempos-sbody">
+          <div class="tiempos-sname">${stop.name || 'Sin nombre'}</div>
+          <div class="tiempos-saddr">📍 ${addr}</div>
+          ${eta ? `<div class="tiempos-eta">🕐 Llegada estimada: ~${eta.arr}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    return `<div class="tiempos-card">
+      <div class="tiempos-card-hd">
+        <span class="tiempos-driver-name ${driver}">${driver.charAt(0).toUpperCase()+driver.slice(1)}</span>
+        <span class="tiempos-badge has-stops">${s.stopCount} pedidos</span>
+      </div>
+      <div class="tiempos-stats">
+        <div class="tiempos-stat"><span class="tiempos-stat-label">Salida</span><span class="tiempos-stat-value">${s.start_time}</span></div>
+        <div class="tiempos-stat"><span class="tiempos-stat-label">Velocidad</span><span class="tiempos-stat-value">${s.speed_kmh} km/h</span></div>
+        <div class="tiempos-stat"><span class="tiempos-stat-label">Atención</span><span class="tiempos-stat-value">${s.service_min} min/cliente</span></div>
+        <div class="tiempos-stat"><span class="tiempos-stat-label">Distancia</span><span class="tiempos-stat-value">${s.totalKm} km</span></div>
+        <div class="tiempos-stat"><span class="tiempos-stat-label">Conducción</span><span class="tiempos-stat-value">${s.drivingMin} min</span></div>
+        <div class="tiempos-stat"><span class="tiempos-stat-label">Atención clientes</span><span class="tiempos-stat-value">${s.serviceTotalMin} min</span></div>
+        <div class="tiempos-stat"><span class="tiempos-stat-label">Duración total</span><span class="tiempos-stat-value highlight">${s.totalMin} min</span></div>
+        <div class="tiempos-stat"><span class="tiempos-stat-label">Término</span><span class="tiempos-stat-value highlight">${s.end_time}</span></div>
+      </div>
+      <div class="tiempos-stops">${stopsHTML}</div>
+    </div>`;
+  }).join('');
 }
 
 // ── Paradas ordenadas de un repartidor ───────────────────────────────────
@@ -3365,22 +2995,12 @@ async function applyRepartoOrderToViews(driver){
 
 // ── Refrescar al cambiar fecha o llegar nuevo pedido ─────────────────────
 async function refreshReparto(){
-  for(const drv of REPARTO_DRIVERS){
-    repartoState[drv].orders = [];
-    repartoState[drv].dirty  = false;
-    // Conservar DP seleccionado — solo resetear órdenes
-    try{
-      const r = await fetch(`/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
-      if(r.ok){
-        const d = await r.json();
-        if(d?.ordered?.length) repartoState[drv].orders = d.ordered.map(s=>s.id);
-        if(d?.origin){
-          repartoState[drv].dp = findMatchingDeparturePoint(d.origin) || d.origin;
-        }
-      }
-    } catch(e){}
-  }
+  repartoLoadedDate = null;
+  await loadRepartoStateForDate();
   renderAllDriverCols();
+  if(document.getElementById('page-tiempos')?.classList.contains('active')){
+    renderTiempos();
+  }
 }
 
 
@@ -3395,37 +3015,11 @@ function switchPanel(tab,el){
   if(tab==='clients')loadClients();
   if(tab==='carga'){ initCarga(); }
   if(tab==='reparto'){ initReparto(); }
+  if(tab==='tiempos'){ initTiempos(); }
   // Redibujar mapa al volver a tabs que lo muestran
   if(map && ['list'].includes(tab)){ setTimeout(()=>map.invalidateSize(),150); }
-  if(tab==='optimizer'){
-    // Limpiar TODO el mapa al entrar a optimizar
-    clearRouteLines();
-    Object.keys(markers).forEach(k=>{ map.removeLayer(markers[k]); delete markers[k]; });
-    // Siempre cargar la ruta guardada desde el servidor
-    _loadOptAny().then(saved => {
-      if(saved){
-        renderOptResult(saved);
-        // Detectar si hay pedidos del día que no están en la ruta
-        const savedIds = new Set(saved.ordered.map(s => s.id));
-        const missing = deliveries.filter(d =>
-          d.delivery_date === selectedDate &&
-          !d.completed &&
-          !savedIds.has(d.id) &&
-          (!selectedOptDriver || d.driver === selectedOptDriver)
-        );
-        if(missing.length > 0){
-          const warn = document.createElement('div');
-          warn.style.cssText = 'background:#f59e0b22;border:1px solid #f59e0b;border-radius:7px;padding:.5rem .75rem;margin-bottom:.5rem;font-size:.75rem;color:#f59e0b;font-weight:600;';
-          warn.innerHTML = `⚠️ Hay ${missing.length} pedido(s) nuevo(s) no incluidos en la ruta: ${missing.map(d=>d.name).join(', ')}. Se agregarán al final automáticamente.`;
-          const optResult = document.getElementById('opt-result');
-          if(optResult) optResult.prepend(warn);
-          // Agregarlos automáticamente al final
-          missing.forEach(d => _appendToOpt(d));
-        }
-      }
-    });
-  } else {
-    // Al salir de optimizar: limpiar ruta y restaurar marcadores del día
+  // Limpiar marcadores opt_ al salir de optimizer
+  if(tab!=='optimizer'){
     clearRouteLines();
     Object.keys(markers)
       .filter(k=>k.startsWith('opt_'))
@@ -3453,20 +3047,11 @@ function mobSwitch(tab,el){
       }
     },250);
   } else {
-    // Al salir de optimizer en móvil: limpiar marcadores de ruta del mapa
-    const prevTab = document.querySelector('.mnb.active')?.dataset?.tab || '';
-    if(prevTab === 'optimizer' || tab !== 'optimizer'){
-      clearRouteLines();
-      Object.keys(markers)
-        .filter(k => k.startsWith('opt_'))
-        .forEach(k => { map.removeLayer(markers[k]); delete markers[k]; });
-    }
-    // Al salir de reparto: limpiar marcadores de reparto
-    if(prevTab === 'reparto'){
-      Object.keys(markers)
-        .filter(k => k.startsWith('rep_'))
-        .forEach(k => { map.removeLayer(markers[k]); delete markers[k]; });
-    }
+    // Limpiar marcadores de ruta y reparto
+    clearRouteLines();
+    Object.keys(markers)
+      .filter(k => k.startsWith('opt_') || k.startsWith('rep_'))
+      .forEach(k => { map.removeLayer(markers[k]); delete markers[k]; });
     panel.style.display='';mapCol.classList.remove('mob-show');switchPanel(tab,null);
   }
   document.querySelectorAll('.mnb').forEach(b=>b.classList.remove('active'));
@@ -3474,6 +3059,7 @@ function mobSwitch(tab,el){
   if(tab==='clients')loadClients();
   if(tab==='carga'){ initCarga(); }
   if(tab==='reparto'){ initReparto(); }
+  if(tab==='tiempos'){ initTiempos(); }
   if(tab==='calendar-mob') renderMobCal();
 }
 
