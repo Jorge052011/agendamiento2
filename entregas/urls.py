@@ -10,7 +10,6 @@ urlpatterns = [
     path('api/deliveries',                    views.deliveries,    name='deliveries'),
     path('api/deliveries/<str:delivery_id>',  views.delivery_detail, name='delivery_detail'),
     path('api/calendar',  views.calendar,  name='calendar'),
-    #path('api/optimize',  views.optimize,  name='optimize'),
     path('api/config',    views.config,    name='config'),
     # Ruta optimizada guardada (espejo servidor)
     path('api/opt-route', views.opt_route, name='opt_route'),

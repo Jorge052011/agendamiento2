@@ -9,7 +9,7 @@ from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 
 from .models import Client, ClientAddress, Delivery, DailyStock, OptRoute, Config
-from .utils import normalize_phone, haversine, nearest_neighbor_route
+from .utils import normalize_phone
 
 
 def no_cache(response):
@@ -308,111 +308,6 @@ def calendar(request):
         for k, v in summary.items()
     }
     return JsonResponse(result)
-
-
-# ═══════════════════════════════════════════════════════════════════════════════
-#  OPTIMIZADOR
-# ═══════════════════════════════════════════════════════════════════════════════
-
-@csrf_exempt
-@require_http_methods(["POST"])
-def optimize(request):
-    data          = json.loads(request.body)
-    origin        = data.get("origin")
-    driver        = data.get("driver", "")
-    day           = data.get("date", date.today().isoformat())
-    driver_filter = data.get("driver_filter", True)
-
-    if not origin:
-        return JsonResponse({"error": "Punto de partida requerido"}, status=400)
-
-    origin_ref = (origin.get("place_id") or origin.get("formatted_address") or origin.get("address"))
-    if not origin_ref:
-        return JsonResponse({"error": "Punto de partida requerido"}, status=400)
-
-    qs = Delivery.objects.filter(delivery_date=day, completed=False)
-    if driver_filter and driver:
-        qs = qs.filter(driver=driver)
-
-    clients_map = {c.phone: c for c in Client.objects.all()}
-
-    stops = []
-    for d in qs:
-        client = clients_map.get(d.client_phone)
-        lat = d.lat or (client.lat if client else None)
-        lng = d.lng or (client.lng if client else None)
-        stop_ref = (d.place_id or d.formatted_address or d.address or
-                    (client.place_id if client else None) or
-                    (client.formatted_address if client else None) or
-                    (client.address if client else None))
-        if not stop_ref:
-            continue
-
-        stop = d.to_dict(client=client)
-        stop["route_ref"] = stop_ref
-        stop["lat"]       = lat
-        stop["lng"]       = lng
-        if not stop.get("name") and client:
-            stop["name"] = client.name
-        if not stop.get("reference") and client:
-            stop["reference"] = client.reference
-        stops.append(stop)
-
-    if not stops:
-        return JsonResponse(
-            {"error": "No hay entregas pendientes con dirección válida para este día"},
-            status=404)
-
-    stops_with_coords = [s for s in stops if s.get("lat") and s.get("lng")]
-    stops_without     = [s for s in stops if not (s.get("lat") and s.get("lng"))]
-
-    if stops_with_coords and origin.get("lat") and origin.get("lng"):
-        ordered = nearest_neighbor_route(origin, stops_with_coords) + stops_without
-    else:
-        ordered = stops
-
-    total_km = 0.0
-    if origin.get("lat") and ordered:
-        prev = origin
-        for s in ordered:
-            if s.get("lat") and s.get("lng"):
-                total_km += haversine(float(prev["lat"]), float(prev["lng"]),
-                                      float(s["lat"]),    float(s["lng"]))
-                prev = s
-    total_km = round(total_km, 2)
-
-    def location_for_url(item):
-        lat = item.get("lat")
-        lng = item.get("lng")
-        if lat and lng:
-            return f"{lat},{lng}"
-        return item.get("formatted_address") or item.get("address") or ""
-
-    import urllib.parse
-    origin_str = location_for_url(origin)
-    if len(ordered) == 1:
-        dest_str      = location_for_url(ordered[0])
-        waypoints_str = ""
-    else:
-        dest_str      = location_for_url(ordered[-1])
-        waypoints_str = "|".join(location_for_url(s) for s in ordered[:-1])
-
-    maps_url = (
-        f"https://www.google.com/maps/dir/?api=1"
-        f"&origin={urllib.parse.quote(str(origin_str))}"
-        f"&destination={urllib.parse.quote(str(dest_str))}"
-        f"&travelmode=driving"
-    )
-    if waypoints_str:
-        maps_url += f"&waypoints={urllib.parse.quote(waypoints_str)}"
-
-    return no_cache(JsonResponse({
-        "origin":   origin,
-        "ordered":  ordered,
-        "stops":    len(ordered),
-        "total_km": total_km,
-        "maps_url": maps_url,
-    }))
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
