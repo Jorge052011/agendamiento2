@@ -1376,7 +1376,7 @@ function showClientFound(c){
     reference:c.reference, lat:c.lat, lng:c.lng, place_id:c.place_id
   }].filter(a=>a.formatted_address||a.address);
   const sel=document.getElementById('f-address-select');
-  sel.innerHTML=addresses.map((a,i)=>`<option value="${a.id}">${a.label?`${a.label} — `:''}${a.formatted_address||a.address}</option>`).join('');
+  sel.innerHTML=addresses.map((a,i)=>`<option value="${escapeHTML(a.id)}">${a.label?`${escapeHTML(a.label)} — `:''}${escapeHTML(a.formatted_address||a.address)}</option>`).join('');
   document.getElementById('address-selector-wrap').style.display=addresses.length?'block':'none';
   currentAddress=addresses[0]||null;
   document.getElementById('cf-addr').textContent=currentAddress?(currentAddress.formatted_address||currentAddress.address):'Sin dirección registrada';
@@ -2184,10 +2184,10 @@ function renderSettingsDP(){
     <div class="dp-edit-row">
       <div>
         <div class="field" style="margin-bottom:.3rem">
-          <label>Nombre</label><input type="text" id="sdp-name-${i}" value="${dp.name}">
+          <label>Nombre</label><input type="text" id="sdp-name-${i}" value="${escapeHTML(dp.name)}">
         </div>
         <div class="field">
-          <label>Dirección</label><input type="text" id="sdp-addr-${i}" value="${dp.address}" autocomplete="off">
+          <label>Dirección</label><input type="text" id="sdp-addr-${i}" value="${escapeHTML(dp.address)}" autocomplete="off">
         </div>
       </div>
       <button class="btn-secondary" onclick="removeDP(${i})" style="align-self:flex-start;margin-top:1.6rem;color:var(--acc3)">✕</button>
@@ -2515,7 +2515,7 @@ function selectRepartoDPForDriver(driver, dpId){
   if(dpInfo){
     const dp = getResolvedRepartoDP(driver);
     dpInfo.innerHTML = dp
-      ? `<span style="color:var(--acc);font-weight:700;"> · ${dp.name}</span>`
+      ? `<span style="color:var(--acc);font-weight:700;"> · ${escapeHTML(dp.name)}</span>`
       : `<span style="color:#f59e0b;"> · Sin seleccionar</span>`;
   }
   // Marcar botón guardar como pendiente
@@ -2535,11 +2535,14 @@ function _refreshDriverDPButtons(driver){
 function _buildDPButtonsHTML(driver){
   const currentDP = repartoState[driver].dp;
   const points = appConfig.departure_points || [];
-  return points.map(dp => `
+  return points.map(dp => {
+    const dpIdArg = encodeURIComponent(String(dp.id ?? '')).replace(/'/g,'%27');
+    return `
     <div class="reparto-dp-btn${currentDP?.id===dp.id?' selected':''}"
-         onclick="selectRepartoDPForDriver('${driver}','${dp.id}')">
-      📍 ${dp.name}
-    </div>`).join('') + `
+         onclick="selectRepartoDPForDriver('${driver}',decodeURIComponent('${dpIdArg}'))">
+      📍 ${escapeHTML(dp.name)}
+    </div>`;
+  }).join('') + `
   <div class="reparto-dp-btn${currentDP?.id==='custom'?' selected':''}"
        onclick="selectRepartoDPForDriver('${driver}','custom')"
        style="color:var(--mut);">✏️ Otro</div>`;
@@ -2821,7 +2824,7 @@ function buildDriverCol(driver){
     <div style="padding:.4rem .6rem;border-bottom:1px solid var(--brd);background:var(--surf2);flex-shrink:0;">
       <div style="font-size:.6rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem;">
         📍 Punto de partida<span id="reparto-dp-info-${driver}">${dp
-          ? `<span style="color:var(--acc);font-weight:700;"> · ${dp.name}</span>`
+          ? `<span style="color:var(--acc);font-weight:700;"> · ${escapeHTML(dp.name)}</span>`
           : `<span style="color:#f59e0b;"> · Sin seleccionar</span>`
         }</span>
       </div>
@@ -2937,7 +2940,7 @@ function verRepartoEnMapa(driver){
       iconAnchor:[15,15]
     })
   });
-  originMarker.addTo(map).bindPopup(`<b>Inicio de ${driver.charAt(0).toUpperCase()+driver.slice(1)}</b><br>${resolvedOrigin.name || ''}<br>${resolvedOrigin.formatted_address || resolvedOrigin.address || ''}`);
+  originMarker.addTo(map).bindPopup(`<b>Inicio de ${driver.charAt(0).toUpperCase()+driver.slice(1)}</b><br>${escapeHTML(resolvedOrigin.name || '')}<br>${escapeHTML(resolvedOrigin.formatted_address || resolvedOrigin.address || '')}`);
   markers[`rep_origin_${driver}`] = originMarker;
 
   stops.forEach((s,i)=>{
@@ -3244,8 +3247,8 @@ function renderSkuInputs(){
           <div style="display:flex;align-items:center;gap:.4rem;">
             <div class="sku-dot" style="background:${color};"></div>
             <div>
-              <div class="sku-name">${p.name}</div>
-              <div class="sku-unit">${p.unit}</div>
+              <div class="sku-name">${escapeHTML(p.name)}</div>
+              <div class="sku-unit">${escapeHTML(p.unit)}</div>
             </div>
           </div>
         </div>
@@ -3312,8 +3315,8 @@ function renderBalance(){
           <div class="balance-prod">
             <div class="sku-dot" style="background:${color};width:10px;height:10px;"></div>
             <div>
-              <div class="balance-prod-name">${p.name}</div>
-              <div class="balance-prod-unit">${p.unit}</div>
+              <div class="balance-prod-name">${escapeHTML(p.name)}</div>
+              <div class="balance-prod-unit">${escapeHTML(p.unit)}</div>
             </div>
           </div>
         </div>
@@ -3355,7 +3358,7 @@ function renderAlerts(){
   badge.style.display = '';
   container.innerHTML = alerts.map(a => `
     <div class="alert-banner">
-      ⚠️ <strong>${a.product_name} (${a.unit})</strong>:
+      ⚠️ <strong>${escapeHTML(a.product_name)} (${escapeHTML(a.unit)})</strong>:
       Faltan <strong>${a.shortage}</strong> unidades —
       tienes ${a.balance} pero quedan ${a.pending} por entregar.
     </div>
@@ -3427,14 +3430,14 @@ async function renderCargaPedidos(date){
           .map(([pid, qty]) => {
             const prod = (cargaProducts||[]).find(p => p.id === pid);
             const label = prod ? prod.unit : pid;
-            return `<div class="carga-pedido-sku">${label}: <span>${qty}</span></div>`;
+            return `<div class="carga-pedido-sku">${escapeHTML(label)}: <span>${Number(qty)||0}</span></div>`;
           }).join('')
       : '<span style="font-size:.63rem;color:#ff8040;">⚠️ Sin bolsas registradas</span>';
 
     const done = d.completed;
     return `
       <div class="carga-pedido-card">
-        <div class="carga-pedido-name">${d.name || 'Sin nombre'}</div>
+        <div class="carga-pedido-name">${escapeHTML(d.name || 'Sin nombre')}</div>
         <div class="carga-pedido-items">${skuBadges}</div>
         <div class="carga-pedido-status ${done?'done':'pending'}">${done ? '✅ Entregado' : '⏳ Pendiente'}</div>
       </div>`;
