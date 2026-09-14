@@ -1240,16 +1240,16 @@ function addMarker(d){
   const ref = d.reference || d._client?.reference || '';
   const m = L.marker([d.lat, d.lng], {icon: makeIcon(d.driver, num, 38, !d.completed)});
   m.bindPopup(`
-    <div class="pu-name">${d.name}</div>
-    <div class="pu-addr">📍 ${d.address}</div>
-    ${ref?`<div class="pu-row"><span class="pu-lbl">🔖</span><span class="pu-val">${ref}</span></div>`:''}
-    ${d.client_phone?`<div class="pu-row"><span class="pu-lbl">📞</span><span class="pu-val">${d.client_phone}</span></div>`:''}
-    ${d.product?`<div class="pu-row"><span class="pu-lbl">📦</span><span class="pu-val">${d.product} ${d.amount}</span></div>`:''}
-    ${d.payment?`<div class="pu-row"><span class="pu-lbl">💳</span><span class="pu-val">${d.payment}</span></div>`:''}
-    <div class="pu-row"><span class="pu-lbl">⏰</span><span class="pu-val">${d.time_start}–${d.time_end}</span></div>
+    <div class="pu-name">${escapeHTML(d.name)}</div>
+    <div class="pu-addr">📍 ${escapeHTML(d.address)}</div>
+    ${ref?`<div class="pu-row"><span class="pu-lbl">🔖</span><span class="pu-val">${escapeHTML(ref)}</span></div>`:''}
+    ${d.client_phone?`<div class="pu-row"><span class="pu-lbl">📞</span><span class="pu-val">${escapeHTML(d.client_phone)}</span></div>`:''}
+    ${d.product?`<div class="pu-row"><span class="pu-lbl">📦</span><span class="pu-val">${escapeHTML(d.product)} ${escapeHTML(d.amount)}</span></div>`:''}
+    ${d.payment?`<div class="pu-row"><span class="pu-lbl">💳</span><span class="pu-val">${escapeHTML(d.payment)}</span></div>`:''}
+    <div class="pu-row"><span class="pu-lbl">⏰</span><span class="pu-val">${escapeHTML(d.time_start)}–${escapeHTML(d.time_end)}</span></div>
     <div class="pu-row"><span class="pu-lbl">🚴</span><span class="pu-val" style="color:${COLORS[d.driver]}">${driverLabel(d.driver)}</span></div>
-    ${d.arrived_at?`<div class="pu-row"><span class="pu-lbl">✅</span><span class="pu-val">Llegó: ${d.arrived_at}</span></div>`:''}
-    ${d.notes?`<div class="pu-row"><span class="pu-lbl">📝</span><span class="pu-val" style="color:var(--acc)">${d.notes}</span></div>`:''}
+    ${d.arrived_at?`<div class="pu-row"><span class="pu-lbl">✅</span><span class="pu-val">Llegó: ${escapeHTML(d.arrived_at)}</span></div>`:''}
+    ${d.notes?`<div class="pu-row"><span class="pu-lbl">📝</span><span class="pu-val" style="color:var(--acc)">${escapeHTML(d.notes)}</span></div>`:''}
   `);
   m.addTo(map);markers[d.id]=m;
 }
@@ -1897,20 +1897,21 @@ function renderClientList(){
     return;
   }
 
-  el.innerHTML = list.map(c=>`
-    <div class="client-card">
+  el.innerHTML = list.map(c=>{
+    const phoneArg = encodeURIComponent(String(c.phone || '')).replace(/'/g,'%27');
+    return`<div class="client-card">
       <div class="cc-top">
-        <div class="cc-name">${c.name||'Sin nombre'}${c.geocode_source==='google'?'<span class="cc-badge google">📍</span>':''}</div>
+        <div class="cc-name">${escapeHTML(c.name||'Sin nombre')}${c.geocode_source==='google'?'<span class="cc-badge google">📍</span>':''}</div>
         <div style="display:flex;gap:.25rem;flex-shrink:0">
-          <button class="ibtn" style="font-size:.8rem" title="Editar" onclick="openClientModal('${c.phone}')">✏️</button>
-          <button class="ibtn del" title="Eliminar" onclick="deleteClient('${c.phone}')">✕</button>
+          <button class="ibtn" style="font-size:.8rem" title="Editar" onclick="openClientModal(decodeURIComponent('${phoneArg}'))">✏️</button>
+          <button class="ibtn del" title="Eliminar" onclick="deleteClient(decodeURIComponent('${phoneArg}'))">✕</button>
         </div>
       </div>
-      <div class="cc-phone">📞 ${c.phone_raw||c.phone}</div>
-      <div class="cc-addr">📍 ${c.formatted_address||c.address||'Sin dirección'}</div>
-      ${c.reference?`<div class="cc-ref">🔖 ${c.reference}</div>`:''}
-    </div>
-  `).join('');
+      <div class="cc-phone">📞 ${escapeHTML(c.phone_raw||c.phone)}</div>
+      <div class="cc-addr">📍 ${escapeHTML(c.formatted_address||c.address||'Sin dirección')}</div>
+      ${c.reference?`<div class="cc-ref">🔖 ${escapeHTML(c.reference)}</div>`:''}
+    </div>`;
+  }).join('');
 }
 
 function openClientModal(phone){
@@ -1990,7 +1991,7 @@ async function saveClientModal(){
 async function deleteClient(phone){
   if(!confirm('¿Eliminar este cliente? Esta acción no se puede deshacer.'))return;
   try{
-    await fetch(`/api/clients/${phone}`,{method:'DELETE'});
+    await fetch(`/api/clients/${encodeURIComponent(phone)}`,{method:'DELETE'});
     allClients = allClients.filter(c=>c.phone!==phone);
     renderClientList();
     toast('🗑️ Cliente eliminado');
@@ -2100,8 +2101,8 @@ function _doDraw(result){
           const originLatLng = [firstLeg.start_location.lat(), firstLeg.start_location.lng()];
           const om = L.marker(originLatLng, { icon: makeOriginIcon() })
             .bindPopup(`
-              <div class="pu-name">🚀 ${result.origin.name || 'Origen'}</div>
-              <div class="pu-addr">${result.origin.formatted_address || result.origin.address || ''}</div>
+              <div class="pu-name">🚀 ${escapeHTML(result.origin.name || 'Origen')}</div>
+              <div class="pu-addr">${escapeHTML(result.origin.formatted_address || result.origin.address || '')}</div>
             `)
             .addTo(map);
           markers['opt_origin'] = om;
@@ -2117,9 +2118,9 @@ function _doDraw(result){
             { icon: makeIcon(stop.driver || 'jorge_noche', i + 1, 38, !isCompleted) }
           )
           .bindPopup(`
-            <div class="pu-name">${i + 1}. ${stop.name || 'Parada'}</div>
-            <div class="pu-addr">${stop.formatted_address || stop.address || ''}</div>
-            ${stop.reference ? `<div class="pu-row"><span class="pu-lbl">🔖</span><span class="pu-val">${stop.reference}</span></div>` : ''}
+            <div class="pu-name">${i + 1}. ${escapeHTML(stop.name || 'Parada')}</div>
+            <div class="pu-addr">${escapeHTML(stop.formatted_address || stop.address || '')}</div>
+            ${stop.reference ? `<div class="pu-row"><span class="pu-lbl">🔖</span><span class="pu-val">${escapeHTML(stop.reference)}</span></div>` : ''}
           `)
           .addTo(map);
           markers[`opt_stop_${i}`] = m;
@@ -2150,7 +2151,7 @@ function _drawFallbackPolyline(result, ordered){
 
   // Marcador origen
   const om = L.marker(latlngs[0], { icon: makeOriginIcon() })
-    .bindPopup(`<div class="pu-name">🚀 ${result.origin.name || 'Origen'}</div>`)
+    .bindPopup(`<div class="pu-name">🚀 ${escapeHTML(result.origin.name || 'Origen')}</div>`)
     .addTo(map);
   markers['opt_origin'] = om;
 
@@ -2163,8 +2164,8 @@ function _drawFallbackPolyline(result, ordered){
       { icon: makeIcon(s.driver || 'jorge_noche', i + 1, 38, !isCompleted) }
     )
     .bindPopup(`
-      <div class="pu-name">${i + 1}. ${s.name || 'Parada'}</div>
-      <div class="pu-addr">${s.formatted_address || s.address || ''}</div>
+      <div class="pu-name">${i + 1}. ${escapeHTML(s.name || 'Parada')}</div>
+      <div class="pu-addr">${escapeHTML(s.formatted_address || s.address || '')}</div>
     `)
     .addTo(map);
     markers[`opt_stop_${i}`] = m;
@@ -2636,13 +2637,13 @@ function renderTiempos(){
     }
     const stopsHTML = s.stops.map((stop, i) => {
       const eta = s.etas[i];
-      const addr = stop.formatted_address || stop.address || '';
+      const addr = escapeHTML(stop.formatted_address || stop.address || '');
       return `<div class="tiempos-stop">
         <div class="tiempos-snum">${i + 1}</div>
         <div class="tiempos-sbody">
-          <div class="tiempos-sname">${stop.name || 'Sin nombre'}</div>
+          <div class="tiempos-sname">${escapeHTML(stop.name || 'Sin nombre')}</div>
           <div class="tiempos-saddr">📍 ${addr}</div>
-          ${eta ? `<div class="tiempos-eta">🕐 Llegada estimada: ~${eta.arr}</div>` : ''}
+          ${eta ? `<div class="tiempos-eta">🕐 Llegada estimada: ~${escapeHTML(eta.arr)}</div>` : ''}
         </div>
       </div>`;
     }).join('');
@@ -2855,33 +2856,35 @@ function _fillStopsList(listEl, driver, stops){
   }
   const dp   = getResolvedRepartoDP(driver);
   listEl.innerHTML = stops.map((s,i)=>{
-    const ref = s.reference || (s._client && s._client.reference) || '';
-    const phone = s.client_phone || (s._client && s._client.phone) || '';
-    const address = s.formatted_address || s.address || 'Sin dirección';
-    const navDest = (s.lat&&s.lng) ? `${s.lat},${s.lng}` : encodeURIComponent(address);
+    const ref = escapeHTML(s.reference || (s._client && s._client.reference) || '');
+    const phone = escapeHTML(s.client_phone || (s._client && s._client.phone) || '');
+    const address = escapeHTML(s.formatted_address || s.address || 'Sin dirección');
+    const rawAddress = s.formatted_address || s.address || 'Sin dirección';
+    const navDest = (s.lat&&s.lng) ? `${s.lat},${s.lng}` : encodeURIComponent(rawAddress);
     const gmUrl = `https://www.google.com/maps/dir/?api=1&destination=${navDest}&travelmode=driving&dir_action=navigate`;
-    const wzUrl = `https://waze.com/ul?ll=${s.lat&&s.lng?s.lat+','+s.lng:''}&q=${encodeURIComponent(address)}&navigate=yes`;
+    const wzUrl = `https://waze.com/ul?ll=${s.lat&&s.lng?s.lat+','+s.lng:''}&q=${encodeURIComponent(rawAddress)}&navigate=yes`;
     const horario = (s.time_start || s.time_end)
-      ? (s.time_start && s.time_end ? `${s.time_start} – ${s.time_end}` : (s.time_start || s.time_end))
+      ? (s.time_start && s.time_end ? `${escapeHTML(s.time_start)} – ${escapeHTML(s.time_end)}` : escapeHTML(s.time_start || s.time_end))
       : '';
     const chips = [
-      (s.product || s.amount) ? `<span class="r-chip">📦 ${[s.product, s.amount].filter(Boolean).join(' × ')}</span>` : '',
-      s.payment ? `<span class="r-chip">💳 ${s.payment}</span>` : '',
+      (s.product || s.amount) ? `<span class="r-chip">📦 ${escapeHTML([s.product, s.amount].filter(Boolean).join(' × '))}</span>` : '',
+      s.payment ? `<span class="r-chip">💳 ${escapeHTML(s.payment)}</span>` : '',
       horario ? `<span class="r-chip">⏰ ${horario}</span>` : '',
     ].filter(Boolean).join('');
-    return `<div class="reparto-stop${s.completed?' r-completed':''}" data-id="${s.id}">
+    const stopId = Number(s.id);
+    return `<div class="reparto-stop${s.completed?' r-completed':''}" data-id="${stopId}">
       ${!s.completed?`<span class="r-drag" title="Arrastrar">⠿</span>`:`<span style="width:14px;flex-shrink:0;"></span>`}
       <div class="r-snum ${driver}">${Number.isFinite(parseInt(s.route_order)) ? parseInt(s.route_order) : (i+1)}</div>
       <div class="r-sbody">
-        <div class="r-sname">${s.name||'Sin nombre'}${s.completed?`<span style="font-size:.6rem;background:#00c853;color:#000;border-radius:4px;padding:1px 5px;margin-left:4px;">✓</span>`:''}</div>
+        <div class="r-sname">${escapeHTML(s.name||'Sin nombre')}${s.completed?`<span style="font-size:.6rem;background:#00c853;color:#000;border-radius:4px;padding:1px 5px;margin-left:4px;">✓</span>`:''}</div>
         <div class="r-saddr">📍 ${address}</div>
         ${ref?`<div class="r-sref">🔖 ${ref}</div>`:''}
         ${phone?`<div style="font-size:.62rem;color:var(--mut2);margin-top:1px;">📞 ${phone}</div>`:''}
         ${chips?`<div class="r-chips">${chips}</div>`:''}
-        ${s.notes?`<div class="route-notes" style="margin-top:4px;">📝 ${s.notes}</div>`:''}
+        ${s.notes?`<div class="route-notes" style="margin-top:4px;">📝 ${escapeHTML(s.notes)}</div>`:''}
         <div class="r-nav-row">
           ${!s.completed?`<button onclick="window.open('${gmUrl}','_blank')">🗺️ GMaps</button><button onclick="window.open('${wzUrl}','_blank')">🚗 Waze</button>`:''}
-          <button onclick="openDeliveryModal('${s.id}','${driver}')" style="background:var(--acc);color:#000;font-weight:700;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:.75rem;touch-action:manipulation;">📋 Ver</button>
+          <button onclick="openDeliveryModal(${stopId},'${driver}')" style="background:var(--acc);color:#000;font-weight:700;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:.75rem;touch-action:manipulation;">📋 Ver</button>
         </div>
       </div>
     </div>`;
