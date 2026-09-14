@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RepartoTrack</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -69,7 +69,7 @@ header{background:var(--surf);border-bottom:1px solid var(--brd);display:flex;al
 .cal-nav button:hover{border-color:var(--acc);color:var(--acc);}
 .cal-body{padding:.4rem .5rem .6rem;flex:1;overflow-y:auto;}
 .cal-wds{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:2px;}
-.cal-wd{text-align:center;font-size:.56rem;font-weight:700;color:var(--mut);text-transform:uppercase;padding:2px 0;}
+.cal-wd{text-align:center;font-size:.68rem;font-weight:700;color:var(--mut);text-transform:uppercase;padding:2px 0;}
 .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
 .cal-day{aspect-ratio:1;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:2px;cursor:pointer;transition:all .15s;border:1px solid transparent;}
 .cal-day:hover{background:var(--surf2);border-color:var(--brd2);}
@@ -81,7 +81,7 @@ header{background:var(--surf);border-bottom:1px solid var(--brd);display:flex;al
 .cal-day.selected .dn{color:var(--txt);}
 .ddots{display:flex;gap:1px;flex-wrap:wrap;justify-content:center;margin-top:1px;}
 .ddot{width:4px;height:4px;border-radius:50%;}
-.dcnt{font-size:.52rem;font-weight:700;color:var(--mut);margin-top:1px;line-height:1;}
+.dcnt{font-size:.68rem;font-weight:700;color:var(--mut);margin-top:1px;line-height:1;}
 .cal-legend{padding:.4rem .7rem .5rem;border-top:1px solid var(--brd);display:flex;gap:6px;flex-wrap:wrap;}
 .cl-item{display:flex;align-items:center;gap:3px;font-size:.63rem;color:var(--mut);}
 .cl-dot{width:6px;height:6px;border-radius:50%;}
@@ -122,6 +122,7 @@ header{background:var(--surf);border-bottom:1px solid var(--brd);display:flex;al
 label{font-size:.63rem;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.6px;}
 input,select,textarea{background:var(--surf2);border:1px solid var(--brd);border-radius:8px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.84rem;padding:9px 11px;outline:none;transition:border-color .2s;width:100%;-webkit-appearance:none;appearance:none;}
 input:focus,select:focus,textarea:focus{border-color:var(--acc);}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236868a0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
 select option{background:var(--surf2);}
 textarea{resize:vertical;min-height:50px;}
@@ -181,7 +182,7 @@ textarea{resize:vertical;min-height:50px;}
 .card-ref{font-size:.86rem;color:var(--acc2);margin-bottom:5px;font-weight:700;line-height:1.35;}
 .card-phone{font-size:.7rem;color:var(--acc2);margin-bottom:4px;}
 .card-tags{display:flex;flex-wrap:wrap;gap:3px;}
-.tag{font-size:.6rem;font-weight:600;padding:2px 6px;border-radius:20px;background:var(--brd);color:var(--mut);text-transform:uppercase;letter-spacing:.4px;}
+.tag{font-size:.68rem;font-weight:600;padding:2px 6px;border-radius:20px;background:var(--brd);color:var(--mut);text-transform:uppercase;letter-spacing:.4px;}
 .tag.product{color:var(--acc2);background:rgba(64,200,240,.12);}
 .tag.pay{color:var(--grn);background:rgba(64,240,144,.1);}
 .tag.time{color:var(--acc);background:rgba(240,224,64,.1);}
@@ -197,12 +198,12 @@ textarea{resize:vertical;min-height:50px;}
 .edit-grid{display:grid;gap:.4rem;}
 .edit-row{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;}
 .edit-field{display:flex;flex-direction:column;gap:2px;}
-.edit-label{font-size:.58rem;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;}
+.edit-label{font-size:.68rem;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;}
 .edit-field input,.edit-field select{font-size:.78rem;padding:6px 9px;background:var(--surf3);border:1px solid var(--brd2);border-radius:6px;color:var(--txt);width:100%;outline:none;}
 .edit-field input:focus,.edit-field select:focus{border-color:var(--acc);}
 .edit-addr-wrap{position:relative;}
 .edit-addr-status{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:.7rem;pointer-events:none;}
-.edit-addr-hint{font-size:.58rem;color:var(--mut);margin-top:2px;}
+.edit-addr-hint{font-size:.68rem;color:var(--mut);margin-top:2px;}
 .edit-btns{display:flex;gap:.35rem;margin-top:.4rem;}
 .btn-save-edit{flex:1;background:var(--acc);color:#000;font-family:'Syne',sans-serif;font-weight:700;font-size:.75rem;border:none;border-radius:7px;padding:8px;cursor:pointer;transition:all .2s;}
 .btn-save-edit:hover{background:#ffe800;}
@@ -295,7 +296,7 @@ textarea{resize:vertical;min-height:50px;}
 .tiempos-badge.has-stops{background:rgba(240,224,64,.12);color:var(--acc);}
 .tiempos-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.35rem;padding:.6rem .85rem;background:var(--surf);border-bottom:1px solid var(--brd);}
 .tiempos-stat{display:flex;flex-direction:column;gap:1px;}
-.tiempos-stat-label{font-size:.58rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;}
+.tiempos-stat-label{font-size:.68rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;}
 .tiempos-stat-value{font-family:'Syne',sans-serif;font-weight:800;font-size:.88rem;color:var(--txt);}
 .tiempos-stat-value.highlight{color:var(--acc);}
 .tiempos-stops{padding:.4rem .65rem;}
@@ -330,7 +331,7 @@ textarea{resize:vertical;min-height:50px;}
 .cc-phone{font-size:.7rem;color:var(--acc2);margin-bottom:3px;}
 .cc-addr{font-size:.7rem;color:var(--mut);line-height:1.35;}
 .cc-ref{font-size:.66rem;color:var(--acc2);margin-top:2px;}
-.cc-badge{font-size:.58rem;font-weight:600;padding:1px 6px;border-radius:10px;margin-left:4px;}
+.cc-badge{font-size:.65rem;font-weight:600;padding:1px 6px;border-radius:10px;margin-left:4px;}
 .cc-badge.google{background:rgba(64,240,144,.12);color:var(--grn);}
 
 /* ── SETTINGS ── */
@@ -352,7 +353,7 @@ textarea{resize:vertical;min-height:50px;}
 .empty-txt{font-size:.78rem;line-height:1.5;}
 .mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surf);border-top:1px solid var(--brd);height:var(--tab-h);z-index:200;padding-bottom:env(safe-area-inset-bottom,0);}
 .mob-nav-inner{display:flex;height:100%;overflow-x:auto;}
-.mnb{flex:1;min-width:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:none;border:none;color:var(--mut);cursor:pointer;font-size:.52rem;font-family:'DM Sans',sans-serif;transition:color .18s;touch-action:manipulation;padding:0;}
+.mnb{flex:1;min-width:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:none;border:none;color:var(--mut);cursor:pointer;font-size:.68rem;font-family:'DM Sans',sans-serif;transition:color .18s;touch-action:manipulation;padding:0;}
 .mnb .ico{font-size:1.1rem;line-height:1;}
 .mnb.active{color:var(--acc);}
 @media(max-width:900px){.cal-col{display:none;}#btn-mob-cal{display:block!important;}.map-col{display:none;}.map-col.mob-show{display:flex;}.desk-nav{display:none;}.mob-nav{display:flex;}.main{padding-bottom:calc(var(--tab-h) + env(safe-area-inset-bottom,0px));}.panel{flex:1;max-width:100%;}#toast{bottom:calc(var(--tab-h) + max(8px,env(safe-area-inset-bottom,0px)));} html{font-size:15px;}}
@@ -510,7 +511,7 @@ textarea{resize:vertical;min-height:50px;}
 .balance-bars{display:grid;grid-template-columns:repeat(3,1fr);gap:.3rem;margin-top:.4rem;}
 .balance-stat{text-align:center;background:var(--surf3);border-radius:6px;padding:.3rem .2rem;}
 .balance-stat-val{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;}
-.balance-stat-lbl{font-size:.58rem;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;margin-top:1px;}
+.balance-stat-lbl{font-size:.68rem;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;margin-top:1px;}
 .balance-stat.disponible .balance-stat-val{color:var(--grn);}
 .balance-stat.entregado .balance-stat-val{color:var(--acc2);}
 .balance-stat.pendiente .balance-stat-val{color:var(--acc);}
@@ -525,7 +526,7 @@ textarea{resize:vertical;min-height:50px;}
 .carga-pedido-items{display:flex;flex-wrap:wrap;gap:.25rem;}
 .carga-pedido-sku{font-size:.64rem;background:var(--surf3);border-radius:4px;padding:2px 7px;color:var(--mut2);}
 .carga-pedido-sku span{color:var(--txt);font-weight:700;}
-.carga-pedido-status{font-size:.62rem;margin-top:.3rem;}
+.carga-pedido-status{font-size:.68rem;margin-top:.3rem;}
 .carga-pedido-status.done{color:var(--grn);}
 .carga-pedido-status.pending{color:var(--acc);}
 @media(max-width:700px){.carga-body{flex-direction:column;overflow-y:auto;}.carga-col{height:auto;overflow-y:visible;}.carga-col:first-child{border-right:none;border-bottom:1px solid var(--brd);}}
@@ -2634,6 +2635,7 @@ function renderTiempos(){
         <div class="tiempos-stat">
           <span class="tiempos-stat-label">Salida</span>
           <input type="time" value="${s.start_time}"
+            aria-label="Hora de salida ${driver.charAt(0).toUpperCase()+driver.slice(1)}"
             style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.72rem;padding:.32rem .4rem;"
             onchange="updateRepartoDriverConfig('${driver}','start_time',this.value)"
             onblur="renderTiempos()">
@@ -2641,6 +2643,7 @@ function renderTiempos(){
         <div class="tiempos-stat">
           <span class="tiempos-stat-label">KM/H</span>
           <input type="number" value="${s.speed_kmh}" min="5" max="120" step="1"
+            aria-label="Velocidad en km/h ${driver.charAt(0).toUpperCase()+driver.slice(1)}"
             style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.72rem;padding:.32rem .4rem;width:70px;text-align:center;"
             onchange="updateRepartoDriverConfig('${driver}','speed_kmh',this.value)"
             onblur="renderTiempos()">
@@ -2648,6 +2651,7 @@ function renderTiempos(){
         <div class="tiempos-stat">
           <span class="tiempos-stat-label">Min/cliente</span>
           <input type="number" value="${s.service_min}" min="1" max="90" step="1"
+            aria-label="Minutos por cliente ${driver.charAt(0).toUpperCase()+driver.slice(1)}"
             style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.72rem;padding:.32rem .4rem;width:70px;text-align:center;"
             onchange="updateRepartoDriverConfig('${driver}','service_min',this.value)"
             onblur="renderTiempos()">
@@ -2656,6 +2660,7 @@ function renderTiempos(){
           <span class="tiempos-stat-label">Factor tráfico</span>
           <input type="number" step="0.05" min="0.80" max="2.00"
             value="${(cfg.traffic_factor ?? 1.0).toFixed(2)}"
+            aria-label="Factor de tráfico ${driver.charAt(0).toUpperCase()+driver.slice(1)}"
             style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.72rem;padding:.32rem .4rem;width:70px;text-align:center;"
             onchange="updateRepartoDriverConfig('${driver}','traffic_factor',this.value)"
             onblur="renderTiempos()">
