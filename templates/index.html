@@ -1581,22 +1581,32 @@ async function addDelivery(){
 //  ACCIONES ENTREGAS
 // ════════════════════════════════════════════════════════
 async function toggleDone(id){
-  const d=deliveries.find(x=>x.id===id);if(!d)return;
-  await patchDelivery(id,{completed:!d.completed,arrived_at:!d.completed?new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'}):null});
+  const targetId=String(id);
+  const d=deliveries.find(x=>String(x.id)===targetId);if(!d)return;
+  await patchDelivery(targetId,{completed:!d.completed,arrived_at:!d.completed?new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'}):null});
 }
 async function deleteDelivery(id){
   if(!confirm('¿Eliminar esta entrega?'))return;
-  await fetch(`/api/deliveries/${id}`,{method:'DELETE'});
-  if(markers[id]){map.removeLayer(markers[id]);delete markers[id];}
-  deliveries=deliveries.filter(x=>x.id!==id);
-  await loadCalSummary();renderAll();refreshMarkers();toast('🗑️ Eliminada');
+  try{
+    const targetId=String(id);
+    const r=await fetch(`/api/deliveries/${encodeURIComponent(targetId)}`,{method:'DELETE'});
+    if(!r.ok){
+      const err=await r.json().catch(()=>({}));
+      toast('❌ Error al eliminar: '+(err.error||r.status));
+      return;
+    }
+    if(markers[targetId]){map.removeLayer(markers[targetId]);delete markers[targetId];}
+    deliveries=deliveries.filter(x=>String(x.id)!==targetId);
+    await loadCalSummary();renderAll();refreshMarkers();toast('🗑️ Eliminada');
+  }catch(e){toast('❌ Sin conexión con el servidor');}
 }
 async function patchDelivery(id,data){
   try{
-    const r=await fetch(`/api/deliveries/${id}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    const targetId=String(id);
+    const r=await fetch(`/api/deliveries/${encodeURIComponent(targetId)}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
     if(r.ok){
       const u=await r.json();
-      const i=deliveries.findIndex(x=>x.id===id);
+      const i=deliveries.findIndex(x=>String(x.id)===targetId);
       if(i>-1)deliveries[i]=u;
       renderAll();refreshMarkers();
       // Actualizar columna del repartidor en Mi Ruta si está visible
@@ -1640,8 +1650,9 @@ function closeEditPanel(id){
 
 
 async function saveEdit(id){
-  const eid=`edit-${id}`;
-  const d=deliveries.find(x=>x.id===id);
+  const targetId=String(id);
+  const eid=`edit-${targetId}`;
+  const d=deliveries.find(x=>String(x.id)===targetId);
   if(!d)return;
 
   const name   =document.getElementById(`${eid}-name`).value.trim();
@@ -1666,7 +1677,7 @@ async function saveEdit(id){
   if(phoneRaw && phoneRaw !== oldPhone){
     // Actualizar cliente con nuevo teléfono
     if(oldPhone){
-      await fetch(`/api/clients/${oldPhone}`,{
+      await fetch(`/api/clients/${encodeURIComponent(oldPhone)}`,{
         method:'PATCH',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({phone:phoneRaw, name})
       });
@@ -1677,26 +1688,26 @@ async function saveEdit(id){
   // Dirección: solo actualizar si cambió Y fue seleccionada de Google
   const addrChanged=addrRaw&&addrRaw!==d.address;
   if(addrChanged){
-    if(!editAddrData[id]){
+    if(!editAddrData[targetId]){
       toast('⚠️ Selecciona la dirección nueva desde las sugerencias de Google Maps');
       return;
     }
-    patch.address          =editAddrData[id].formatted_address;
-    patch.formatted_address=editAddrData[id].formatted_address;
-    patch.lat              =editAddrData[id].lat;
-    patch.lng              =editAddrData[id].lng;
-    patch.place_id         =editAddrData[id].place_id;
+    patch.address          =editAddrData[targetId].formatted_address;
+    patch.formatted_address=editAddrData[targetId].formatted_address;
+    patch.lat              =editAddrData[targetId].lat;
+    patch.lng              =editAddrData[targetId].lng;
+    patch.place_id         =editAddrData[targetId].place_id;
 
     // Actualizar cliente también si existe
     if(d.client_phone){
-      fetch(`/api/clients/${d.client_phone}`,{
+      fetch(`/api/clients/${encodeURIComponent(d.client_phone)}`,{
         method:'PATCH',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
-          address:           editAddrData[id].formatted_address,
-          formatted_address: editAddrData[id].formatted_address,
-          lat:               editAddrData[id].lat,
-          lng:               editAddrData[id].lng,
-          place_id:          editAddrData[id].place_id,
+          address:           editAddrData[targetId].formatted_address,
+          formatted_address: editAddrData[targetId].formatted_address,
+          lat:               editAddrData[targetId].lat,
+          lng:               editAddrData[targetId].lng,
+          place_id:          editAddrData[targetId].place_id,
           verified:          true,
           geocode_source:    'google',
         })
@@ -1704,11 +1715,11 @@ async function saveEdit(id){
     }
   }
 
-  const btn=document.querySelector(`#card-${id} .btn-save-edit`);
+  const btn=document.querySelector(`#card-${targetId} .btn-save-edit`);
   if(btn){btn.textContent='⏳ Guardando...';btn.disabled=true;}
 
-  await patchDelivery(id,patch);
-  closeEditPanel(id);
+  await patchDelivery(targetId,patch);
+  closeEditPanel(targetId);
   toast('✅ Entrega actualizada');
 }
 
