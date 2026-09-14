@@ -170,14 +170,14 @@ textarea{resize:vertical;min-height:50px;}
 .d-card:hover{border-color:var(--brd2);}
 .d-card.completed{opacity:.35;}
 .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px;}
-.card-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.86rem;display:flex;align-items:center;gap:6px;}
+.card-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.86rem;display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;}
 .route-order-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;border-radius:50%;background:var(--acc);color:#000;font-size:.65rem;font-weight:800;padding:0 4px;flex-shrink:0;}
 .card-btns{display:flex;gap:3px;}
 .ibtn{background:none;border:none;color:var(--mut);cursor:pointer;font-size:.78rem;padding:2px 6px;border-radius:4px;transition:color .15s;touch-action:manipulation;}
 .ibtn:hover{color:var(--txt);}
 .ibtn.del:hover{color:var(--acc3);}
 .ibtn.ok:hover{color:var(--grn);}
-.card-addr{font-size:.85rem;color:var(--mut);margin-bottom:4px;line-height:1.35;}
+.card-addr{font-size:.85rem;color:var(--mut);margin-bottom:4px;line-height:1.35;word-break:break-word;}
 .card-ref{font-size:.86rem;color:var(--acc2);margin-bottom:5px;font-weight:700;line-height:1.35;}
 .card-phone{font-size:.7rem;color:var(--acc2);margin-bottom:4px;}
 .card-tags{display:flex;flex-wrap:wrap;gap:3px;}
@@ -357,6 +357,7 @@ textarea{resize:vertical;min-height:50px;}
 .mnb.active{color:var(--acc);}
 @media(max-width:900px){.cal-col{display:none;}#btn-mob-cal{display:block!important;}.map-col{display:none;}.map-col.mob-show{display:flex;}.desk-nav{display:none;}.mob-nav{display:flex;}.main{padding-bottom:calc(var(--tab-h) + env(safe-area-inset-bottom,0px));}.panel{flex:1;max-width:100%;}#toast{bottom:calc(var(--tab-h) + max(8px,env(safe-area-inset-bottom,0px)));} html{font-size:15px;}}
 @media(max-width:600px){header{padding:0 .75rem;}.hdr-date{font-size:.7rem;padding:3px 8px;}.panel-hd{padding:.65rem .9rem .4rem;}.scrollable{padding:.65rem .9rem;}.filter-bar{padding:.35rem .9rem;}.form-row{grid-template-columns:1fr;}}
+@media(max-width:1100px){header{gap:.4rem;}.desk-nav .nb{padding:4px 8px;font-size:.75rem;}}
 
 /* ══ MEJORAS MÓVIL ══════════════════════════════════════
    Aplica solo en pantallas ≤480px (teléfonos)
@@ -468,6 +469,9 @@ textarea{resize:vertical;min-height:50px;}
 
   /* Mi Ruta: drag handle más grande */
   .r-drag{ padding:8px 4px; min-height:36px; display:flex; align-items:center; touch-action:none; }
+
+  /* Edición de pedidos: apilar campos */
+  .edit-row{ grid-template-columns:1fr; }
 }
 
 /* ── CARGA DEL DÍA ── */
