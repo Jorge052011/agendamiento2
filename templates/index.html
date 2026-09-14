@@ -879,6 +879,59 @@ textarea{resize:vertical;min-height:50px;}
       </div>
     </div>
 
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!--  CARGA DEL DÍA                                       -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div id="page-carga" class="page" style="background:var(--surf);overflow:hidden;">
+      <div class="panel-hd">
+        <span class="panel-title">📦 Carga del Día</span>
+        <span id="carga-alerta-badge" style="display:none;background:#ff4040;color:#fff;font-size:.65rem;font-weight:700;padding:2px 9px;border-radius:20px;">⚠️ Sin stock suficiente</span>
+      </div>
+
+      <!-- Fecha -->
+      <div class="carga-date-bar">
+        <span style="font-size:.75rem;color:var(--mut);font-weight:600;">Fecha:</span>
+        <input type="date" id="carga-date" onchange="loadCarga()">
+        <button onclick="loadCarga()" style="background:var(--surf2);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.75rem;padding:4px 10px;cursor:pointer;">↻ Actualizar</button>
+      </div>
+
+      <!-- Selector conductor -->
+      <div class="carga-driver-tabs">
+        <span style="font-size:.72rem;color:var(--mut);align-self:center;margin-right:4px;">Ver:</span>
+        <button class="carga-driver-tab jorge active" onclick="setCargaDriver('jorge',this)">Jorge</button>
+        <button class="carga-driver-tab diego" onclick="setCargaDriver('diego',this)">Diego</button>
+        <button class="carga-driver-tab jorge_noche" onclick="setCargaDriver('jorge_noche',this)">Jorge Noche</button>
+        <button class="carga-driver-tab diego_noche" onclick="setCargaDriver('diego_noche',this)">Diego Noche</button>
+      </div>
+
+      <!-- Cuerpo en dos columnas -->
+      <div class="carga-body">
+
+        <!-- COL IZQ: Stock inicial -->
+        <div class="carga-col">
+          <div class="carga-col-title">🏗 Stock al salir de bodega</div>
+          <div id="carga-sku-list">
+            <!-- generado por JS -->
+          </div>
+          <button class="btn-guardar-stock" onclick="guardarStock()">💾 Guardar carga</button>
+          <div id="carga-save-msg" style="font-size:.7rem;color:var(--grn);margin-top:.4rem;min-height:1rem;"></div>
+        </div>
+
+        <!-- COL DER: Balance en ruta + alertas -->
+        <div class="carga-col">
+          <div id="carga-alerts-container"></div>
+          <div class="carga-col-title">📊 Balance en ruta</div>
+          <div id="carga-balance-list">
+            <div class="carga-empty">Cargando...</div>
+          </div>
+          <div class="carga-col-title" style="margin-top:1rem;">🗂 Pedidos del día</div>
+          <div id="carga-pedidos-list">
+            <div class="carga-empty">Sin pedidos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div><!-- .panel -->
 
   <div class="map-col" id="map-col">
@@ -898,59 +951,6 @@ textarea{resize:vertical;min-height:50px;}
     </div>
   </div>
 
-</div>
-
-<!-- ══════════════════════════════════════════════════════ -->
-<!--  CARGA DEL DÍA                                       -->
-<!-- ══════════════════════════════════════════════════════ -->
-<div id="page-carga" class="page" style="flex-direction:column;height:100%;background:var(--surf);overflow:hidden;">
-  <div class="panel-hd">
-    <span class="panel-title">📦 Carga del Día</span>
-    <span id="carga-alerta-badge" style="display:none;background:#ff4040;color:#fff;font-size:.65rem;font-weight:700;padding:2px 9px;border-radius:20px;">⚠️ Sin stock suficiente</span>
-  </div>
-
-  <!-- Fecha -->
-  <div class="carga-date-bar">
-    <span style="font-size:.75rem;color:var(--mut);font-weight:600;">Fecha:</span>
-    <input type="date" id="carga-date" onchange="loadCarga()">
-    <button onclick="loadCarga()" style="background:var(--surf2);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.75rem;padding:4px 10px;cursor:pointer;">↻ Actualizar</button>
-  </div>
-
-  <!-- Selector conductor -->
-  <div class="carga-driver-tabs">
-    <span style="font-size:.72rem;color:var(--mut);align-self:center;margin-right:4px;">Ver:</span>
-    <button class="carga-driver-tab jorge active" onclick="setCargaDriver('jorge',this)">Jorge</button>
-    <button class="carga-driver-tab diego" onclick="setCargaDriver('diego',this)">Diego</button>
-    <button class="carga-driver-tab jorge_noche" onclick="setCargaDriver('jorge_noche',this)">Jorge Noche</button>
-    <button class="carga-driver-tab diego_noche" onclick="setCargaDriver('diego_noche',this)">Diego Noche</button>
-  </div>
-
-  <!-- Cuerpo en dos columnas -->
-  <div class="carga-body">
-
-    <!-- COL IZQ: Stock inicial -->
-    <div class="carga-col">
-      <div class="carga-col-title">🏗 Stock al salir de bodega</div>
-      <div id="carga-sku-list">
-        <!-- generado por JS -->
-      </div>
-      <button class="btn-guardar-stock" onclick="guardarStock()">💾 Guardar carga</button>
-      <div id="carga-save-msg" style="font-size:.7rem;color:var(--grn);margin-top:.4rem;min-height:1rem;"></div>
-    </div>
-
-    <!-- COL DER: Balance en ruta + alertas -->
-    <div class="carga-col">
-      <div id="carga-alerts-container"></div>
-      <div class="carga-col-title">📊 Balance en ruta</div>
-      <div id="carga-balance-list">
-        <div class="carga-empty">Cargando...</div>
-      </div>
-      <div class="carga-col-title" style="margin-top:1rem;">🗂 Pedidos del día</div>
-      <div id="carga-pedidos-list">
-        <div class="carga-empty">Sin pedidos</div>
-      </div>
-    </div>
-  </div>
 </div>
 
 </div>
