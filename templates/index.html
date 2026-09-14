@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RepartoTrack</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
@@ -13,7 +13,7 @@
   --bg:#0a0a0f; --surf:#13131a; --surf2:#1c1c28; --surf3:#22222f;
   --brd:#2a2a3d; --brd2:#353550;
   --acc:#f0e040; --acc2:#1e90ff; --acc3:#ff6b2b; --grn:#40f090;
-  --txt:#e8e8f0; --mut:#6868a0; --mut2:#9090c0;
+  --txt:#e8e8f0; --mut:#8585b0; --mut2:#9090c0;
   --jorge:#f0e040; --diego:#1e90ff; --jorge-noche:#ff6b2b; --diego-noche:#b56cff;
   --nav-h:56px; --tab-h:52px;
 }
@@ -22,7 +22,7 @@
   --bg:#f0f2f5; --surf:#ffffff; --surf2:#e8eaed; --surf3:#dde0e5;
   --brd:#d0d4db; --brd2:#b8bdc7;
   --acc:#d4a000; --acc2:#0088bb; --acc3:#cc2060; --grn:#1a9950;
-  --txt:#1a1a2e; --mut:#6c7280; --mut2:#4a5060;
+  --txt:#1a1a2e; --mut:#555b65; --mut2:#4a5060;
   --jorge:#b8860b; --diego:#1565c0; --jorge-noche:#e64a19; --diego-noche:#7e57c2;
 }
 .light .tag.time{color:#b8860b;background:rgba(212,160,0,.12);}
@@ -69,7 +69,7 @@ header{background:var(--surf);border-bottom:1px solid var(--brd);display:flex;al
 .cal-nav button:hover{border-color:var(--acc);color:var(--acc);}
 .cal-body{padding:.4rem .5rem .6rem;flex:1;overflow-y:auto;}
 .cal-wds{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:2px;}
-.cal-wd{text-align:center;font-size:.56rem;font-weight:700;color:var(--mut);text-transform:uppercase;padding:2px 0;}
+.cal-wd{text-align:center;font-size:.68rem;font-weight:700;color:var(--mut);text-transform:uppercase;padding:2px 0;}
 .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
 .cal-day{aspect-ratio:1;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:2px;cursor:pointer;transition:all .15s;border:1px solid transparent;}
 .cal-day:hover{background:var(--surf2);border-color:var(--brd2);}
@@ -81,7 +81,7 @@ header{background:var(--surf);border-bottom:1px solid var(--brd);display:flex;al
 .cal-day.selected .dn{color:var(--txt);}
 .ddots{display:flex;gap:1px;flex-wrap:wrap;justify-content:center;margin-top:1px;}
 .ddot{width:4px;height:4px;border-radius:50%;}
-.dcnt{font-size:.52rem;font-weight:700;color:var(--mut);margin-top:1px;line-height:1;}
+.dcnt{font-size:.68rem;font-weight:700;color:var(--mut);margin-top:1px;line-height:1;}
 .cal-legend{padding:.4rem .7rem .5rem;border-top:1px solid var(--brd);display:flex;gap:6px;flex-wrap:wrap;}
 .cl-item{display:flex;align-items:center;gap:3px;font-size:.63rem;color:var(--mut);}
 .cl-dot{width:6px;height:6px;border-radius:50%;}
@@ -108,8 +108,8 @@ header{background:var(--surf);border-bottom:1px solid var(--brd);display:flex;al
 #map.night-mode .leaflet-tile-pane{
   filter: invert(1) hue-rotate(180deg) brightness(1.1) saturate(1.2) contrast(0.9);
 }
-.map-legend{position:absolute;top:10px;right:10px;z-index:500;background:rgba(10,10,15,.93);border:1px solid var(--brd);border-radius:8px;padding:8px 11px;font-size:.68rem;backdrop-filter:blur(10px);}
-.ml-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.66rem;color:var(--mut);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.map-legend{position:absolute;top:10px;right:10px;z-index:500;background:rgba(10,10,15,.93);border:1px solid var(--brd);border-radius:8px;padding:8px 11px;font-size:.68rem;backdrop-filter:blur(10px);color:#f1f5f9;}
+.ml-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.66rem;color:#f1f5f9;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
 .ml-item{display:flex;align-items:center;gap:5px;margin-bottom:2px;}
 .ml-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
 .map-stats{position:absolute;bottom:24px;left:10px;z-index:500;display:flex;gap:5px;}
@@ -122,6 +122,7 @@ header{background:var(--surf);border-bottom:1px solid var(--brd);display:flex;al
 label{font-size:.63rem;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.6px;}
 input,select,textarea{background:var(--surf2);border:1px solid var(--brd);border-radius:8px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:.84rem;padding:9px 11px;outline:none;transition:border-color .2s;width:100%;-webkit-appearance:none;appearance:none;}
 input:focus,select:focus,textarea:focus{border-color:var(--acc);}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236868a0' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
 select option{background:var(--surf2);}
 textarea{resize:vertical;min-height:50px;}
@@ -170,18 +171,18 @@ textarea{resize:vertical;min-height:50px;}
 .d-card:hover{border-color:var(--brd2);}
 .d-card.completed{opacity:.35;}
 .card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px;}
-.card-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.86rem;display:flex;align-items:center;gap:6px;}
+.card-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.86rem;display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;}
 .route-order-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;border-radius:50%;background:var(--acc);color:#000;font-size:.65rem;font-weight:800;padding:0 4px;flex-shrink:0;}
 .card-btns{display:flex;gap:3px;}
 .ibtn{background:none;border:none;color:var(--mut);cursor:pointer;font-size:.78rem;padding:2px 6px;border-radius:4px;transition:color .15s;touch-action:manipulation;}
 .ibtn:hover{color:var(--txt);}
 .ibtn.del:hover{color:var(--acc3);}
 .ibtn.ok:hover{color:var(--grn);}
-.card-addr{font-size:.85rem;color:var(--mut);margin-bottom:4px;line-height:1.35;}
+.card-addr{font-size:.85rem;color:var(--mut);margin-bottom:4px;line-height:1.35;word-break:break-word;}
 .card-ref{font-size:.86rem;color:var(--acc2);margin-bottom:5px;font-weight:700;line-height:1.35;}
 .card-phone{font-size:.7rem;color:var(--acc2);margin-bottom:4px;}
 .card-tags{display:flex;flex-wrap:wrap;gap:3px;}
-.tag{font-size:.6rem;font-weight:600;padding:2px 6px;border-radius:20px;background:var(--brd);color:var(--mut);text-transform:uppercase;letter-spacing:.4px;}
+.tag{font-size:.68rem;font-weight:600;padding:2px 6px;border-radius:20px;background:var(--surf2);color:var(--mut);text-transform:uppercase;letter-spacing:.4px;}
 .tag.product{color:var(--acc2);background:rgba(64,200,240,.12);}
 .tag.pay{color:var(--grn);background:rgba(64,240,144,.1);}
 .tag.time{color:var(--acc);background:rgba(240,224,64,.1);}
@@ -197,12 +198,12 @@ textarea{resize:vertical;min-height:50px;}
 .edit-grid{display:grid;gap:.4rem;}
 .edit-row{display:grid;grid-template-columns:1fr 1fr;gap:.4rem;}
 .edit-field{display:flex;flex-direction:column;gap:2px;}
-.edit-label{font-size:.58rem;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;}
+.edit-label{font-size:.68rem;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;}
 .edit-field input,.edit-field select{font-size:.78rem;padding:6px 9px;background:var(--surf3);border:1px solid var(--brd2);border-radius:6px;color:var(--txt);width:100%;outline:none;}
 .edit-field input:focus,.edit-field select:focus{border-color:var(--acc);}
 .edit-addr-wrap{position:relative;}
 .edit-addr-status{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:.7rem;pointer-events:none;}
-.edit-addr-hint{font-size:.58rem;color:var(--mut);margin-top:2px;}
+.edit-addr-hint{font-size:.68rem;color:var(--mut);margin-top:2px;}
 .edit-btns{display:flex;gap:.35rem;margin-top:.4rem;}
 .btn-save-edit{flex:1;background:var(--acc);color:#000;font-family:'Syne',sans-serif;font-weight:700;font-size:.75rem;border:none;border-radius:7px;padding:8px;cursor:pointer;transition:all .2s;}
 .btn-save-edit:hover{background:#ffe800;}
@@ -210,33 +211,6 @@ textarea{resize:vertical;min-height:50px;}
 .btn-cancel-edit:hover{color:var(--txt);}
 .ibtn.edit:hover{color:var(--acc2);}
 .ibtn.nav:hover{color:#40f090;}
-.btn-nav-route{background:var(--surf3);border:1px solid var(--brd);border-radius:7px;color:#40f090;font-size:.72rem;font-family:'DM Sans',sans-serif;padding:5px 12px;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:5px;white-space:nowrap;}
-.btn-nav-route:hover{border-color:#40f090;background:rgba(64,240,144,.08);}
-
-
-/* ── ROUTES ── */
-.route-block{background:var(--surf2);border:1px solid var(--brd);border-radius:9px;padding:.8rem;margin-bottom:.6rem;}
-.route-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;}
-.rdriver{font-family:'Syne',sans-serif;font-weight:700;font-size:.84rem;}
-.rdriver.jorge{color:var(--jorge);}.rdriver.diego{color:var(--diego);}.rdriver.jorge_noche{color:var(--jorge-noche);}.rdriver.diego_noche{color:var(--diego-noche);}
-.rsub{font-size:.68rem;color:var(--mut);}
-.stop{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-top:1px solid var(--brd);}
-.snum{width:20px;height:20px;border-radius:50%;font-size:.58rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.sbody{flex:1;min-width:0;}
-.sname{font-size:.76rem;font-weight:600;}
-.saddr{font-size:.66rem;color:var(--mut);word-break:break-word;}
-.sref{font-size:.64rem;color:var(--acc2);}
-.stime{font-size:.64rem;color:var(--acc);margin-top:2px;font-weight:600;}
-.stimes{display:flex;gap:4px;margin-top:3px;}
-.stimes input{flex:1;font-size:.66rem;padding:4px 6px;}
-.slabels{display:flex;gap:4px;margin-top:1px;}
-.slabels span{flex:1;font-size:.56rem;color:var(--mut);}
-.btn-nav-stop{background:none;border:1px solid rgba(64,240,144,.35);border-radius:6px;color:#40f090;
-  font-size:.65rem;font-family:'DM Sans',sans-serif;padding:4px 9px;cursor:pointer;
-  transition:all .18s;display:flex;align-items:center;gap:4px;margin-top:5px;width:100%;}
-.btn-nav-stop:hover{background:rgba(64,240,144,.1);border-color:#40f090;}
-.stop.completed-stop{opacity:.4;}
-.stop.completed-stop .btn-nav-stop{display:none;}
 .btn-apply-order{background:var(--grn);color:#000;font-family:'Syne',sans-serif;font-weight:700;
   font-size:.86rem;border:none;border-radius:9px;padding:11px;cursor:pointer;width:100%;
   margin-top:.4rem;transition:all .2s;letter-spacing:.3px;}
@@ -252,74 +226,7 @@ textarea{resize:vertical;min-height:50px;}
 .btn-ir-gmaps:hover{filter:brightness(1.15);}
 .btn-ir-waze{background:#05c8f0;color:#000;}
 .btn-ir-waze:hover{filter:brightness(1.1);}
-.stop.completed-stop .btn-nav-row{display:none;}
 
-/* ── OPTIMIZER ── */
-.opt-section{margin-bottom:.9rem;}
-.opt-stitle{font-family:'Syne',sans-serif;font-weight:700;font-size:.74rem;color:var(--mut);text-transform:uppercase;letter-spacing:.7px;margin-bottom:.45rem;}
-.dp-grid{display:grid;grid-template-columns:1fr 1fr;gap:.35rem;margin-bottom:.35rem;}
-.dp-btn{background:var(--surf2);border:2px solid var(--brd);border-radius:8px;padding:.5rem .65rem;cursor:pointer;transition:all .18s;text-align:left;touch-action:manipulation;}
-.dp-btn:hover{border-color:var(--acc2);}
-.dp-btn.selected{border-color:var(--acc);background:rgba(240,224,64,.07);}
-.dp-btn-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.75rem;color:var(--txt);}
-.dp-btn-addr{font-size:.62rem;color:var(--mut);margin-top:1px;line-height:1.3;}
-.custom-dp{background:var(--surf2);border:2px dashed var(--brd);border-radius:8px;padding:.6rem .75rem;cursor:pointer;transition:all .18s;margin-bottom:.45rem;}
-.custom-dp:hover{border-color:var(--acc2);}
-.custom-dp.selected{border-color:var(--acc);border-style:solid;background:rgba(240,224,64,.07);}
-.custom-dp-label{font-size:.7rem;color:var(--mut);margin-bottom:.35rem;display:flex;align-items:center;gap:4px;}
-.custom-dp-fields{display:grid;gap:.35rem;}
-.driver-row{display:flex;gap:.35rem;flex-wrap:wrap;}
-.dchip{background:var(--surf2);border:1px solid var(--brd);border-radius:20px;padding:3px 11px;font-size:.7rem;cursor:pointer;color:var(--mut);transition:all .15s;touch-action:manipulation;}
-.dchip:hover{color:var(--txt);}
-.dchip.active{border-color:var(--acc);color:var(--acc);}
-.dchip.jorge.active{border-color:var(--jorge);color:var(--jorge);}
-.dchip.diego.active{border-color:var(--diego);color:var(--diego);}
-.dchip.jorge_noche.active{border-color:var(--jorge-noche);color:var(--jorge-noche);}
-.dchip.diego_noche.active{border-color:var(--diego-noche);color:var(--diego-noche);}
-.opt-result{background:var(--surf2);border:1px solid var(--brd);border-radius:9px;padding:.85rem;margin-top:.75rem;}
-.opt-rh{display:flex;justify-content:space-between;align-items:center;margin-bottom:.65rem;}
-.opt-rtitle{font-family:'Syne',sans-serif;font-weight:700;font-size:.88rem;color:var(--grn);}
-.opt-stats{display:flex;gap:.4rem;}
-.opt-stat{background:var(--bg);border:1px solid var(--brd);border-radius:6px;padding:3px 9px;text-align:center;}
-.opt-stat-n{font-family:'Syne',sans-serif;font-weight:800;font-size:.9rem;color:var(--acc);}
-.opt-stat-l{font-size:.58rem;color:var(--mut);}
-.opt-stop{display:flex;gap:7px;align-items:flex-start;padding:5px 0;border-top:1px solid var(--brd);}
-.opt-stop.draggable{cursor:grab;transition:background .15s;}
-.opt-stop.draggable:active{cursor:grabbing;}
-.opt-stop.sortable-ghost{opacity:.35;background:var(--surf3);border-radius:7px;}
-.opt-stop.sortable-chosen{background:rgba(240,224,64,.06);border-radius:7px;}
-.opt-drag-handle{display:flex;align-items:center;color:var(--mut);font-size:.85rem;padding:2px 1px 0;flex-shrink:0;cursor:grab;user-select:none;touch-action:none;}
-.opt-drag-hint{font-size:.62rem;color:var(--mut);text-align:center;margin:.35rem 0 .1rem;opacity:.7;}
-.opt-snum{width:21px;height:21px;border-radius:50%;background:var(--acc);color:#000;font-size:.62rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-.opt-snum.origin{background:var(--acc2);}
-.opt-sbody{flex:1;min-width:0;}
-.opt-sname{font-size:.78rem;font-weight:600;}
-.opt-saddr{font-size:.66rem;color:var(--mut);}
-.opt-sref{font-size:.63rem;color:var(--mut);margin-top:2px;}
-.opt-eta{font-size:.65rem;font-weight:700;color:var(--acc2);background:rgba(64,200,240,.12);border-radius:4px;padding:1px 6px;display:inline-block;margin-top:2px;}
-.opt-eta-orig{font-size:.65rem;font-weight:700;color:var(--grn);background:rgba(64,240,144,.12);border-radius:4px;padding:1px 6px;display:inline-block;margin-top:2px;}
-.seta{font-size:.65rem;font-weight:700;color:var(--acc2);margin-bottom:1px;}
-.opt-eta-summary{background:var(--surf3);border:1px solid var(--brd);border-radius:7px;padding:.4rem .7rem;margin:.4rem 0;font-size:.7rem;display:flex;gap:.75rem;flex-wrap:wrap;}
-.opt-eta-summary span{color:var(--mut);}
-.opt-eta-summary b{color:var(--txt);}
-.opt-new-badge{display:inline-block;font-size:.58rem;font-weight:700;background:#f59e0b;color:#fff;border-radius:4px;padding:1px 5px;margin-left:4px;vertical-align:middle;letter-spacing:.03em;}
-.opt-order{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px;}
-.opt-order-chip{font-size:.62rem;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap;}
-.sinfo-chips{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 2px;}
-.opt-order-chip.product{background:rgba(240,224,64,.12);color:var(--acc);}
-.opt-order-chip.amount{background:rgba(64,240,144,.12);color:var(--grn);}
-.opt-order-chip.payment{background:rgba(64,200,240,.12);color:var(--acc2);}
-.opt-sdist{font-size:.61rem;color:var(--mut);margin-top:1px;}
-.opt-stime{margin:3px 0 2px;}
-.opt-stop.opt-completed{opacity:.55;background:rgba(0,200,83,.04);border-radius:8px;padding:6px 5px;}
-.opt-stop.opt-completed .opt-snum{background:#00c853;color:#000;}
-.opt-stop.opt-completed .opt-sname{text-decoration:line-through;color:var(--mut);}
-.opt-stop.opt-completed .btn-nav-row{display:none;}
-.opt-completed-badge{display:inline-block;font-size:.58rem;font-weight:700;background:#00c853;color:#000;border-radius:4px;padding:1px 6px;margin-left:5px;vertical-align:middle;letter-spacing:.03em;}
-.btn-gmaps{background:linear-gradient(135deg,#4285f4,#34a853);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;border:none;border-radius:9px;padding:11px;cursor:pointer;width:100%;margin-top:.65rem;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;touch-action:manipulation;}
-.btn-gmaps:hover{opacity:.9;}
-.btn-ver-mapa{background:var(--surf3);border:1.5px solid var(--acc);color:var(--acc);font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;border-radius:9px;padding:11px;cursor:pointer;width:100%;margin-top:.5rem;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;touch-action:manipulation;}
-.btn-ver-mapa:hover{background:rgba(240,224,64,.1);}
 /* ── MI RUTA (Módulo Reparto) ── */
 .reparto-dp-section{padding:.6rem .8rem .4rem;flex-shrink:0;border-bottom:1px solid var(--brd);}
 .reparto-dp-title{font-size:.68rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem;}
@@ -374,15 +281,33 @@ textarea{resize:vertical;min-height:50px;}
 .reparto-save-btn.dirty{border-color:var(--acc);color:var(--acc);background:rgba(240,224,64,.07);}
 .reparto-apply-btn{width:100%;padding:.5rem;background:rgba(64,240,144,.08);border:1.5px solid rgba(64,240,144,.35);border-radius:8px;color:var(--grn);font-size:.72rem;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;margin-top:.35rem;transition:all .2s;}
 .reparto-apply-btn:hover{filter:brightness(1.08);border-color:var(--grn);}
-/* ── Tracking GPS ── */
-.tracking-card{background:var(--bg);border:1px solid var(--brd);border-radius:8px;padding:.6rem .8rem;margin-bottom:.5rem;display:flex;align-items:center;gap:.7rem;}
-.tracking-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;animation:markerPulse 1.2s ease-out infinite;}
-.tracking-info{flex:1;min-width:0;}
-.tracking-name{font-size:.78rem;font-weight:700;}
-.tracking-coords{font-size:.62rem;color:var(--mut);}
-.tracking-time{font-size:.6rem;color:var(--mut2);white-space:nowrap;}
 .btn-secondary{background:var(--surf3);border:1px solid var(--brd);color:var(--mut);font-family:'Syne',sans-serif;font-weight:700;font-size:.78rem;border-radius:8px;padding:9px;cursor:pointer;transition:all .2s;}
 .btn-secondary:hover{border-color:var(--acc3);color:var(--acc3);}
+/* ── TIEMPOS ── */
+.tiempos-scroll{padding:.75rem;overflow-y:auto;flex:1;}
+.tiempos-card{background:var(--surf2);border:1px solid var(--brd);border-radius:10px;margin-bottom:.75rem;overflow:hidden;}
+.tiempos-card-hd{display:flex;align-items:center;gap:.5rem;padding:.65rem .85rem;border-bottom:1px solid var(--brd);flex-wrap:wrap;}
+.tiempos-driver-name{font-family:'Syne',sans-serif;font-weight:700;font-size:.92rem;}
+.tiempos-driver-name.jorge{color:var(--jorge);}
+.tiempos-driver-name.diego{color:var(--diego);}
+.tiempos-driver-name.jorge_noche{color:var(--jorge-noche);}
+.tiempos-driver-name.diego_noche{color:var(--diego-noche);}
+.tiempos-badge{font-size:.65rem;font-weight:700;background:var(--surf3);border-radius:20px;padding:2px 8px;color:var(--mut);}
+.tiempos-badge.has-stops{background:rgba(240,224,64,.12);color:var(--acc);}
+.tiempos-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.35rem;padding:.6rem .85rem;background:var(--surf);border-bottom:1px solid var(--brd);}
+.tiempos-stat{display:flex;flex-direction:column;gap:1px;}
+.tiempos-stat-label{font-size:.68rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;}
+.tiempos-stat-value{font-family:'Syne',sans-serif;font-weight:800;font-size:.88rem;color:var(--txt);}
+.tiempos-stat-value.highlight{color:var(--acc);}
+.tiempos-stops{padding:.4rem .65rem;}
+.tiempos-stop{display:flex;gap:8px;align-items:flex-start;padding:6px 4px;border-top:1px solid var(--brd);}
+.tiempos-stop:first-child{border-top:none;}
+.tiempos-snum{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;color:#000;flex-shrink:0;margin-top:1px;background:var(--acc);}
+.tiempos-sbody{flex:1;min-width:0;}
+.tiempos-sname{font-size:.82rem;font-weight:600;}
+.tiempos-saddr{font-size:.75rem;color:var(--mut);margin-top:1px;}
+.tiempos-eta{font-size:.7rem;font-weight:700;color:var(--acc2);margin-top:2px;}
+.tiempos-empty{padding:1.5rem;text-align:center;color:var(--mut);font-size:.82rem;}
 /* ── Marcadores mapa ── */
 @keyframes markerPulse{
   0%  {transform:scale(1);   opacity:.7;}
@@ -406,7 +331,7 @@ textarea{resize:vertical;min-height:50px;}
 .cc-phone{font-size:.7rem;color:var(--acc2);margin-bottom:3px;}
 .cc-addr{font-size:.7rem;color:var(--mut);line-height:1.35;}
 .cc-ref{font-size:.66rem;color:var(--acc2);margin-top:2px;}
-.cc-badge{font-size:.58rem;font-weight:600;padding:1px 6px;border-radius:10px;margin-left:4px;}
+.cc-badge{font-size:.65rem;font-weight:600;padding:1px 6px;border-radius:10px;margin-left:4px;}
 .cc-badge.google{background:rgba(64,240,144,.12);color:var(--grn);}
 
 /* ── SETTINGS ── */
@@ -415,7 +340,7 @@ textarea{resize:vertical;min-height:50px;}
 .dp-edit-row{display:grid;grid-template-columns:1fr auto;gap:.35rem;align-items:end;margin-bottom:.4rem;padding-bottom:.4rem;border-bottom:1px solid var(--brd);}
 .dp-edit-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
 .divider{height:1px;background:var(--brd);margin:.65rem 0;}
-#toast{position:fixed;bottom:max(80px,env(safe-area-inset-bottom,16px) + 16px);left:50%;transform:translateX(-50%) translateY(80px);background:var(--acc);color:#000;font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;padding:9px 18px;border-radius:8px;z-index:9999;opacity:0;transition:all .3s;white-space:nowrap;}
+#toast{position:fixed;bottom:max(80px,env(safe-area-inset-bottom,16px) + 16px);left:50%;transform:translateX(-50%) translateY(80px);background:var(--acc);color:#000;font-family:'Syne',sans-serif;font-weight:700;font-size:.8rem;padding:9px 18px;border-radius:8px;z-index:9999;opacity:0;transition:all .3s;max-width:calc(100vw - 32px);white-space:normal;word-break:break-word;text-align:center;}
 #toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
 .leaflet-popup-content-wrapper{background:var(--surf)!important;border:1px solid var(--brd)!important;border-radius:9px!important;color:var(--txt)!important;box-shadow:0 8px 32px rgba(0,0,0,.5)!important;}
 .leaflet-popup-tip{background:var(--surf)!important;}
@@ -428,11 +353,12 @@ textarea{resize:vertical;min-height:50px;}
 .empty-txt{font-size:.78rem;line-height:1.5;}
 .mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surf);border-top:1px solid var(--brd);height:var(--tab-h);z-index:200;padding-bottom:env(safe-area-inset-bottom,0);}
 .mob-nav-inner{display:flex;height:100%;overflow-x:auto;}
-.mnb{flex:1;min-width:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:none;border:none;color:var(--mut);cursor:pointer;font-size:.52rem;font-family:'DM Sans',sans-serif;transition:color .18s;touch-action:manipulation;padding:0;}
+.mnb{flex:1;min-width:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:none;border:none;color:var(--mut);cursor:pointer;font-size:.68rem;font-family:'DM Sans',sans-serif;transition:color .18s;touch-action:manipulation;padding:0;}
 .mnb .ico{font-size:1.1rem;line-height:1;}
 .mnb.active{color:var(--acc);}
-@media(max-width:900px){.cal-col{display:none;}#btn-mob-cal{display:block!important;}.map-col{display:none;}.map-col.mob-show{display:flex;}.desk-nav{display:none;}.mob-nav{display:flex;}.main{padding-bottom:var(--tab-h);}.panel{flex:1;max-width:100%;}#toast{bottom:calc(var(--tab-h) + max(8px,env(safe-area-inset-bottom,0px)));} html{font-size:15px;}}
-@media(max-width:600px){header{padding:0 .75rem;}.hdr-date{font-size:.7rem;padding:3px 8px;}.panel-hd{padding:.65rem .9rem .4rem;}.scrollable{padding:.65rem .9rem;}.filter-bar{padding:.35rem .9rem;}.form-row{grid-template-columns:1fr;}.dp-grid{grid-template-columns:1fr;}}
+@media(max-width:900px){.cal-col{display:none;}#btn-mob-cal{display:block!important;}.map-col{display:none;}.map-col.mob-show{display:flex;}.desk-nav{display:none;}.mob-nav{display:flex;}.main{padding-bottom:calc(var(--tab-h) + env(safe-area-inset-bottom,0px));}.panel{flex:1;max-width:100%;}#toast{bottom:calc(var(--tab-h) + max(8px,env(safe-area-inset-bottom,0px)));} html{font-size:15px;}}
+@media(max-width:600px){header{padding:0 .75rem;}.hdr-date{font-size:.7rem;padding:3px 8px;}.panel-hd{padding:.65rem .9rem .4rem;}.scrollable{padding:.65rem .9rem;}.filter-bar{padding:.35rem .9rem;}.form-row{grid-template-columns:1fr;}}
+@media(max-width:1100px){header{gap:.4rem;}.desk-nav .nb{padding:4px 8px;font-size:.75rem;}}
 
 /* ══ MEJORAS MÓVIL ══════════════════════════════════════
    Aplica solo en pantallas ≤480px (teléfonos)
@@ -482,7 +408,7 @@ textarea{resize:vertical;min-height:50px;}
   .btn-secondary{ font-size:.82rem; padding:.55rem .9rem; }
 
   /* Filtros */
-  .filter-bar .fb{ font-size:.72rem !important; padding:5px 11px !important; }
+  .filter-bar .chip{ font-size:.72rem !important; padding:5px 11px !important; }
 
   /* Tarjetas de clientes */
   .client-card{ padding:.85rem 1rem; border-radius:11px; }
@@ -494,14 +420,6 @@ textarea{resize:vertical;min-height:50px;}
 
   /* Búsqueda y sort en clientes */
   #cli-search, #cli-sort{ font-size:.82rem !important; padding:.5rem .75rem !important; }
-
-  /* Rutas */
-  .sname{ font-size:.88rem !important; }
-  .saddr{ font-size:.78rem !important; }
-  .seta{ font-size:.75rem !important; }
-  .route-hd{ font-size:.85rem; }
-  .rdriver{ font-size:.82rem !important; }
-  .rsub{ font-size:.75rem !important; }
 
   /* Popup mapa */
   .pu-name{ font-size:.95rem !important; }
@@ -536,6 +454,25 @@ textarea{resize:vertical;min-height:50px;}
 
   /* Toast */
   #toast{ font-size:.88rem; padding:11px 22px; }
+
+  /* Botón tema */
+  .btn-theme{ width:44px; height:44px; }
+
+  /* Tiempos: grid 2 cols, inputs touch-friendly */
+  .tiempos-stats{ grid-template-columns:repeat(2,1fr); gap:.45rem; }
+  .tiempos-stat input{ min-height:44px; width:100%; font-size:.82rem !important; padding:.4rem .5rem !important; box-sizing:border-box; }
+
+  /* Mi Ruta: botones más grandes */
+  .r-nav-row button{ padding:8px 14px; font-size:.78rem; }
+  .reparto-save-btn{ padding:.6rem; }
+  .reparto-apply-btn{ padding:.6rem; }
+  .reparto-dp-btn{ padding:.5rem .75rem; }
+
+  /* Mi Ruta: drag handle más grande */
+  .r-drag{ padding:8px 4px; min-height:36px; display:flex; align-items:center; touch-action:none; }
+
+  /* Edición de pedidos: apilar campos */
+  .edit-row{ grid-template-columns:1fr; }
 }
 
 /* ── CARGA DEL DÍA ── */
@@ -574,7 +511,7 @@ textarea{resize:vertical;min-height:50px;}
 .balance-bars{display:grid;grid-template-columns:repeat(3,1fr);gap:.3rem;margin-top:.4rem;}
 .balance-stat{text-align:center;background:var(--surf3);border-radius:6px;padding:.3rem .2rem;}
 .balance-stat-val{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;}
-.balance-stat-lbl{font-size:.58rem;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;margin-top:1px;}
+.balance-stat-lbl{font-size:.68rem;color:var(--mut);text-transform:uppercase;letter-spacing:.04em;margin-top:1px;}
 .balance-stat.disponible .balance-stat-val{color:var(--grn);}
 .balance-stat.entregado .balance-stat-val{color:var(--acc2);}
 .balance-stat.pendiente .balance-stat-val{color:var(--acc);}
@@ -589,7 +526,7 @@ textarea{resize:vertical;min-height:50px;}
 .carga-pedido-items{display:flex;flex-wrap:wrap;gap:.25rem;}
 .carga-pedido-sku{font-size:.64rem;background:var(--surf3);border-radius:4px;padding:2px 7px;color:var(--mut2);}
 .carga-pedido-sku span{color:var(--txt);font-weight:700;}
-.carga-pedido-status{font-size:.62rem;margin-top:.3rem;}
+.carga-pedido-status{font-size:.68rem;margin-top:.3rem;}
 .carga-pedido-status.done{color:var(--grn);}
 .carga-pedido-status.pending{color:var(--acc);}
 @media(max-width:700px){.carga-body{flex-direction:column;overflow-y:auto;}.carga-col{height:auto;overflow-y:visible;}.carga-col:first-child{border-right:none;border-bottom:1px solid var(--brd);}}
@@ -639,9 +576,9 @@ textarea{resize:vertical;min-height:50px;}
   <div class="desk-nav">
     <button class="nb active" onclick="switchPanel('list',this)">📋 Pedidos</button>
     <button class="nb" onclick="switchPanel('form',this)">➕ Nuevo</button>
-    <button class="nb" onclick="switchPanel('routes',this)">🗺️ Rutas</button>
     <!-- <button class="nb" onclick="switchPanel('optimizer',this)">⚡ Optimizar</button> -->
     <button class="nb" onclick="switchPanel('reparto',this)">📍 Mi Ruta</button>
+    <button class="nb" onclick="switchPanel('tiempos',this)">⏱ Tiempos</button>
     <button class="nb" onclick="switchPanel('clients',this)">👥 Clientes</button>
     <button class="nb" onclick="switchPanel('carga',this)">📦 Carga</button>
     <button class="nb" onclick="switchPanel('settings',this)">⚙️</button>
@@ -685,9 +622,9 @@ textarea{resize:vertical;min-height:50px;}
       <!-- Panel calendario desplegable móvil -->
       <div id="mob-cal-panel" style="display:none;padding:.6rem .9rem;border-bottom:1px solid var(--brd);background:var(--surf2);">
         <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;">
-          <button class="ibtn" onclick="calPrev();renderMobCal();" style="font-size:1.1rem;">‹</button>
+          <button class="ibtn" onclick="calPrev()" style="font-size:1.1rem;">‹</button>
           <div id="mob-cal-title" style="flex:1;text-align:center;font-weight:700;font-size:.85rem;"></div>
-          <button class="ibtn" onclick="calNext();renderMobCal();" style="font-size:1.1rem;">›</button>
+          <button class="ibtn" onclick="calNext()" style="font-size:1.1rem;">›</button>
         </div>
         <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:.65rem;font-weight:600;color:var(--mut);text-align:center;margin-bottom:3px;">
           <div>L</div><div>M</div><div>X</div><div>J</div><div>V</div><div>S</div><div>D</div>
@@ -860,57 +797,12 @@ textarea{resize:vertical;min-height:50px;}
       </div>
     </div>
 
-    <!-- RUTAS -->
-    <div id="page-routes" class="page">
-      <div class="panel-hd"><div class="panel-title">🗺️ Rutas del día</div></div>
-      <div class="scrollable">
-
-        <!-- Lista de rutas del día -->
-        <div id="routes-body"></div>
-
-        <!-- PANEL GPS — separador visual -->
-        <div style="border-top:1px solid var(--brd);margin:.75rem 0 .5rem;"></div>
-
-        <!-- PANEL REPARTIDOR (celular) -->
-        <div class="cfg-block" id="tracking-driver-panel">
-          <div class="cfg-title">📍 Compartir mi ubicación</div>
-          <div style="font-size:.72rem;color:var(--mut);margin-bottom:.6rem;">
-            Selecciona quién eres y activa el GPS para que se vea en el mapa.
-          </div>
-          <div style="display:flex;gap:6px;margin-bottom:.7rem;" id="tracking-who">
-            <button class="dchip jorge" onclick="setTrackingDriver('jorge',this)">Jorge</button>
-            <button class="dchip diego" onclick="setTrackingDriver('diego',this)">Diego</button>
-            <button class="dchip jorge_noche" onclick="setTrackingDriver('jorge_noche',this)">Jorge Noche</button>
-            <button class="dchip diego_noche" onclick="setTrackingDriver('diego_noche',this)">Diego Noche</button>
-          </div>
-          <button class="btn-primary" id="btn-tracking" onclick="toggleTracking()" disabled>
-            📍 ACTIVAR SEGUIMIENTO
-          </button>
-          <div id="tracking-status" style="font-size:.68rem;color:var(--mut);margin-top:.5rem;text-align:center;"></div>
-        </div>
-
-        <!-- PANEL MONITOR (escritorio) -->
-        <div class="cfg-block">
-          <div class="cfg-title">👁️ Monitor en tiempo real</div>
-          <div style="font-size:.72rem;color:var(--mut);margin-bottom:.7rem;">
-            Posición actual de los repartidores activos.
-          </div>
-          <div id="tracking-monitor">
-            <div style="font-size:.72rem;color:var(--mut);text-align:center;padding:.5rem;">
-              Sin repartidores activos
-            </div>
-          </div>
-          <div style="display:flex;gap:6px;margin-top:.7rem;">
-            <button class="btn-primary" onclick="loadGpsStatus()" style="flex:1;">
-              🔄 Actualizar
-            </button>
-            <button class="btn-secondary" onclick="clearAllTrails()" style="flex:1;background:var(--surf3);border:1px solid var(--brd);color:var(--mut);">
-              🗑️ Limpiar rastros
-            </button>
-          </div>
-        </div>
-
+    <!-- TIEMPOS -->
+    <div id="page-tiempos" class="page" style="flex-direction:column;overflow:hidden;height:100%;">
+      <div class="panel-hd" style="flex-shrink:0;">
+        <div class="panel-title">⏱ Tiempos</div>
       </div>
+      <div class="tiempos-scroll" id="tiempos-scroll"></div>
     </div>
 
     <!-- OPTIMIZADOR -->
@@ -919,7 +811,7 @@ textarea{resize:vertical;min-height:50px;}
         <div style="font-size:.78rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;">📅 Seleccionar fecha</div>
         <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;">
           <button class="ibtn" onclick="calPrev()" style="font-size:1.1rem;">‹</button>
-          <div id="mob-cal-title" style="flex:1;text-align:center;font-weight:700;font-size:.9rem;"></div>
+          <div id="cal-full-title" style="flex:1;text-align:center;font-weight:700;font-size:.9rem;"></div>
           <button class="ibtn" onclick="calNext()" style="font-size:1.1rem;">›</button>
         </div>
         <div id="mob-cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;font-size:.72rem;text-align:center;">
@@ -931,76 +823,12 @@ textarea{resize:vertical;min-height:50px;}
           <div style="color:var(--mut);font-weight:600;">S</div>
           <div style="color:var(--mut);font-weight:600;">D</div>
         </div>
-        <div id="mob-cal-days" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:3px;"></div>
+        <div id="cal-full-days" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:3px;"></div>
         <div style="margin-top:.75rem;padding:.5rem;background:var(--surf2);border-radius:8px;font-size:.78rem;">
           Fecha seleccionada: <span id="mob-cal-selected" style="font-weight:700;color:var(--acc);"></span>
         </div>
       </div>
     </div>
-    <div id="page-optimizer" class="page">
-      <div class="panel-hd"><div class="panel-title">⚡ Optimizar Ruta</div></div>
-      <div class="scrollable">
-        <!-- Panel diagnóstico visible en móvil -->
-        <div id="opt-debug" style="background:#1a1a2e;color:#0f0;font-size:11px;padding:6px 10px;border-radius:6px;margin:6px 0;display:none;white-space:pre-wrap;font-family:monospace;"></div>
-        <button onclick="runOptDiag()" style="font-size:11px;padding:4px 10px;margin-bottom:6px;background:#333;color:#aaa;border:1px solid #555;border-radius:5px;width:100%">🔍 Diagnóstico servidor</button>
-        <div class="opt-section">
-          <div class="opt-stitle">1 · Punto de partida</div>
-          <div class="dp-grid" id="dp-buttons"></div>
-          <div class="custom-dp" id="custom-dp-card" onclick="selectCustomDP()">
-            <div class="custom-dp-label">📍 Dirección personalizada</div>
-            <div class="custom-dp-fields" id="custom-dp-fields" style="display:none">
-              <div class="field">
-                <label>Nombre</label>
-                <input id="cdp-name" type="text" placeholder="Mi casa" onclick="event.stopPropagation()">
-              </div>
-              <div class="field">
-                <label>Dirección</label>
-                <input id="cdp-addr" type="text" placeholder="Escribe para buscar..." onclick="event.stopPropagation()" autocomplete="off">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="opt-section">
-          <div class="opt-stitle">2 · Repartidor (opcional)</div>
-          <div class="driver-row">
-            <div class="dchip active" onclick="setOptDriver('',this)">Todos</div>
-            <div class="dchip jorge"  onclick="setOptDriver('jorge',this)">Jorge</div>
-            <div class="dchip diego"  onclick="setOptDriver('diego',this)">Diego</div>
-            <div class="dchip jorge_noche" onclick="setOptDriver('jorge_noche',this)">Jorge Noche</div>
-            <div class="dchip diego_noche" onclick="setOptDriver('diego_noche',this)">Diego Noche</div>
-          </div>
-        </div>
-        <div class="divider"></div>
-        <!-- Configuración ETA -->
-        <div style="background:var(--surf2);border:1px solid var(--brd);border-radius:9px;padding:.65rem .8rem;margin-bottom:.5rem;">
-          <div style="font-size:.7rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;">⏱ Parámetros de tiempo</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;">
-            <div>
-              <label style="font-size:.65rem;color:var(--mut);display:block;margin-bottom:2px;">🕐 Hora salida</label>
-              <input type="time" id="eta-start" value="14:00"
-                style="width:100%;background:var(--surf3);border:1px solid var(--brd2);border-radius:5px;color:var(--txt);font-size:.78rem;padding:4px 5px;"
-                onchange="ETA_START_TIME=this.value; if(currentOptResult) renderOptResult(currentOptResult);">
-            </div>
-            <div>
-              <label style="font-size:.65rem;color:var(--mut);display:block;margin-bottom:2px;">🚗 km/h ciudad</label>
-              <input type="number" id="eta-speed" value="25" min="10" max="80"
-                style="width:100%;background:var(--surf3);border:1px solid var(--brd2);border-radius:5px;color:var(--txt);font-size:.78rem;padding:4px 5px;"
-                onchange="ETA_SPEED_KMH=parseInt(this.value)||30; if(currentOptResult) renderOptResult(currentOptResult);">
-            </div>
-            <div>
-              <label style="font-size:.65rem;color:var(--mut);display:block;margin-bottom:2px;">⏳ Min/cliente</label>
-              <input type="number" id="eta-service" value="10" min="1" max="60"
-                style="width:100%;background:var(--surf3);border:1px solid var(--brd2);border-radius:5px;color:var(--txt);font-size:.78rem;padding:4px 5px;"
-                onchange="ETA_SERVICE_MIN=parseInt(this.value)||10; if(currentOptResult) renderOptResult(currentOptResult);">
-            </div>
-          </div>
-        </div>
-        <button class="btn-primary" id="btn-optimize" onclick="runOptimizer()">⚡ CALCULAR RUTA ÓPTIMA</button>
-        <div id="opt-result"></div>
-      </div>
-    </div>
-
     <!-- MI RUTA — Módulo de reparto manual por repartidor -->
     <div id="page-reparto" class="page" style="flex-direction:column;overflow:hidden;height:100%;">
       <div class="panel-hd" style="flex-shrink:0;">
@@ -1052,6 +880,59 @@ textarea{resize:vertical;min-height:50px;}
       </div>
     </div>
 
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!--  CARGA DEL DÍA                                       -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <div id="page-carga" class="page" style="background:var(--surf);overflow:hidden;">
+      <div class="panel-hd">
+        <span class="panel-title">📦 Carga del Día</span>
+        <span id="carga-alerta-badge" style="display:none;background:#ff4040;color:#fff;font-size:.65rem;font-weight:700;padding:2px 9px;border-radius:20px;">⚠️ Sin stock suficiente</span>
+      </div>
+
+      <!-- Fecha -->
+      <div class="carga-date-bar">
+        <span style="font-size:.75rem;color:var(--mut);font-weight:600;">Fecha:</span>
+        <input type="date" id="carga-date" onchange="loadCarga()">
+        <button onclick="loadCarga()" style="background:var(--surf2);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.75rem;padding:4px 10px;cursor:pointer;">↻ Actualizar</button>
+      </div>
+
+      <!-- Selector conductor -->
+      <div class="carga-driver-tabs">
+        <span style="font-size:.72rem;color:var(--mut);align-self:center;margin-right:4px;">Ver:</span>
+        <button class="carga-driver-tab jorge active" onclick="setCargaDriver('jorge',this)">Jorge</button>
+        <button class="carga-driver-tab diego" onclick="setCargaDriver('diego',this)">Diego</button>
+        <button class="carga-driver-tab jorge_noche" onclick="setCargaDriver('jorge_noche',this)">Jorge Noche</button>
+        <button class="carga-driver-tab diego_noche" onclick="setCargaDriver('diego_noche',this)">Diego Noche</button>
+      </div>
+
+      <!-- Cuerpo en dos columnas -->
+      <div class="carga-body">
+
+        <!-- COL IZQ: Stock inicial -->
+        <div class="carga-col">
+          <div class="carga-col-title">🏗 Stock al salir de bodega</div>
+          <div id="carga-sku-list">
+            <!-- generado por JS -->
+          </div>
+          <button class="btn-guardar-stock" onclick="guardarStock()">💾 Guardar carga</button>
+          <div id="carga-save-msg" style="font-size:.7rem;color:var(--grn);margin-top:.4rem;min-height:1rem;"></div>
+        </div>
+
+        <!-- COL DER: Balance en ruta + alertas -->
+        <div class="carga-col">
+          <div id="carga-alerts-container"></div>
+          <div class="carga-col-title">📊 Balance en ruta</div>
+          <div id="carga-balance-list">
+            <div class="carga-empty">Cargando...</div>
+          </div>
+          <div class="carga-col-title" style="margin-top:1rem;">🗂 Pedidos del día</div>
+          <div id="carga-pedidos-list">
+            <div class="carga-empty">Sin pedidos</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div><!-- .panel -->
 
   <div class="map-col" id="map-col">
@@ -1073,59 +954,6 @@ textarea{resize:vertical;min-height:50px;}
 
 </div>
 
-<!-- ══════════════════════════════════════════════════════ -->
-<!--  CARGA DEL DÍA                                       -->
-<!-- ══════════════════════════════════════════════════════ -->
-<div id="page-carga" class="page" style="flex-direction:column;height:100%;background:var(--surf);overflow:hidden;">
-  <div class="panel-hd">
-    <span class="panel-title">📦 Carga del Día</span>
-    <span id="carga-alerta-badge" style="display:none;background:#ff4040;color:#fff;font-size:.65rem;font-weight:700;padding:2px 9px;border-radius:20px;">⚠️ Sin stock suficiente</span>
-  </div>
-
-  <!-- Fecha -->
-  <div class="carga-date-bar">
-    <span style="font-size:.75rem;color:var(--mut);font-weight:600;">Fecha:</span>
-    <input type="date" id="carga-date" onchange="loadCarga()">
-    <button onclick="loadCarga()" style="background:var(--surf2);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.75rem;padding:4px 10px;cursor:pointer;">↻ Actualizar</button>
-  </div>
-
-  <!-- Selector conductor -->
-  <div class="carga-driver-tabs">
-    <span style="font-size:.72rem;color:var(--mut);align-self:center;margin-right:4px;">Ver:</span>
-    <button class="carga-driver-tab jorge active" onclick="setCargaDriver('jorge',this)">Jorge</button>
-    <button class="carga-driver-tab diego" onclick="setCargaDriver('diego',this)">Diego</button>
-    <button class="carga-driver-tab jorge_noche" onclick="setCargaDriver('jorge_noche',this)">Jorge Noche</button>
-    <button class="carga-driver-tab diego_noche" onclick="setCargaDriver('diego_noche',this)">Diego Noche</button>
-  </div>
-
-  <!-- Cuerpo en dos columnas -->
-  <div class="carga-body">
-
-    <!-- COL IZQ: Stock inicial -->
-    <div class="carga-col">
-      <div class="carga-col-title">🏗 Stock al salir de bodega</div>
-      <div id="carga-sku-list">
-        <!-- generado por JS -->
-      </div>
-      <button class="btn-guardar-stock" onclick="guardarStock()">💾 Guardar carga</button>
-      <div id="carga-save-msg" style="font-size:.7rem;color:var(--grn);margin-top:.4rem;min-height:1rem;"></div>
-    </div>
-
-    <!-- COL DER: Balance en ruta + alertas -->
-    <div class="carga-col">
-      <div id="carga-alerts-container"></div>
-      <div class="carga-col-title">📊 Balance en ruta</div>
-      <div id="carga-balance-list">
-        <div class="carga-empty">Cargando...</div>
-      </div>
-      <div class="carga-col-title" style="margin-top:1rem;">🗂 Pedidos del día</div>
-      <div id="carga-pedidos-list">
-        <div class="carga-empty">Sin pedidos</div>
-      </div>
-    </div>
-  </div>
-</div>
-
 </div>
 
 <nav class="mob-nav">
@@ -1133,9 +961,9 @@ textarea{resize:vertical;min-height:50px;}
     <button class="mnb active" data-tab="list"      onclick="mobSwitch('list',this)"><span class="ico">📋</span>Pedidos</button>
     <button class="mnb"        data-tab="form"      onclick="mobSwitch('form',this)"><span class="ico">➕</span>Nuevo</button>
     <button class="mnb"        data-tab="map"       onclick="mobSwitch('map',this)"><span class="ico">🗺️</span>Mapa</button>
-    <button class="mnb"        data-tab="routes"    onclick="mobSwitch('routes',this)"><span class="ico">📍</span>Rutas</button>
     <!-- <button class="mnb"        data-tab="optimizer" onclick="mobSwitch('optimizer',this)"><span class="ico">⚡</span>Ruta opt.</button> -->
     <button class="mnb"        data-tab="reparto"   onclick="mobSwitch('reparto',this)"><span class="ico">📍</span>Mi Ruta</button>
+    <button class="mnb"        data-tab="tiempos"   onclick="mobSwitch('tiempos',this)"><span class="ico">⏱</span>Tiempos</button>
     <button class="mnb"        data-tab="carga"     onclick="mobSwitch('carga',this)"><span class="ico">📦</span>Carga</button>
     <button class="mnb"        data-tab="clients"   onclick="mobSwitch('clients',this)"><span class="ico">👥</span>Clientes</button>
     <button class="mnb"        data-tab="settings"  onclick="mobSwitch('settings',this)"><span class="ico">⚙️</span>Config</button>
@@ -1157,12 +985,20 @@ let map,markers={},routeLines=[];
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 let selectedDate=todayStr();
 let appConfig={google_maps_key:'',departure_points:[]};
-let selectedDP=null,customDPSelected=false,selectedOptDriver='';
+
 let lookupTimer=null,currentClient=null,currentAddress=null,addingAddress=false;
+
+function escapeHTML(value){
+  return String(value ?? '')
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#039;');
+}
 
 // Google Places state
 let addressAutocomplete=null;   // para formulario nuevo cliente
-let customDPAutocomplete=null;  // para punto partida personalizado
 let pendingAddressData=null;    // datos de la dirección seleccionada en Google
 let googleMapsLoaded=false;
 
@@ -1176,9 +1012,6 @@ async function init(){
   loadCalSummary();
   await selectDate(selectedDate);
   syncFormDate();
-  // Cargar ruta optimizada — buscar en todos los conductores
-  const saved = await _loadOptAny();
-  if(saved){ renderOptResult(saved); }
 }
 init();
 
@@ -1204,7 +1037,6 @@ function loadGoogleMaps(apiKey){
   // Una vez cargado, enganchar autocomplete al formulario nuevo cliente
   gmapsReadyPromise.then(()=>{
     attachNewClientAutocomplete();
-    attachCustomDPAutocomplete();
   });
 }
 
@@ -1260,34 +1092,6 @@ function attachNewClientAutocomplete(){
   });
 }
 
-// ── Autocomplete punto de partida personalizado ──────────
-function attachCustomDPAutocomplete(){
-  const input = document.getElementById('cdp-addr');
-  if(!input || input._acDone) return;
-
-  input._acDone = true;
-
-  const ac = new google.maps.places.Autocomplete(input, {
-    componentRestrictions: { country: 'cl' },
-    fields: ['place_id', 'formatted_address', 'geometry'],
-  });
-
-  input.addEventListener('keydown', e => {
-    if(e.key === 'Enter') e.preventDefault();
-  });
-
-  ac.addListener('place_changed', () => {
-    const place = ac.getPlace();
-    if(!place) return;
-
-    input._placeData = {
-      place_id: place.place_id || '',
-      formatted_address: place.formatted_address || input.value.trim()
-    };
-
-    input.value = place.formatted_address || input.value;
-  });
-}
 
 // ── Autocomplete para edición inline de tarjeta ──────────
 function attachEditAutocomplete(id){
@@ -1347,25 +1151,6 @@ function navigateWaze(id){
   // Coordenadas → más preciso; si no, usa dirección de texto
   const dest = (d.lat && d.lng) ? `${d.lat},${d.lng}` : encodeURIComponent(d.address);
   window.open(`https://www.google.com/maps/dir/?api=1&destination=${dest}&travelmode=driving`, '_blank');
-}
-
-function navigateRouteWaze(driver){
-  const stops = deliveries.filter(d => d.driver === driver && !d.completed && d.lat && d.lng);
-  const all   = deliveries.filter(d => d.driver === driver && d.lat && d.lng);
-  const pool  = stops.length ? stops : all;
-  if(!pool.length){ toast('⚠️ Sin coordenadas para navegar'); return; }
-
-  if(pool.length === 1){
-    window.open(`https://www.google.com/maps/dir/?api=1&destination=${pool[0].lat},${pool[0].lng}&travelmode=driving`, '_blank');
-    return;
-  }
-  // Google Maps multi-parada: origen/wp1/wp2/.../destino
-  // Separamos destino final del resto (intermedios van como waypoints)
-  const dest      = `${pool[pool.length-1].lat},${pool[pool.length-1].lng}`;
-  const waypoints = pool.slice(0, -1).map(d=>`${d.lat},${d.lng}`).join('|');
-  const url = `https://www.google.com/maps/dir/?api=1&destination=${dest}&waypoints=${encodeURIComponent(waypoints)}&travelmode=driving`;
-  window.open(url, '_blank');
-  toast(`🗺️ Abriendo ${pool.length} paradas en Google Maps`);
 }
 
 function getMapTileLayer(isLight){
@@ -1455,16 +1240,16 @@ function addMarker(d){
   const ref = d.reference || d._client?.reference || '';
   const m = L.marker([d.lat, d.lng], {icon: makeIcon(d.driver, num, 38, !d.completed)});
   m.bindPopup(`
-    <div class="pu-name">${d.name}</div>
-    <div class="pu-addr">📍 ${d.address}</div>
-    ${ref?`<div class="pu-row"><span class="pu-lbl">🔖</span><span class="pu-val">${ref}</span></div>`:''}
-    ${d.client_phone?`<div class="pu-row"><span class="pu-lbl">📞</span><span class="pu-val">${d.client_phone}</span></div>`:''}
-    ${d.product?`<div class="pu-row"><span class="pu-lbl">📦</span><span class="pu-val">${d.product} ${d.amount}</span></div>`:''}
-    ${d.payment?`<div class="pu-row"><span class="pu-lbl">💳</span><span class="pu-val">${d.payment}</span></div>`:''}
-    <div class="pu-row"><span class="pu-lbl">⏰</span><span class="pu-val">${d.time_start}–${d.time_end}</span></div>
+    <div class="pu-name">${escapeHTML(d.name)}</div>
+    <div class="pu-addr">📍 ${escapeHTML(d.address)}</div>
+    ${ref?`<div class="pu-row"><span class="pu-lbl">🔖</span><span class="pu-val">${escapeHTML(ref)}</span></div>`:''}
+    ${d.client_phone?`<div class="pu-row"><span class="pu-lbl">📞</span><span class="pu-val">${escapeHTML(d.client_phone)}</span></div>`:''}
+    ${d.product?`<div class="pu-row"><span class="pu-lbl">📦</span><span class="pu-val">${escapeHTML(d.product)} ${escapeHTML(d.amount)}</span></div>`:''}
+    ${d.payment?`<div class="pu-row"><span class="pu-lbl">💳</span><span class="pu-val">${escapeHTML(d.payment)}</span></div>`:''}
+    <div class="pu-row"><span class="pu-lbl">⏰</span><span class="pu-val">${escapeHTML(d.time_start)}–${escapeHTML(d.time_end)}</span></div>
     <div class="pu-row"><span class="pu-lbl">🚴</span><span class="pu-val" style="color:${COLORS[d.driver]}">${driverLabel(d.driver)}</span></div>
-    ${d.arrived_at?`<div class="pu-row"><span class="pu-lbl">✅</span><span class="pu-val">Llegó: ${d.arrived_at}</span></div>`:''}
-    ${d.notes?`<div class="pu-row"><span class="pu-lbl">📝</span><span class="pu-val" style="color:var(--acc)">${d.notes}</span></div>`:''}
+    ${d.arrived_at?`<div class="pu-row"><span class="pu-lbl">✅</span><span class="pu-val">Llegó: ${escapeHTML(d.arrived_at)}</span></div>`:''}
+    ${d.notes?`<div class="pu-row"><span class="pu-lbl">📝</span><span class="pu-val" style="color:var(--acc)">${escapeHTML(d.notes)}</span></div>`:''}
   `);
   m.addTo(map);markers[d.id]=m;
 }
@@ -1495,6 +1280,8 @@ function calMove(dir){
   if(calMonth<0){calMonth=11;calYear--;}
   loadCalSummary();
 }
+function calPrev(){ calMove(-1); renderMobCal(); }
+function calNext(){ calMove(1);  renderMobCal(); }
 function renderCalendar(){
   const MN=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   document.getElementById('cal-title').textContent=`${MN[calMonth]} ${calYear}`;
@@ -1522,15 +1309,34 @@ function renderCalendar(){
   }
 }
 async function selectDate(ds){
-  selectedDate=ds;syncFormDate();
-  document.getElementById('hdr-date').textContent=(ds===todayStr()?'Hoy · ':'')+fmtDate(ds);
+  selectedDate = ds;
+  syncFormDate();
+  repartoLoadedDate = null;
+
+  document.getElementById('hdr-date').textContent =
+    (ds===todayStr()?'Hoy · ':'')+fmtDate(ds);
+
   renderCalendar();
-  const r=await fetch(`/api/deliveries?date=${ds}&_=${Date.now()}`);
-  deliveries=await r.json();
-  renderAll();refreshMarkers();
-  // Si el módulo Mi Ruta está visible, refrescar
+
+  const requestDate = ds;
+  const r = await fetch(`/api/deliveries?date=${requestDate}&_=${Date.now()}`);
+  const data = await r.json();
+
+  if(selectedDate !== requestDate) return;
+
+  deliveries = data;
+  renderAll();
+  refreshMarkers();
+
   if(document.getElementById('page-reparto')?.classList.contains('active')){
-    refreshReparto();
+    await refreshReparto();
+    if(selectedDate !== requestDate) return;
+  }
+
+  if(document.getElementById('page-tiempos')?.classList.contains('active')){
+    await loadRepartoStateForDate();
+    if(selectedDate !== requestDate) return;
+    renderTiempos();
   }
 }
 
@@ -1570,7 +1376,7 @@ function showClientFound(c){
     reference:c.reference, lat:c.lat, lng:c.lng, place_id:c.place_id
   }].filter(a=>a.formatted_address||a.address);
   const sel=document.getElementById('f-address-select');
-  sel.innerHTML=addresses.map((a,i)=>`<option value="${a.id}">${a.label?`${a.label} — `:''}${a.formatted_address||a.address}</option>`).join('');
+  sel.innerHTML=addresses.map((a,i)=>`<option value="${escapeHTML(a.id)}">${a.label?`${escapeHTML(a.label)} — `:''}${escapeHTML(a.formatted_address||a.address)}</option>`).join('');
   document.getElementById('address-selector-wrap').style.display=addresses.length?'block':'none';
   currentAddress=addresses[0]||null;
   document.getElementById('cf-addr').textContent=currentAddress?(currentAddress.formatted_address||currentAddress.address):'Sin dirección registrada';
@@ -1745,8 +1551,6 @@ async function addDelivery(){
       const[y,m]=date.split('-').map(Number);
       if(y===calYear&&m===calMonth+1)await loadCalSummary();
       renderAll();
-      // Agregar el nuevo pedido al final de la ruta guardada (sin re-optimizar)
-      await _appendToOpt(nd);
       ['f-phone','f-name','f-address','f-reference','f-amount','f-notes'].forEach(id=>document.getElementById(id).value='');
       ['f-product','f-payment','f-driver'].forEach(id=>document.getElementById(id).value='');
       ['si-LAV-8','si-LAV-20','si-LAV-CA-8','si-LAV-CA-20','si-CA-TB-20','si-CAF-20'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value='0'; });
@@ -1777,36 +1581,34 @@ async function addDelivery(){
 //  ACCIONES ENTREGAS
 // ════════════════════════════════════════════════════════
 async function toggleDone(id){
-  const d=deliveries.find(x=>x.id===id);if(!d)return;
-  await patchDelivery(id,{completed:!d.completed,arrived_at:!d.completed?new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'}):null});
+  const targetId=String(id);
+  const d=deliveries.find(x=>String(x.id)===targetId);if(!d)return;
+  await patchDelivery(targetId,{completed:!d.completed,arrived_at:!d.completed?new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'}):null});
 }
 async function deleteDelivery(id){
   if(!confirm('¿Eliminar esta entrega?'))return;
-  await fetch(`/api/deliveries/${id}`,{method:'DELETE'});
-  if(markers[id]){map.removeLayer(markers[id]);delete markers[id];}
-  deliveries=deliveries.filter(x=>x.id!==id);
-  await loadCalSummary();renderAll();refreshMarkers();toast('🗑️ Eliminada');
+  try{
+    const targetId=String(id);
+    const r=await fetch(`/api/deliveries/${encodeURIComponent(targetId)}`,{method:'DELETE'});
+    if(!r.ok){
+      const err=await r.json().catch(()=>({}));
+      toast('❌ Error al eliminar: '+(err.error||r.status));
+      return;
+    }
+    if(markers[targetId]){map.removeLayer(markers[targetId]);delete markers[targetId];}
+    deliveries=deliveries.filter(x=>String(x.id)!==targetId);
+    await loadCalSummary();renderAll();refreshMarkers();toast('🗑️ Eliminada');
+  }catch(e){toast('❌ Sin conexión con el servidor');}
 }
 async function patchDelivery(id,data){
   try{
-    const r=await fetch(`/api/deliveries/${id}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+    const targetId=String(id);
+    const r=await fetch(`/api/deliveries/${encodeURIComponent(targetId)}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
     if(r.ok){
       const u=await r.json();
-      const i=deliveries.findIndex(x=>x.id===id);
+      const i=deliveries.findIndex(x=>String(x.id)===targetId);
       if(i>-1)deliveries[i]=u;
       renderAll();refreshMarkers();
-      // Actualizar estado en ruta optimizada sin reordenar
-      if(currentOptResult?.ordered){
-        console.log('[OPT] Buscando id:', id, 'phone:', u.client_phone);
-        console.log('[OPT] ordered ids:', currentOptResult.ordered.map(s=>s.id));
-        const oi=currentOptResult.ordered.findIndex(s=>String(s.id)===String(id)||s.client_phone===u.client_phone);
-        console.log('[OPT] encontrado en índice:', oi);
-        if(oi>-1){
-          currentOptResult.ordered[oi].completed=u.completed;
-          currentOptResult.ordered[oi].arrived_at=u.arrived_at;
-          renderOptResult(currentOptResult);
-        }
-      }
       // Actualizar columna del repartidor en Mi Ruta si está visible
       if(document.getElementById('page-reparto')?.classList.contains('active')){
         renderAllDriverCols();
@@ -1848,8 +1650,9 @@ function closeEditPanel(id){
 
 
 async function saveEdit(id){
-  const eid=`edit-${id}`;
-  const d=deliveries.find(x=>x.id===id);
+  const targetId=String(id);
+  const eid=`edit-${targetId}`;
+  const d=deliveries.find(x=>String(x.id)===targetId);
   if(!d)return;
 
   const name   =document.getElementById(`${eid}-name`).value.trim();
@@ -1874,7 +1677,7 @@ async function saveEdit(id){
   if(phoneRaw && phoneRaw !== oldPhone){
     // Actualizar cliente con nuevo teléfono
     if(oldPhone){
-      await fetch(`/api/clients/${oldPhone}`,{
+      await fetch(`/api/clients/${encodeURIComponent(oldPhone)}`,{
         method:'PATCH',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({phone:phoneRaw, name})
       });
@@ -1885,26 +1688,26 @@ async function saveEdit(id){
   // Dirección: solo actualizar si cambió Y fue seleccionada de Google
   const addrChanged=addrRaw&&addrRaw!==d.address;
   if(addrChanged){
-    if(!editAddrData[id]){
+    if(!editAddrData[targetId]){
       toast('⚠️ Selecciona la dirección nueva desde las sugerencias de Google Maps');
       return;
     }
-    patch.address          =editAddrData[id].formatted_address;
-    patch.formatted_address=editAddrData[id].formatted_address;
-    patch.lat              =editAddrData[id].lat;
-    patch.lng              =editAddrData[id].lng;
-    patch.place_id         =editAddrData[id].place_id;
+    patch.address          =editAddrData[targetId].formatted_address;
+    patch.formatted_address=editAddrData[targetId].formatted_address;
+    patch.lat              =editAddrData[targetId].lat;
+    patch.lng              =editAddrData[targetId].lng;
+    patch.place_id         =editAddrData[targetId].place_id;
 
     // Actualizar cliente también si existe
     if(d.client_phone){
-      fetch(`/api/clients/${d.client_phone}`,{
+      fetch(`/api/clients/${encodeURIComponent(d.client_phone)}`,{
         method:'PATCH',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({
-          address:           editAddrData[id].formatted_address,
-          formatted_address: editAddrData[id].formatted_address,
-          lat:               editAddrData[id].lat,
-          lng:               editAddrData[id].lng,
-          place_id:          editAddrData[id].place_id,
+          address:           editAddrData[targetId].formatted_address,
+          formatted_address: editAddrData[targetId].formatted_address,
+          lat:               editAddrData[targetId].lat,
+          lng:               editAddrData[targetId].lng,
+          place_id:          editAddrData[targetId].place_id,
           verified:          true,
           geocode_source:    'google',
         })
@@ -1912,18 +1715,18 @@ async function saveEdit(id){
     }
   }
 
-  const btn=document.querySelector(`#card-${id} .btn-save-edit`);
+  const btn=document.querySelector(`#card-${targetId} .btn-save-edit`);
   if(btn){btn.textContent='⏳ Guardando...';btn.disabled=true;}
 
-  await patchDelivery(id,patch);
-  closeEditPanel(id);
+  await patchDelivery(targetId,patch);
+  closeEditPanel(targetId);
   toast('✅ Entrega actualizada');
 }
 
 // ════════════════════════════════════════════════════════
 //  RENDER
 // ════════════════════════════════════════════════════════
-function renderAll(){renderList();renderRoutes();updateStats();}
+function renderAll(){renderList();updateStats();}
 
 function renderList(){
   const el=document.getElementById('delivery-list');
@@ -1937,55 +1740,67 @@ function renderList(){
     return;
   }
   el.innerHTML=list.map(d=>{
-    const ref=d.reference||(d._client&&d._client.reference)||'';
+    const ref=escapeHTML(d.reference||(d._client&&d._client.reference)||'');
     const eid=`edit-${d.id}`;
-    return`<div class="d-card ${d.driver} ${d.completed?'completed':''}" id="card-${d.id}">
-      <div class="card-top" onclick="focusDelivery('${d.id}')">
+    const deliveryId=Number(d.id);
+    const safeName=escapeHTML(d.name);
+    const safeAddr=escapeHTML(d.address);
+    const safePhone=escapeHTML(d.client_phone);
+    const safeProduct=escapeHTML(d.product);
+    const safeAmount=escapeHTML(d.amount);
+    const safePayment=escapeHTML(d.payment);
+    const safeTimeStart=escapeHTML(d.time_start);
+    const safeTimeEnd=escapeHTML(d.time_end);
+    const safeArrived=escapeHTML(d.arrived_at);
+    const safeNotes=escapeHTML(d.notes);
+    const safeRef=ref;
+    return`<div class="d-card ${d.driver} ${d.completed?'completed':''}" id="card-${deliveryId}">
+      <div class="card-top" onclick="focusDelivery(${deliveryId})">
         <div class="card-name">
-          ${d.route_order ? `<span class="route-order-badge">${d.route_order}</span>` : ''}${d.name}
+          ${d.route_order ? `<span class="route-order-badge">${Number(d.route_order)}</span>` : ''}${safeName}
         </div>
         <div class="card-btns">
-          <button class="ibtn nav"  onclick="event.stopPropagation();navigateWaze('${d.id}')" title="Navegar con Waze">🧭</button>
-          <button class="ibtn edit" onclick="event.stopPropagation();toggleEditPanel('${d.id}')" title="Editar">✏️</button>
-          <button class="ibtn ok"   onclick="event.stopPropagation();toggleDone('${d.id}')">${d.completed?'↩':'✓'}</button>
-          <button class="ibtn del"  onclick="event.stopPropagation();deleteDelivery('${d.id}')">✕</button>
+          <button class="ibtn nav"  onclick="event.stopPropagation();navigateWaze(${deliveryId})" title="Navegar con Waze">🧭</button>
+          <button class="ibtn edit" onclick="event.stopPropagation();toggleEditPanel(${deliveryId})" title="Editar">✏️</button>
+          <button class="ibtn ok"   onclick="event.stopPropagation();toggleDone(${deliveryId})">${d.completed?'↩':'✓'}</button>
+          <button class="ibtn del"  onclick="event.stopPropagation();deleteDelivery(${deliveryId})">✕</button>
         </div>
       </div>
-      <div class="card-addr" onclick="focusDelivery('${d.id}')">📍 ${d.address}</div>
-      ${ref?`<div class="card-ref" onclick="focusDelivery('${d.id}')">🔖 ${ref}</div>`:''}
-      ${d.client_phone?`<div class="card-phone" onclick="focusDelivery('${d.id}')">📞 ${d.client_phone}</div>`:''}
-      <div class="card-tags" onclick="focusDelivery('${d.id}')">
-        ${d.product?`<span class="tag product">${d.product}</span>`:''}
-        ${d.amount?`<span class="tag">${d.amount}</span>`:''}
-        ${d.payment?`<span class="tag pay">${d.payment}</span>`:''}
-        <span class="tag time">⏰ ${d.time_start}–${d.time_end}</span>
+      <div class="card-addr" onclick="focusDelivery(${deliveryId})">📍 ${safeAddr}</div>
+      ${ref?`<div class="card-ref" onclick="focusDelivery(${deliveryId})">🔖 ${safeRef}</div>`:''}
+      ${d.client_phone?`<div class="card-phone" onclick="focusDelivery(${deliveryId})">📞 ${safePhone}</div>`:''}
+      <div class="card-tags" onclick="focusDelivery(${deliveryId})">
+        ${d.product?`<span class="tag product">${safeProduct}</span>`:''}
+        ${d.amount?`<span class="tag">${safeAmount}</span>`:''}
+        ${d.payment?`<span class="tag pay">${safePayment}</span>`:''}
+        <span class="tag time">⏰ ${safeTimeStart}–${safeTimeEnd}</span>
         <span class="tag driver ${d.driver}">${driverLabel(d.driver)}</span>
       </div>
-      ${d.arrived_at?`<div class="arrived-mark">✅ Llegó ${d.arrived_at}</div>`:''}
-      ${d.notes?`<div class="card-notes">📝 ${d.notes}</div>`:''}
+      ${d.arrived_at?`<div class="arrived-mark">✅ Llegó ${safeArrived}</div>`:''}
+      ${d.notes?`<div class="card-notes">📝 ${safeNotes}</div>`:''}
 
       <!-- PANEL EDICIÓN -->
       <div class="card-edit" id="${eid}">
         <div class="edit-grid">
           <div class="edit-field">
             <div class="edit-label">Nombre</div>
-            <input id="${eid}-name" type="text" value="${(d.name||'').replace(/"/g,'&quot;')}">
+            <input id="${eid}-name" type="text" value="${escapeHTML(d.name||'')}">
           </div>
           <div class="edit-field" style="grid-column:1/-1">
             <div class="edit-label">Dirección</div>
             <div class="edit-addr-wrap">
-              <input id="${eid}-addr" type="text" value="${(d.address||'').replace(/"/g,'&quot;')}" autocomplete="off">
+              <input id="${eid}-addr" type="text" value="${escapeHTML(d.address||'')}" autocomplete="off">
               <span class="edit-addr-status" id="${eid}-addr-status"></span>
             </div>
             <div class="edit-addr-hint" id="${eid}-addr-hint">Escribe para buscar con Google Maps</div>
           </div>
           <div class="edit-field">
             <div class="edit-label">Referencia</div>
-            <input id="${eid}-ref" type="text" value="${(ref||'').replace(/"/g,'&quot;')}">
+            <input id="${eid}-ref" type="text" value="${escapeHTML(ref||'')}">
           </div>
           <div class="edit-field">
             <div class="edit-label">Teléfono</div>
-            <input id="${eid}-phone" type="tel" value="${(d.client_phone||'').replace(/"/g,'&quot;')}"
+            <input id="${eid}-phone" type="tel" value="${escapeHTML(d.client_phone||'')}"
               oninput="this.value=this.value.replace(/\s/g,'')">
           </div>
           <div class="edit-field" style="grid-column:1/-1">
@@ -1998,7 +1813,7 @@ function renderList(){
           <div class="edit-row" style="grid-column:1/-1">
             <div class="edit-field">
               <div class="edit-label">Cantidad</div>
-              <input id="${eid}-amount" type="text" value="${(d.amount||'').replace(/"/g,'&quot;')}">
+              <input id="${eid}-amount" type="text" value="${escapeHTML(d.amount||'')}">
             </div>
             <div class="edit-field">
               <div class="edit-label">Forma de pago</div>
@@ -2011,11 +1826,11 @@ function renderList(){
           <div class="edit-row" style="grid-column:1/-1">
             <div class="edit-field">
               <div class="edit-label">Hora inicio</div>
-              <input id="${eid}-ts" type="time" value="${d.time_start||''}">
+              <input id="${eid}-ts" type="time" value="${escapeHTML(d.time_start||'')}">
             </div>
             <div class="edit-field">
               <div class="edit-label">Hora fin</div>
-              <input id="${eid}-te" type="time" value="${d.time_end||''}">
+              <input id="${eid}-te" type="time" value="${escapeHTML(d.time_end||'')}">
             </div>
           </div>
           <div class="edit-field" style="grid-column:1/-1">
@@ -2030,54 +1845,15 @@ function renderList(){
         </div>
           <div class="edit-field" style="grid-column:1/-1">
             <div class="edit-label">Notas internas</div>
-            <textarea id="${eid}-notes" rows="2" style="resize:vertical;min-height:42px">${(d.notes||'').replace(/"/g,'&quot;')}</textarea>
+            <textarea id="${eid}-notes" rows="2" style="resize:vertical;min-height:42px">${escapeHTML(d.notes||'')}</textarea>
           </div>
         </div>
         <div class="edit-btns">
-          <button class="btn-save-edit" onclick="saveEdit('${d.id}')">💾 Guardar</button>
-          <button class="btn-cancel-edit" onclick="closeEditPanel('${d.id}')">Cancelar</button>
+          <button class="btn-save-edit" onclick="saveEdit(${deliveryId})">💾 Guardar</button>
+          <button class="btn-cancel-edit" onclick="closeEditPanel(${deliveryId})">Cancelar</button>
         </div>
       </div>
     </div>`;
-  }).join('');
-}
-
-function renderRoutes(){
-  const el=document.getElementById('routes-body');
-  const drivers=[...new Set(deliveries.map(d=>d.driver))];
-  if(!drivers.length){el.innerHTML=`<div class="empty"><div class="empty-icon">🗺️</div><div class="empty-txt">Sin rutas para este día.</div></div>`;return;}
-  el.innerHTML=drivers.map(drv=>{
-    const dd = getSortedStops(drv);
-    const origin = getResolvedRepartoDP(drv);
-    const drvEtas = calcRepartoETAs(origin, dd, drv);
-    const stops=dd.map((d,i)=>{
-      const ref=d.reference||(d._client&&d._client.reference)||'';
-      const navDest = (d.lat && d.lng) ? `${d.lat},${d.lng}` : encodeURIComponent(d.address);
-      const navUrl  = `https://www.google.com/maps/dir/?api=1&destination=${navDest}&travelmode=driving&dir_action=navigate`;
-      const eta = drvEtas[i];
-      return`<div class="stop ${d.completed?'completed-stop':''}">
-        <div class="snum" style="background:${COLORS[drv]};color:#000">${i+1}</div>
-        <div class="sbody">
-          <div class="sname">${d.name} ${d.completed?'✅':''}</div>
-          ${eta?.arr ? `<div class="seta">🕐 Llegada estimada: ~${eta.arr}</div>` : ''}
-          <div class="saddr">${d.address}</div>
-          ${ref?`<div class="sref">🔖 ${ref}</div>`:''}
-          ${d.client_phone?`<div class="saddr">📞 ${d.client_phone}</div>`:''}
-          ${(d.product||d.amount||d.payment)?`<div class="sinfo-chips">
-            ${(d.product||d.amount)?`<span class="opt-order-chip amount">📦 ${[d.product,d.amount].filter(Boolean).join(' × ')}</span>`:''}
-            ${d.payment?`<span class="opt-order-chip payment">💳 ${d.payment}</span>`:''}
-          ${d.notes ? `<div class="route-notes">📝 ${d.notes}</div>` : ''}
-          </div>`:''}
-          ${(d.time_start||d.time_end)?`<div class="stime"><span class="tag time">⏰ ${d.time_start&&d.time_end?d.time_start+' – '+d.time_end:(d.time_start||d.time_end)}</span></div>`:''}
-
-          ${!d.completed?`<div class="btn-nav-row">
-            <button class="btn-ir-gmaps" onclick="window.open('${navUrl}','_blank')">🗺️ Google Maps</button>
-            <button class="btn-ir-waze"  onclick="window.open('https://waze.com/ul?ll=${d.lat&&d.lng?d.lat+','+d.lng:''}&q=${encodeURIComponent(d.address)}&navigate=yes','_blank')">🚗 Waze</button>
-          </div>`:''}
-        </div>
-      </div>`;
-    }).join('');
-    return`<div class="route-block"><div class="route-hd"><div class="rdriver ${drv}">${driverLabel(drv)}</div><div class="rsub">${dd.filter(d=>!d.completed).length} pend · ${dd.length} total</div><button class="btn-nav-route" onclick="navigateRouteWaze('${drv}')">🧭 Navegar ruta</button></div>${stops}</div>`;
   }).join('');
 }
 
@@ -2127,25 +1903,26 @@ function renderClientList(){
 
   if(!list.length){
     el.innerHTML = allClients.length
-      ? `<div class="empty"><div class="empty-icon">🔍</div><div class="empty-txt">Sin resultados para "<b>${q}</b>"</div></div>`
+      ? `<div class="empty"><div class="empty-icon">🔍</div><div class="empty-txt">Sin resultados para "<b>${escapeHTML(q)}</b>"</div></div>`
       : `<div class="empty"><div class="empty-icon">👥</div><div class="empty-txt">Aún no hay clientes registrados.<br>Se crean automáticamente al agregar entregas.</div></div>`;
     return;
   }
 
-  el.innerHTML = list.map(c=>`
-    <div class="client-card">
+  el.innerHTML = list.map(c=>{
+    const phoneArg = encodeURIComponent(String(c.phone || '')).replace(/'/g,'%27');
+    return`<div class="client-card">
       <div class="cc-top">
-        <div class="cc-name">${c.name||'Sin nombre'}${c.geocode_source==='google'?'<span class="cc-badge google">📍</span>':''}</div>
+        <div class="cc-name">${escapeHTML(c.name||'Sin nombre')}${c.geocode_source==='google'?'<span class="cc-badge google">📍</span>':''}</div>
         <div style="display:flex;gap:.25rem;flex-shrink:0">
-          <button class="ibtn" style="font-size:.8rem" title="Editar" onclick="openClientModal('${c.phone}')">✏️</button>
-          <button class="ibtn del" title="Eliminar" onclick="deleteClient('${c.phone}')">✕</button>
+          <button class="ibtn" style="font-size:.8rem" title="Editar" onclick="openClientModal(decodeURIComponent('${phoneArg}'))">✏️</button>
+          <button class="ibtn del" title="Eliminar" onclick="deleteClient(decodeURIComponent('${phoneArg}'))">✕</button>
         </div>
       </div>
-      <div class="cc-phone">📞 ${c.phone_raw||c.phone}</div>
-      <div class="cc-addr">📍 ${c.formatted_address||c.address||'Sin dirección'}</div>
-      ${c.reference?`<div class="cc-ref">🔖 ${c.reference}</div>`:''}
-    </div>
-  `).join('');
+      <div class="cc-phone">📞 ${escapeHTML(c.phone_raw||c.phone)}</div>
+      <div class="cc-addr">📍 ${escapeHTML(c.formatted_address||c.address||'Sin dirección')}</div>
+      ${c.reference?`<div class="cc-ref">🔖 ${escapeHTML(c.reference)}</div>`:''}
+    </div>`;
+  }).join('');
 }
 
 function openClientModal(phone){
@@ -2225,7 +2002,7 @@ async function saveClientModal(){
 async function deleteClient(phone){
   if(!confirm('¿Eliminar este cliente? Esta acción no se puede deshacer.'))return;
   try{
-    await fetch(`/api/clients/${phone}`,{method:'DELETE'});
+    await fetch(`/api/clients/${encodeURIComponent(phone)}`,{method:'DELETE'});
     allClients = allClients.filter(c=>c.phone!==phone);
     renderClientList();
     toast('🗑️ Cliente eliminado');
@@ -2241,467 +2018,7 @@ async function loadConfig(){
   if(appConfig.google_maps_key){
     loadGoogleMaps(appConfig.google_maps_key);
   }
-  renderDPButtons();renderSettingsDP();
-}
-function renderDPButtons(){
-  const c=document.getElementById('dp-buttons');if(!c)return;
-  c.innerHTML=(appConfig.departure_points||[]).map(dp=>`
-    <div class="dp-btn" id="dpbtn-${dp.id}" onclick="selectDP('${dp.id}')">
-      <div class="dp-btn-name">📍 ${dp.name}</div>
-      <div class="dp-btn-addr">${dp.address}</div>
-    </div>`).join('');
-}
-function selectDP(id){
-  customDPSelected=false;
-  selectedDP=(appConfig.departure_points||[]).find(p=>p.id===id)||null;
-  document.querySelectorAll('.dp-btn').forEach(b=>b.classList.remove('selected'));
-  const btn=document.getElementById('dpbtn-'+id);if(btn)btn.classList.add('selected');
-  document.getElementById('custom-dp-card').classList.remove('selected');
-  document.getElementById('custom-dp-fields').style.display='none';
-}
-function selectCustomDP(){
-  customDPSelected=true;selectedDP=null;
-  document.querySelectorAll('.dp-btn').forEach(b=>b.classList.remove('selected'));
-  document.getElementById('custom-dp-card').classList.add('selected');
-  document.getElementById('custom-dp-fields').style.display='grid';
-}
-function setOptDriver(drv,el){
-  selectedOptDriver=drv;
-  document.querySelectorAll('.dchip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-}
-
-async function runOptimizer(){
-  let origin = selectedDP;
-  console.log('[OPT] selectedDP al optimizar:', selectedDP?.name, '| customDPSelected:', customDPSelected);
-
-  if(customDPSelected){
-    const name = document.getElementById('cdp-name').value.trim() || 'Punto de partida';
-    const addrInput = document.getElementById('cdp-addr');
-    const addr = addrInput.value.trim();
-
-    if(!addr){
-      toast('⚠️ Ingresa la dirección de partida');
-      return;
-    }
-
-    const placeData = addrInput._placeData || null;
-
-    if(!placeData || !placeData.lat){
-      toast('⚠️ Selecciona la dirección de partida desde las sugerencias de Google Maps');
-      return;
-    }
-
-    origin = {
-      id:                'custom',
-      name,
-      address:           placeData.formatted_address || addr,
-      formatted_address: placeData.formatted_address || addr,
-      place_id:          placeData.place_id || '',
-      lat:               placeData.lat,
-      lng:               placeData.lng,
-    };
-  }
-
-  if(!origin){
-    toast('⚠️ Selecciona un punto de partida');
-    return;
-  }
-
-  const btn = document.getElementById('btn-optimize');
-  btn.textContent = '⏳ Calculando...';
-  btn.disabled = true;
-
-  const res = await fetch('/api/optimize', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      origin,
-      date: selectedDate,
-      driver: selectedOptDriver,
-      driver_filter: !!selectedOptDriver
-    })
-  });
-
-  btn.textContent = '⚡ CALCULAR RUTA ÓPTIMA';
-  btn.disabled = false;
-
-  if(!res.ok){
-    const e = await res.json();
-    toast('❌ ' + e.error);
-    return;
-  }
-
-  const result = await res.json();
-  renderOptResult(result);
-  await _saveOpt(); // ← guardar en servidor
-  // El usuario dibuja manualmente con "Ver ruta en mapa"
-}
-
-// ── Diagnóstico visible en móvil ─────────────────────────────────────────
-async function runOptDiag(){
-  const el = document.getElementById('opt-debug');
-  el.style.display = 'block';
-  el.textContent = '⏳ Consultando servidor...\n';
-  el.textContent += `Fecha: ${selectedDate}\nConductor: "${selectedOptDriver || ''}"\n`;
-  el.textContent += `opt-result tiene contenido: ${document.getElementById('opt-result')?.innerHTML?.trim()?.length > 0 ? 'SÍ' : 'NO'}\n`;
-  try {
-    const driver = selectedOptDriver || '';
-    const url = `/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(driver)}&_=${Date.now()}`;
-    el.textContent += `URL: ${url}\n`;
-    const res = await fetch(url);
-    el.textContent += `Status: ${res.status}\n`;
-    if(res.ok){
-      const data = await res.json();
-      el.textContent += `✅ Ruta encontrada: ${data?.ordered?.length} paradas\nOrigen: ${data?.origin?.name||'?'}\n`;
-      renderOptResult(data);
-      toast('✅ Ruta restaurada desde servidor');
-    } else {
-      const err = await res.json().catch(()=>({}));
-      el.textContent += `❌ No hay ruta: ${err.error||'sin datos'}\n`;
-      // Intentar con todas las combinaciones de driver
-      el.textContent += `\nBuscando en otros conductores...\n`;
-      for(const drv of ['',...ALL_DRIVERS]){
-        if(drv === driver) continue;
-        const r2 = await fetch(`/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
-        if(r2.ok){
-          const d2 = await r2.json();
-          el.textContent += `✅ Encontrada con conductor="${drv}": ${d2?.ordered?.length} paradas\n`;
-          renderOptResult(d2);
-          toast('✅ Ruta restaurada');
-          break;
-        } else {
-          el.textContent += `  conductor="${drv}": 404\n`;
-        }
-      }
-    }
-  } catch(e){
-    el.textContent += `❌ Error: ${e.message}`;
-  }
-}
-// ─────────────────────────────────────────────────────────────────────────
-let currentOptResult = null;
-let _drawGen = 0; // incrementa cada vez que se pide un nuevo dibujado
-
-// ── Persistencia del optimizador en el SERVIDOR (espejo) ─────────────────
-async function _saveOpt(){
-  if(!currentOptResult) return;
-  try {
-    const body = {
-      date:   selectedDate,
-      driver: selectedOptDriver || '',
-      result: currentOptResult,
-    };
-    console.log('[OPT] Guardando en servidor:', body.date, body.driver, body.result?.ordered?.length, 'paradas');
-    const res = await fetch('/api/opt-route', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(body)
-    });
-    const json = await res.json();
-    console.log('[OPT] Guardado OK:', json);
-    // Limpiar flag _new una vez que se guardó
-    if(currentOptResult?.ordered){
-      currentOptResult.ordered.forEach(s => { delete s._new; });
-    }
-    toast('💾 Ruta guardada en servidor');
-  } catch(e){ console.warn('[OPT] Error guardando ruta en servidor', e); toast('⚠️ Error al guardar ruta'); }
-}
-async function _appendToOpt(newDelivery){
-  // Agrega el nuevo pedido al FINAL de TODAS las rutas guardadas del día,
-  // sin importar el conductor. Así aparece siempre en Optimizar.
-  try {
-    const date = newDelivery.delivery_date || selectedDate;
-    const allDrivers = ['', ...ALL_DRIVERS];
-    let appendedToAny = false;
-
-    for(const drv of allDrivers){
-      const r = await fetch(`/api/opt-route?date=${date}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
-      if(!r.ok) continue;
-      const savedResult = await r.json();
-      if(!savedResult?.ordered?.length) continue;
-
-      // Verificar que el pedido no esté ya en esta ruta
-      const alreadyIn = savedResult.ordered.some(s => s.id === newDelivery.id);
-      if(alreadyIn) continue;
-
-      // Agregar al final
-      const newStop = {
-        ...newDelivery,
-        route_ref: newDelivery.place_id || newDelivery.formatted_address || newDelivery.address || '',
-        _new: true,
-      };
-      savedResult.ordered.push(newStop);
-      savedResult.stops = savedResult.ordered.length;
-
-      // Guardar en servidor con el mismo conductor que tenía
-      await fetch('/api/opt-route', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ date, driver: drv, result: savedResult })
-      });
-      appendedToAny = true;
-
-      // Si este es el que está en pantalla ahora, actualizar la vista
-      if(currentOptResult){
-        currentOptResult = savedResult;
-        renderOptResult(savedResult);
-      }
-    }
-
-    if(appendedToAny){
-      toast('📍 Pedido agregado al final de la ruta — arrástralo donde quieras');
-    }
-  } catch(e){
-    console.warn('[OPT] Error al agregar pedido a ruta:', e);
-  }
-}
-async function _loadOpt(){
-  try {
-    const driver = selectedOptDriver || '';
-    const res = await fetch(`/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(driver)}&_=${Date.now()}`);
-    if(!res.ok) return null;
-    return await res.json();
-  } catch(e){ return null; }
-}
-// Busca en todos los conductores y retorna la primera ruta que encuentre
-async function _loadOptAny(){
-  const drivers = [selectedOptDriver||'', ...ALL_DRIVERS, ''];
-  const seen = new Set();
-  for(const drv of drivers){
-    if(seen.has(drv)) continue;
-    seen.add(drv);
-    try {
-      const res = await fetch(`/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
-      if(res.ok){
-        const data = await res.json();
-        if(data?.ordered?.length > 0) return data;
-      }
-    } catch(e){}
-  }
-  return null;
-}
-// ─────────────────────────────────────────────────────────────────────────
-
-
-// ════════════════════════════════════════════════════════
-//  ETA — Tiempos estimados de llegada
-// ════════════════════════════════════════════════════════
-let ETA_SPEED_KMH   = 30;    // velocidad promedio ciudad (editable)
-let ETA_SERVICE_MIN = 10;    // minutos de atención por cliente (editable)
-let ETA_START_TIME  = '09:00'; // hora de salida (editable)
-
-function calcETAs(origin, ordered){
-  // Leer siempre los valores actuales de los inputs
-  ETA_START_TIME  = document.getElementById('eta-start')?.value  || ETA_START_TIME;
-  ETA_SPEED_KMH   = parseInt(document.getElementById('eta-speed')?.value)   || ETA_SPEED_KMH;
-  ETA_SERVICE_MIN = parseInt(document.getElementById('eta-service')?.value)  || ETA_SERVICE_MIN;
-  // Devuelve array de {arrivalMin, departMin} en minutos desde medianoche
-  const [sh, sm] = ETA_START_TIME.split(':').map(Number);
-  let cursor = sh * 60 + sm; // minutos desde medianoche
-
-  const haversineMin = (a, b) => {
-    if(!a.lat||!a.lng||!b.lat||!b.lng) return 15; // fallback 15 min
-    const R=6371, dLat=(b.lat-a.lat)*Math.PI/180, dLng=(b.lng-a.lng)*Math.PI/180;
-    const x=Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
-    const km=R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
-    return Math.round(km/ETA_SPEED_KMH*60);
-  };
-
-  const fmt = (mins) => {
-    const h=Math.floor(mins/60)%24, m=mins%60;
-    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
-  };
-
-  const etas = [];
-  let prev = origin;
-  for(const stop of ordered){
-    const travelMin = haversineMin(prev, stop);
-    const arrivalMin = cursor + travelMin;
-    const departMin  = arrivalMin + ETA_SERVICE_MIN;
-    etas.push({ arrivalMin, departMin, travelMin, arrivalStr: fmt(arrivalMin), departStr: fmt(departMin) });
-    cursor = departMin;
-    prev = stop;
-  }
-  return etas;
-}
-
-function fmtMin(mins){
-  const h=Math.floor(mins/60)%24, m=mins%60;
-  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
-}
-
-function renderOptResult(result){
-  currentOptResult = result;
-  const el = document.getElementById('opt-result');
-
-  const originHTML = `
-    <div class="opt-stop">
-      <div class="opt-snum origin">★</div>
-      <div class="opt-sbody">
-        <div class="opt-sname">${result.origin.name || 'Origen'}</div>
-        <div class="opt-saddr">${result.origin.formatted_address || result.origin.address || ''}</div>
-      </div>
-    </div>
-  `;
-
-  const etas = calcETAs(result.origin, result.ordered);
-  const totalMins = etas.length ? etas[etas.length-1].departMin - (()=>{const[h,m]=ETA_START_TIME.split(':').map(Number);return h*60+m;})() : 0;
-  const totalHrs  = Math.floor(totalMins/60), totalMin2 = totalMins%60;
-  const etaSummaryHTML = etas.length ? `
-    <div class="opt-eta-summary">
-      <div><span>🕐 Salida </span><b>${ETA_START_TIME}</b></div>
-      <div><span>🏁 Fin estimado </span><b>${etas[etas.length-1].departStr}</b></div>
-      <div><span>⏱ Duración total </span><b>${totalHrs}h ${totalMin2}min</b></div>
-      <div><span>📍 ${result.stops} paradas · 🚗 ${ETA_SPEED_KMH}km/h · ⏳ ${ETA_SERVICE_MIN}min/cliente</span></div>
-    </div>` : '';
-
-  const stopsHTML = result.ordered.map((s, i) => {
-    const eta = etas[i];
-    const chips = [
-      s.amount  ? `<span class="opt-order-chip amount">💵 ${s.amount}</span>`   : '',
-      s.product ? `<span class="opt-order-chip product">📦 ${s.product}</span>` : '',
-      s.payment ? `<span class="opt-order-chip payment">💳 ${s.payment}</span>` : '',
-    ].filter(Boolean).join('');
-    const navDest = (s.lat && s.lng) ? `${s.lat},${s.lng}` : encodeURIComponent(s.formatted_address || s.address || '');
-    const navUrl  = `https://www.google.com/maps/dir/?api=1&destination=${navDest}&travelmode=driving&dir_action=navigate`;
-    return `
-    <div class="opt-stop draggable${s.completed ? ' opt-completed' : ''}" data-idx="${i}">
-      <div class="opt-drag-handle" title="Arrastra para reordenar">⠿</div>
-      <div class="opt-snum">${i + 1}</div>
-      <div class="opt-sbody">
-        <div class="opt-sname">${s.name || 'Parada'}${s.completed ? '<span class="opt-completed-badge">✓ Entregado</span>' : ''}${s._new ? '<span class="opt-new-badge">NUEVO</span>' : ''}</div>
-        ${eta ? `<div class="opt-eta">🕐 Llegada ~${eta.arrivalStr} · viaje ${eta.travelMin}min</div>` : ''}
-        <div class="opt-saddr">${s.formatted_address || s.address || ''}</div>
-        ${s.reference ? `<div class="opt-sref">🔖 ${s.reference}</div>` : ''}
-        ${chips ? `<div class="opt-order">${chips}</div>` : ''}
-        ${(s.time_start||s.time_end) ? `<div class="opt-stime"><span class="tag time">⏰ ${s.time_start&&s.time_end ? s.time_start+' – '+s.time_end : (s.time_start||s.time_end)}</span></div>` : ''}
-        <div class="btn-nav-row">
-          <button class="btn-ir-gmaps" onclick="window.open('${navUrl}','_blank')">🗺️ Google Maps</button>
-          <button class="btn-ir-waze"  onclick="window.open('https://waze.com/ul?ll=${s.lat&&s.lng?s.lat+','+s.lng:''}&q=${encodeURIComponent(s.formatted_address||s.address||'')}&navigate=yes','_blank')">🚗 Waze</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-
-  el.innerHTML = `
-    <div class="opt-result">
-      <div class="opt-rh">
-        <div class="opt-rtitle">✅ Ruta preparada</div>
-        <div class="opt-stats">
-          <div class="opt-stat">
-            <div class="opt-stat-n">${result.stops}</div>
-            <div class="opt-stat-l">Paradas</div>
-          </div>
-          ${result.total_km ? `<div class="opt-stat">
-            <div class="opt-stat-n">${result.total_km}</div>
-            <div class="opt-stat-l">km aprox</div>
-          </div>` : ''}
-        </div>
-      </div>
-      ${originHTML}
-      ${etaSummaryHTML}
-      <div class="opt-drag-hint">⠿ Arrastra las paradas para cambiar el orden</div>
-      <div id="opt-sortable-list">${stopsHTML}</div>
-      <button class="btn-apply-order" onclick="applyOptOrder()">
-        ✅ APLICAR ESTE ORDEN A TODAS LAS VISTAS
-      </button>
-      <button class="btn-ver-mapa" onclick="verRutaEnMapa()">
-        🗺️ VER RUTA EN MAPA
-      </button>
-      <button class="btn-gmaps" id="btn-open-gmaps" onclick="openOptInGmaps()">
-        <svg width="18" height="18" viewBox="0 0 48 48"><path d="M24 4C15.16 4 8 11.16 8 20c0 12 16 28 16 28s16-16 16-28c0-8.84-7.16-16-16-16z" fill="#4285f4"/><circle cx="24" cy="20" r="6" fill="white"/></svg>
-        ABRIR EN GOOGLE MAPS
-      </button>
-    </div>
-  `;
-
-  // Inicializar SortableJS sobre la lista
-  const listEl = document.getElementById('opt-sortable-list');
-  if(listEl && window.Sortable){
-    Sortable.create(listEl, {
-      handle:    '.opt-drag-handle',
-      animation: 150,
-      ghostClass:  'sortable-ghost',
-      chosenClass: 'sortable-chosen',
-      onEnd(evt){
-        // Leer el orden actual del DOM ANTES de re-renderizar
-        const snapshot = Array.from(
-          listEl.querySelectorAll('.opt-stop[data-idx]')
-        ).map(row => currentOptResult.ordered[parseInt(row.dataset.idx)]);
-
-        // Actualizar datos y re-renderizar completo para recalcular ETAs
-        currentOptResult = { ...currentOptResult, ordered: snapshot };
-        renderOptResult(currentOptResult); // recalcula ETAs con nuevo orden
-        _saveOpt(); // guardar en servidor
-      }
-    });
-  }
-}
-
-function applyOptOrder(){
-  if(!currentOptResult || !currentOptResult.ordered.length){
-    toast('⚠️ Primero calcula una ruta optimizada');
-    return;
-  }
-  const ordered = currentOptResult.ordered;
-
-  // Reordenar el array deliveries según el orden de Optimizar
-  const orderedIds = ordered.map(s => s.id).filter(Boolean);
-  const inOrder    = orderedIds.map(id => deliveries.find(d => d.id === id)).filter(Boolean);
-  const rest       = deliveries.filter(d => !orderedIds.includes(d.id));
-  deliveries       = [...inOrder, ...rest];
-
-  // Guardar número de orden en cada entrega y persistir
-  const patches = [];
-  inOrder.forEach((d, i) => {
-    d.route_order = i + 1;
-    patches.push(patchDelivery(d.id, {route_order: i + 1}));
-  });
-  // Las que no están en la ruta optimizada pierden su número
-  rest.forEach(d => { d.route_order = null; });
-  Promise.all(patches).catch(()=>{});
-
-  renderAll();
-  toast('✅ Orden aplicado — Pedidos y Rutas actualizados');
-}
-
-function verRutaEnMapa(){
-  if(!currentOptResult) return;
-  // Limpiar solo la ruta anterior, mantener marcadores del día
-  clearRouteLines();
-  Object.keys(markers)
-    .filter(k => k.startsWith('opt_'))
-    .forEach(k => { map.removeLayer(markers[k]); delete markers[k]; });
-  _doDraw(currentOptResult);
-}
-
-function openOptInGmaps(){
-  if(!currentOptResult) return;
-  // Reconstruir URL con el orden actual
-  const origin  = currentOptResult.origin;
-  const ordered = currentOptResult.ordered;
-
-  function locStr(item){
-    if(item.lat && item.lng) return `${item.lat},${item.lng}`;
-    return encodeURIComponent(item.formatted_address || item.address || '');
-  }
-
-  let url = `https://www.google.com/maps/dir/?api=1`
-    + `&origin=${locStr(origin)}`
-    + `&destination=${locStr(ordered[ordered.length - 1])}`
-    + `&travelmode=driving`;
-
-  if(ordered.length > 1){
-    const wps = ordered.slice(0, -1).map(locStr).join('|');
-    url += `&waypoints=${wps}`;
-  }
-  window.open(url, '_blank');
-}
-function calcKm(lat1,lng1,lat2,lng2){
-  const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLng=(lng2-lng1)*Math.PI/180;
-  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
-  return (R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))).toFixed(1);
+  renderSettingsDP();
 }
 function drawRouteOnMap(result){
   // Limpiar SIEMPRE de forma síncrona antes de cualquier cosa
@@ -2795,8 +2112,8 @@ function _doDraw(result){
           const originLatLng = [firstLeg.start_location.lat(), firstLeg.start_location.lng()];
           const om = L.marker(originLatLng, { icon: makeOriginIcon() })
             .bindPopup(`
-              <div class="pu-name">🚀 ${result.origin.name || 'Origen'}</div>
-              <div class="pu-addr">${result.origin.formatted_address || result.origin.address || ''}</div>
+              <div class="pu-name">🚀 ${escapeHTML(result.origin.name || 'Origen')}</div>
+              <div class="pu-addr">${escapeHTML(result.origin.formatted_address || result.origin.address || '')}</div>
             `)
             .addTo(map);
           markers['opt_origin'] = om;
@@ -2812,9 +2129,9 @@ function _doDraw(result){
             { icon: makeIcon(stop.driver || 'jorge_noche', i + 1, 38, !isCompleted) }
           )
           .bindPopup(`
-            <div class="pu-name">${i + 1}. ${stop.name || 'Parada'}</div>
-            <div class="pu-addr">${stop.formatted_address || stop.address || ''}</div>
-            ${stop.reference ? `<div class="pu-row"><span class="pu-lbl">🔖</span><span class="pu-val">${stop.reference}</span></div>` : ''}
+            <div class="pu-name">${i + 1}. ${escapeHTML(stop.name || 'Parada')}</div>
+            <div class="pu-addr">${escapeHTML(stop.formatted_address || stop.address || '')}</div>
+            ${stop.reference ? `<div class="pu-row"><span class="pu-lbl">🔖</span><span class="pu-val">${escapeHTML(stop.reference)}</span></div>` : ''}
           `)
           .addTo(map);
           markers[`opt_stop_${i}`] = m;
@@ -2845,7 +2162,7 @@ function _drawFallbackPolyline(result, ordered){
 
   // Marcador origen
   const om = L.marker(latlngs[0], { icon: makeOriginIcon() })
-    .bindPopup(`<div class="pu-name">🚀 ${result.origin.name || 'Origen'}</div>`)
+    .bindPopup(`<div class="pu-name">🚀 ${escapeHTML(result.origin.name || 'Origen')}</div>`)
     .addTo(map);
   markers['opt_origin'] = om;
 
@@ -2858,8 +2175,8 @@ function _drawFallbackPolyline(result, ordered){
       { icon: makeIcon(s.driver || 'jorge_noche', i + 1, 38, !isCompleted) }
     )
     .bindPopup(`
-      <div class="pu-name">${i + 1}. ${s.name || 'Parada'}</div>
-      <div class="pu-addr">${s.formatted_address || s.address || ''}</div>
+      <div class="pu-name">${i + 1}. ${escapeHTML(s.name || 'Parada')}</div>
+      <div class="pu-addr">${escapeHTML(s.formatted_address || s.address || '')}</div>
     `)
     .addTo(map);
     markers[`opt_stop_${i}`] = m;
@@ -2878,10 +2195,10 @@ function renderSettingsDP(){
     <div class="dp-edit-row">
       <div>
         <div class="field" style="margin-bottom:.3rem">
-          <label>Nombre</label><input type="text" id="sdp-name-${i}" value="${dp.name}">
+          <label>Nombre</label><input type="text" id="sdp-name-${i}" value="${escapeHTML(dp.name)}">
         </div>
         <div class="field">
-          <label>Dirección</label><input type="text" id="sdp-addr-${i}" value="${dp.address}" autocomplete="off">
+          <label>Dirección</label><input type="text" id="sdp-addr-${i}" value="${escapeHTML(dp.address)}" autocomplete="off">
         </div>
       </div>
       <button class="btn-secondary" onclick="removeDP(${i})" style="align-self:flex-start;margin-top:1.6rem;color:var(--acc3)">✕</button>
@@ -2950,7 +2267,7 @@ async function saveSettings(){
   await fetch('/api/config',{method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({departure_points:dps})});
   appConfig.departure_points=dps;
-  renderDPButtons();renderSettingsDP();
+  renderSettingsDP();
   btn.textContent='💾 GUARDAR';btn.disabled=false;
   toast('✅ Guardado');
 }
@@ -2960,11 +2277,13 @@ async function saveSettings(){
 // ════════════════════════════════════════════════════════
 const REPARTO_DRIVERS = ALL_DRIVERS;
 const REPARTO_DRIVER_DEFAULTS = {
-  jorge:       { start_time:'14:00', speed_kmh:25, service_min:10 },
-  diego:       { start_time:'14:00', speed_kmh:25, service_min:10 },
-  jorge_noche: { start_time:'19:00', speed_kmh:25, service_min:10 },
-  diego_noche: { start_time:'19:00', speed_kmh:25, service_min:10 },
+  jorge:       { start_time:'14:00', speed_kmh:25, service_min:10, traffic_factor:1.15 },
+  diego:       { start_time:'14:00', speed_kmh:25, service_min:10, traffic_factor:1.15 },
+  jorge_noche: { start_time:'19:00', speed_kmh:25, service_min:10, traffic_factor:1.00 },
+  diego_noche: { start_time:'19:00', speed_kmh:25, service_min:10, traffic_factor:1.00 },
 };
+
+const ROAD_FACTOR = 1.45;
 
 // Estado independiente por repartidor
 let repartoState = {
@@ -2976,6 +2295,9 @@ let repartoState = {
 
 let repartoDriverConfig = JSON.parse(JSON.stringify(REPARTO_DRIVER_DEFAULTS));
 let currentRepartoMapDriver = null;
+let repartoLoadPromise = null;
+let repartoLoadingDate = null;
+let repartoLoadedDate  = null;
 
 function loadRepartoDriverConfigs(){
   try{
@@ -3003,6 +2325,10 @@ function getDriverRouteConfig(driver){
   if(!repartoDriverConfig[driver]){
     repartoDriverConfig[driver] = { ...REPARTO_DRIVER_DEFAULTS[driver] };
   }
+  if(repartoDriverConfig[driver].traffic_factor == null){
+    repartoDriverConfig[driver].traffic_factor =
+      REPARTO_DRIVER_DEFAULTS[driver]?.traffic_factor ?? 1.0;
+  }
   return repartoDriverConfig[driver];
 }
 
@@ -3014,6 +2340,9 @@ function updateRepartoDriverConfig(driver, field, value){
     cfg.speed_kmh = Math.max(5, parseInt(value) || REPARTO_DRIVER_DEFAULTS[driver].speed_kmh);
   } else if(field === 'service_min'){
     cfg.service_min = Math.max(1, parseInt(value) || REPARTO_DRIVER_DEFAULTS[driver].service_min);
+  } else if(field === 'traffic_factor'){
+    cfg.traffic_factor = Math.max(0.80, Math.min(2.00,
+      parseFloat(value) || REPARTO_DRIVER_DEFAULTS[driver].traffic_factor));
   }
   saveRepartoDriverConfigs();
   renderDriverColBody(driver);
@@ -3057,8 +2386,28 @@ function findMatchingDeparturePoint(dpLike){
   return null;
 }
 
+function getDefaultRepartoDP(driver){
+  const points = appConfig.departure_points || [];
+  if(!points.length) return null;
+
+  const nameMap = {
+    jorge:       'Casa Jorge',
+    jorge_noche: 'Casa Jorge',
+    diego:       'Casa Diego',
+    diego_noche: 'Casa Diego',
+  };
+  const target = nameMap[driver];
+  if(!target) return null;
+
+  const norm = _normDPText(target);
+  return points.find(p => _normDPText(p.name) === norm) || null;
+}
+
 function getResolvedRepartoDP(driver){
   let dp = repartoState[driver]?.dp || null;
+  if(!dp){
+    dp = getDefaultRepartoDP(driver);
+  }
   if(!dp) return null;
 
   const found = findMatchingDeparturePoint(dp);
@@ -3072,32 +2421,92 @@ function getResolvedRepartoDP(driver){
   return dp;
 }
 
+// ── Carga compartida de repartoState para la fecha seleccionada ─────────
+async function loadRepartoStateForDate(){
+  if(repartoLoadedDate === selectedDate) return;
+  if(repartoLoadPromise && repartoLoadingDate === selectedDate){
+    return repartoLoadPromise;
+  }
+
+  const loadDate = selectedDate;
+  let hasError = false;
+
+  const thisPromise = (async()=>{
+    // Asegurar deliveries para esta fecha
+    if(!deliveries || deliveries.length === 0 ||
+       deliveries[0]?.delivery_date?.substring(0,10) !== loadDate){
+      try{
+        const r = await fetch(`/api/deliveries?date=${loadDate}&_=${Date.now()}`);
+        if(r.ok){
+          const data = await r.json();
+          if(selectedDate !== loadDate) return;
+          deliveries = data;
+        }
+      }catch(e){
+        console.warn(`[REPARTO] Error de red cargando deliveries para ${loadDate}`, e);
+        hasError = true;
+      }
+    }
+
+    // Cargar rutas guardadas en un batch temporal
+    const batch = {};
+    for(const drv of REPARTO_DRIVERS){
+      batch[drv] = { orders: [], dp: null };
+      try{
+        const r = await fetch(`/api/opt-route?date=${loadDate}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
+        if(r.ok){
+          const data = await r.json();
+          if(selectedDate !== loadDate) return;
+          batch[drv].orders = data?.ordered?.length
+            ? data.ordered.map(s=>s.id) : [];
+          batch[drv].dp = data?.origin
+            ? (findMatchingDeparturePoint(data.origin) || data.origin) : null;
+        } else if(r.status === 404){
+          if(selectedDate !== loadDate) return;
+          batch[drv] = { orders: [], dp: null };
+        } else {
+          console.warn(`[REPARTO] HTTP ${r.status} cargando ruta de ${drv} para ${loadDate}`);
+          hasError = true;
+        }
+      }catch(e){
+        console.warn(`[REPARTO] Error de red cargando ruta de ${drv}`, e);
+        hasError = true;
+      }
+    }
+
+    // Escritura atómica de repartoState
+    if(selectedDate === loadDate && !hasError){
+      for(const drv of REPARTO_DRIVERS){
+        repartoState[drv].orders = batch[drv].orders;
+        repartoState[drv].dp     = batch[drv].dp;
+      }
+    }
+  })();
+
+  repartoLoadPromise = thisPromise;
+  repartoLoadingDate = loadDate;
+
+  try{
+    await thisPromise;
+  }finally{
+    if(repartoLoadPromise === thisPromise){
+      if(selectedDate === loadDate && !hasError){
+        repartoLoadedDate = loadDate;
+      }
+      repartoLoadPromise = null;
+      repartoLoadingDate = null;
+    }
+  }
+}
+
 // ── Inicializar módulo ────────────────────────────────────────────────────
 async function initReparto(){
   loadRepartoDriverConfigs();
-  // Asegurar deliveries cargados
-  if(!deliveries || deliveries.length === 0){
-    try{
-      const r = await fetch(`/api/deliveries?date=${selectedDate}&_=${Date.now()}`);
-      if(r.ok) deliveries = await r.json();
-    } catch(e){}
-  }
-  // Cargar orden y punto de partida guardados por cada repartidor
-  for(const drv of REPARTO_DRIVERS){
-    try{
-      const r = await fetch(`/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
-      if(r.ok){
-        const data = await r.json();
-        if(data?.ordered?.length){
-          repartoState[drv].orders = data.ordered.map(s => s.id);
-        }
-        if(data?.origin){
-          repartoState[drv].dp = findMatchingDeparturePoint(data.origin) || data.origin;
-        }
-      }
-    } catch(e){}
-  }
+  await loadRepartoStateForDate();
   renderAllDriverCols();
+  if(document.getElementById('page-tiempos')?.classList.contains('active')){
+    renderTiempos();
+  }
 }
 
 // ── Seleccionar punto de partida para UN repartidor específico ────────────
@@ -3117,7 +2526,7 @@ function selectRepartoDPForDriver(driver, dpId){
   if(dpInfo){
     const dp = getResolvedRepartoDP(driver);
     dpInfo.innerHTML = dp
-      ? `<span style="color:var(--acc);font-weight:700;"> · ${dp.name}</span>`
+      ? `<span style="color:var(--acc);font-weight:700;"> · ${escapeHTML(dp.name)}</span>`
       : `<span style="color:#f59e0b;"> · Sin seleccionar</span>`;
   }
   // Marcar botón guardar como pendiente
@@ -3137,14 +2546,25 @@ function _refreshDriverDPButtons(driver){
 function _buildDPButtonsHTML(driver){
   const currentDP = repartoState[driver].dp;
   const points = appConfig.departure_points || [];
-  return points.map(dp => `
+  return points.map(dp => {
+    const dpIdArg = encodeURIComponent(String(dp.id ?? '')).replace(/'/g,'%27');
+    return `
     <div class="reparto-dp-btn${currentDP?.id===dp.id?' selected':''}"
-         onclick="selectRepartoDPForDriver('${driver}','${dp.id}')">
-      📍 ${dp.name}
-    </div>`).join('') + `
+         onclick="selectRepartoDPForDriver('${driver}',decodeURIComponent('${dpIdArg}'))">
+      📍 ${escapeHTML(dp.name)}
+    </div>`;
+  }).join('') + `
   <div class="reparto-dp-btn${currentDP?.id==='custom'?' selected':''}"
        onclick="selectRepartoDPForDriver('${driver}','custom')"
        style="color:var(--mut);">✏️ Otro</div>`;
+}
+
+// ── Distancia Haversine en km ──────────────────────────────────────────────
+function haversine_km(a, b){
+  if(!a?.lat||!b?.lat) return 0;
+  const R=6371, dLat=(b.lat-a.lat)*Math.PI/180, dLng=(b.lng-a.lng)*Math.PI/180;
+  const x=Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
 }
 
 // ── ETAs para un repartidor desde su propio DP ────────────────────────────
@@ -3155,19 +2575,141 @@ function calcRepartoETAs(origin, stops, driver){
   let cursor = (Number.isFinite(sh)?sh:14)*60 + (Number.isFinite(sm)?sm:0);
   const speed = Math.max(5, parseInt(cfg.speed_kmh) || 25);
   const service = Math.max(1, parseInt(cfg.service_min) || 10);
-  const hav = (a,b)=>{
-    if(!a?.lat||!b?.lat) return 15;
-    const R=6371, dLat=(b.lat-a.lat)*Math.PI/180, dLng=(b.lng-a.lng)*Math.PI/180;
-    const x=Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLng/2)**2;
-    return Math.round(R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))/speed*60);
-  };
   const fmt = m=>`${String(Math.floor(m/60)%24).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
   const etas=[]; let prev=origin;
   for(const s of stops){
-    const t=hav(prev,s); const arr=cursor+t;
+    const roadKm = haversine_km(prev, s) * ROAD_FACTOR;
+    const trafficFactor = cfg.traffic_factor ?? 1.0;
+    const t = roadKm > 0 ? Math.round((roadKm / speed * 60) * trafficFactor) : 15;
+    const arr=cursor+t;
     etas.push({arr:fmt(arr), trav:t}); cursor=arr+service; prev=s;
   }
   return etas;
+}
+
+// ── Resumen de ruta por repartidor ────────────────────────────────────────
+function calcRouteSummary(driver){
+  const cfg    = getDriverRouteConfig(driver);
+  const stops  = getSortedStops(driver);
+  const origin = getResolvedRepartoDP(driver);
+  const etas   = calcRepartoETAs(origin, stops, driver);
+
+  const speed    = Math.max(5, parseInt(cfg.speed_kmh) || 25);
+  const service  = Math.max(1, parseInt(cfg.service_min) || 10);
+
+  let totalKm = 0;
+  if(origin?.lat){
+    let prev = origin;
+    for(const s of stops){ totalKm += haversine_km(prev, s) * ROAD_FACTOR; prev = s; }
+  }
+
+  const drivingMin      = etas.reduce((sum, e) => sum + (e?.trav || 0), 0);
+  const serviceTotalMin = stops.length * service;
+  const totalMin        = drivingMin + serviceTotalMin;
+
+  const [sh, sm] = (cfg.start_time || '14:00').split(':').map(Number);
+  const startMin = (Number.isFinite(sh)?sh:14)*60 + (Number.isFinite(sm)?sm:0);
+  const fmt = m => `${String(Math.floor(m/60)%24).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+
+  return {
+    driver,
+    stops,
+    stopCount:     stops.length,
+    origin,
+    start_time:    cfg.start_time || '14:00',
+    speed_kmh:     speed,
+    service_min:   service,
+    totalKm:       Math.round(totalKm * 10) / 10,
+    drivingMin,
+    serviceTotalMin,
+    totalMin,
+    end_time:      fmt(startMin + totalMin),
+    etas
+  };
+}
+
+// ── Pestaña Tiempos ──────────────────────────────────────────────────────
+async function initTiempos(){
+  await loadRepartoStateForDate();
+  renderTiempos();
+}
+
+function renderTiempos(){
+  const el = document.getElementById('tiempos-scroll');
+  if(!el) return;
+  el.innerHTML = REPARTO_DRIVERS.map(driver => {
+    const cfg = getDriverRouteConfig(driver);
+    const s = calcRouteSummary(driver);
+    if(s.stopCount === 0){
+      return `<div class="tiempos-card">
+        <div class="tiempos-card-hd">
+          <span class="tiempos-driver-name ${driver}">${driver.charAt(0).toUpperCase()+driver.slice(1)}</span>
+          <span class="tiempos-badge">Sin pedidos</span>
+        </div>
+        <div class="tiempos-empty">📭 Sin pedidos asignados</div>
+      </div>`;
+    }
+    const stopsHTML = s.stops.map((stop, i) => {
+      const eta = s.etas[i];
+      const addr = escapeHTML(stop.formatted_address || stop.address || '');
+      return `<div class="tiempos-stop">
+        <div class="tiempos-snum">${i + 1}</div>
+        <div class="tiempos-sbody">
+          <div class="tiempos-sname">${escapeHTML(stop.name || 'Sin nombre')}</div>
+          <div class="tiempos-saddr">📍 ${addr}</div>
+          ${eta ? `<div class="tiempos-eta">🕐 Llegada estimada: ~${escapeHTML(eta.arr)}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    return `<div class="tiempos-card">
+      <div class="tiempos-card-hd">
+        <span class="tiempos-driver-name ${driver}">${driver.charAt(0).toUpperCase()+driver.slice(1)}</span>
+        <span class="tiempos-badge has-stops">${s.stopCount} pedidos</span>
+      </div>
+      <div class="tiempos-stats">
+        <div class="tiempos-stat">
+          <span class="tiempos-stat-label">Salida</span>
+          <input type="time" value="${s.start_time}"
+            aria-label="Hora de salida ${driver.charAt(0).toUpperCase()+driver.slice(1)}"
+            style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.72rem;padding:.32rem .4rem;"
+            onchange="updateRepartoDriverConfig('${driver}','start_time',this.value)"
+            onblur="renderTiempos()">
+        </div>
+        <div class="tiempos-stat">
+          <span class="tiempos-stat-label">KM/H</span>
+          <input type="number" value="${s.speed_kmh}" min="5" max="120" step="1"
+            aria-label="Velocidad en km/h ${driver.charAt(0).toUpperCase()+driver.slice(1)}"
+            style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.72rem;padding:.32rem .4rem;width:70px;text-align:center;"
+            onchange="updateRepartoDriverConfig('${driver}','speed_kmh',this.value)"
+            onblur="renderTiempos()">
+        </div>
+        <div class="tiempos-stat">
+          <span class="tiempos-stat-label">Min/cliente</span>
+          <input type="number" value="${s.service_min}" min="1" max="90" step="1"
+            aria-label="Minutos por cliente ${driver.charAt(0).toUpperCase()+driver.slice(1)}"
+            style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.72rem;padding:.32rem .4rem;width:70px;text-align:center;"
+            onchange="updateRepartoDriverConfig('${driver}','service_min',this.value)"
+            onblur="renderTiempos()">
+        </div>
+        <div class="tiempos-stat">
+          <span class="tiempos-stat-label">Factor tráfico</span>
+          <input type="number" step="0.05" min="0.80" max="2.00"
+            value="${(cfg.traffic_factor ?? 1.0).toFixed(2)}"
+            aria-label="Factor de tráfico ${driver.charAt(0).toUpperCase()+driver.slice(1)}"
+            style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.72rem;padding:.32rem .4rem;width:70px;text-align:center;"
+            onchange="updateRepartoDriverConfig('${driver}','traffic_factor',this.value)"
+            onblur="renderTiempos()">
+        </div>
+        <div class="tiempos-stat"><span class="tiempos-stat-label">Distancia</span><span class="tiempos-stat-value">${s.totalKm} km</span></div>
+        <div class="tiempos-stat"><span class="tiempos-stat-label">Conducción</span><span class="tiempos-stat-value">${s.drivingMin} min</span></div>
+        <div class="tiempos-stat"><span class="tiempos-stat-label">Atención clientes</span><span class="tiempos-stat-value">${s.serviceTotalMin} min</span></div>
+        <div class="tiempos-stat"><span class="tiempos-stat-label">Duración total</span><span class="tiempos-stat-value highlight">${s.totalMin} min</span></div>
+        <div class="tiempos-stat"><span class="tiempos-stat-label">Término</span><span class="tiempos-stat-value highlight">${s.end_time}</span></div>
+      </div>
+      <div class="tiempos-stops">${stopsHTML}</div>
+    </div>`;
+  }).join('');
 }
 
 // ── Paradas ordenadas de un repartidor ───────────────────────────────────
@@ -3293,32 +2835,12 @@ function buildDriverCol(driver){
     <div style="padding:.4rem .6rem;border-bottom:1px solid var(--brd);background:var(--surf2);flex-shrink:0;">
       <div style="font-size:.6rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.3rem;">
         📍 Punto de partida<span id="reparto-dp-info-${driver}">${dp
-          ? `<span style="color:var(--acc);font-weight:700;"> · ${dp.name}</span>`
+          ? `<span style="color:var(--acc);font-weight:700;"> · ${escapeHTML(dp.name)}</span>`
           : `<span style="color:#f59e0b;"> · Sin seleccionar</span>`
         }</span>
       </div>
       <div class="reparto-dp-grid" id="reparto-dp-wrap-${driver}">
         ${_buildDPButtonsHTML(driver)}
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.35rem;margin-top:.45rem;">
-        <label style="display:flex;flex-direction:column;gap:.15rem;font-size:.62rem;color:var(--mut);">
-          Salida
-          <input type="time" value="${cfg.start_time || '14:00'}"
-            style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.72rem;padding:.32rem .4rem;"
-            onchange="updateRepartoDriverConfig('${driver}','start_time',this.value)">
-        </label>
-        <label style="display:flex;flex-direction:column;gap:.15rem;font-size:.62rem;color:var(--mut);">
-          KM/H
-          <input type="number" value="${cfg.speed_kmh ?? 25}" min="5" max="120"
-            style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.72rem;padding:.32rem .4rem;"
-            onchange="updateRepartoDriverConfig('${driver}','speed_kmh',this.value)">
-        </label>
-        <label style="display:flex;flex-direction:column;gap:.15rem;font-size:.62rem;color:var(--mut);">
-          Min/cliente
-          <input type="number" value="${cfg.service_min ?? 10}" min="1" max="90"
-            style="background:var(--bg);border:1px solid var(--brd);border-radius:6px;color:var(--txt);font-size:.72rem;padding:.32rem .4rem;"
-            onchange="updateRepartoDriverConfig('${driver}','service_min',this.value)">
-        </label>
       </div>
     </div>
     <div class="reparto-driver-body" id="reparto-body-${driver}">
@@ -3347,37 +2869,36 @@ function _fillStopsList(listEl, driver, stops){
     return;
   }
   const dp   = getResolvedRepartoDP(driver);
-  const etas = calcRepartoETAs(dp, stops, driver);
   listEl.innerHTML = stops.map((s,i)=>{
-    const eta = etas[i];
-    const ref = s.reference || (s._client && s._client.reference) || '';
-    const phone = s.client_phone || (s._client && s._client.phone) || '';
-    const address = s.formatted_address || s.address || 'Sin dirección';
-    const navDest = (s.lat&&s.lng) ? `${s.lat},${s.lng}` : encodeURIComponent(address);
+    const ref = escapeHTML(s.reference || (s._client && s._client.reference) || '');
+    const phone = escapeHTML(s.client_phone || (s._client && s._client.phone) || '');
+    const address = escapeHTML(s.formatted_address || s.address || 'Sin dirección');
+    const rawAddress = s.formatted_address || s.address || 'Sin dirección';
+    const navDest = (s.lat&&s.lng) ? `${s.lat},${s.lng}` : encodeURIComponent(rawAddress);
     const gmUrl = `https://www.google.com/maps/dir/?api=1&destination=${navDest}&travelmode=driving&dir_action=navigate`;
-    const wzUrl = `https://waze.com/ul?ll=${s.lat&&s.lng?s.lat+','+s.lng:''}&q=${encodeURIComponent(address)}&navigate=yes`;
+    const wzUrl = `https://waze.com/ul?ll=${s.lat&&s.lng?s.lat+','+s.lng:''}&q=${encodeURIComponent(rawAddress)}&navigate=yes`;
     const horario = (s.time_start || s.time_end)
-      ? (s.time_start && s.time_end ? `${s.time_start} – ${s.time_end}` : (s.time_start || s.time_end))
+      ? (s.time_start && s.time_end ? `${escapeHTML(s.time_start)} – ${escapeHTML(s.time_end)}` : escapeHTML(s.time_start || s.time_end))
       : '';
     const chips = [
-      (s.product || s.amount) ? `<span class="r-chip">📦 ${[s.product, s.amount].filter(Boolean).join(' × ')}</span>` : '',
-      s.payment ? `<span class="r-chip">💳 ${s.payment}</span>` : '',
+      (s.product || s.amount) ? `<span class="r-chip">📦 ${escapeHTML([s.product, s.amount].filter(Boolean).join(' × '))}</span>` : '',
+      s.payment ? `<span class="r-chip">💳 ${escapeHTML(s.payment)}</span>` : '',
       horario ? `<span class="r-chip">⏰ ${horario}</span>` : '',
     ].filter(Boolean).join('');
-    return `<div class="reparto-stop${s.completed?' r-completed':''}" data-id="${s.id}">
+    const stopId = Number(s.id);
+    return `<div class="reparto-stop${s.completed?' r-completed':''}" data-id="${stopId}">
       ${!s.completed?`<span class="r-drag" title="Arrastrar">⠿</span>`:`<span style="width:14px;flex-shrink:0;"></span>`}
       <div class="r-snum ${driver}">${Number.isFinite(parseInt(s.route_order)) ? parseInt(s.route_order) : (i+1)}</div>
       <div class="r-sbody">
-        <div class="r-sname">${s.name||'Sin nombre'}${s.completed?`<span style="font-size:.6rem;background:#00c853;color:#000;border-radius:4px;padding:1px 5px;margin-left:4px;">✓</span>`:''}</div>
-        ${eta&&!s.completed?`<div class="r-seta">🕐 Llegada estimada: ~${eta.arr}${dp?' · '+eta.trav+' min':''}</div>`:''}
+        <div class="r-sname">${escapeHTML(s.name||'Sin nombre')}${s.completed?`<span style="font-size:.6rem;background:#00c853;color:#000;border-radius:4px;padding:1px 5px;margin-left:4px;">✓</span>`:''}</div>
         <div class="r-saddr">📍 ${address}</div>
         ${ref?`<div class="r-sref">🔖 ${ref}</div>`:''}
         ${phone?`<div style="font-size:.62rem;color:var(--mut2);margin-top:1px;">📞 ${phone}</div>`:''}
         ${chips?`<div class="r-chips">${chips}</div>`:''}
-        ${s.notes?`<div class="route-notes" style="margin-top:4px;">📝 ${s.notes}</div>`:''}
+        ${s.notes?`<div class="route-notes" style="margin-top:4px;">📝 ${escapeHTML(s.notes)}</div>`:''}
         <div class="r-nav-row">
           ${!s.completed?`<button onclick="window.open('${gmUrl}','_blank')">🗺️ GMaps</button><button onclick="window.open('${wzUrl}','_blank')">🚗 Waze</button>`:''}
-          <button onclick="openDeliveryModal('${s.id}','${driver}')" style="background:var(--acc);color:#000;font-weight:700;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:.75rem;touch-action:manipulation;">📋 Ver</button>
+          <button onclick="openDeliveryModal(${stopId},'${driver}')" style="background:var(--acc);color:#000;font-weight:700;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:.75rem;touch-action:manipulation;">📋 Ver</button>
         </div>
       </div>
     </div>`;
@@ -3430,7 +2951,7 @@ function verRepartoEnMapa(driver){
       iconAnchor:[15,15]
     })
   });
-  originMarker.addTo(map).bindPopup(`<b>Inicio de ${driver.charAt(0).toUpperCase()+driver.slice(1)}</b><br>${resolvedOrigin.name || ''}<br>${resolvedOrigin.formatted_address || resolvedOrigin.address || ''}`);
+  originMarker.addTo(map).bindPopup(`<b>Inicio de ${driver.charAt(0).toUpperCase()+driver.slice(1)}</b><br>${escapeHTML(resolvedOrigin.name || '')}<br>${escapeHTML(resolvedOrigin.formatted_address || resolvedOrigin.address || '')}`);
   markers[`rep_origin_${driver}`] = originMarker;
 
   stops.forEach((s,i)=>{
@@ -3513,7 +3034,6 @@ async function applyRepartoOrderToViews(driver){
   } catch(e){}
 
   renderList();
-  renderRoutes();
   renderDriverColBody(driver);
   refreshMarkers();
   if(currentRepartoMapDriver === driver){
@@ -3524,22 +3044,12 @@ async function applyRepartoOrderToViews(driver){
 
 // ── Refrescar al cambiar fecha o llegar nuevo pedido ─────────────────────
 async function refreshReparto(){
-  for(const drv of REPARTO_DRIVERS){
-    repartoState[drv].orders = [];
-    repartoState[drv].dirty  = false;
-    // Conservar DP seleccionado — solo resetear órdenes
-    try{
-      const r = await fetch(`/api/opt-route?date=${selectedDate}&driver=${encodeURIComponent(drv)}&_=${Date.now()}`);
-      if(r.ok){
-        const d = await r.json();
-        if(d?.ordered?.length) repartoState[drv].orders = d.ordered.map(s=>s.id);
-        if(d?.origin){
-          repartoState[drv].dp = findMatchingDeparturePoint(d.origin) || d.origin;
-        }
-      }
-    } catch(e){}
-  }
+  repartoLoadedDate = null;
+  await loadRepartoStateForDate();
   renderAllDriverCols();
+  if(document.getElementById('page-tiempos')?.classList.contains('active')){
+    renderTiempos();
+  }
 }
 
 
@@ -3554,38 +3064,11 @@ function switchPanel(tab,el){
   if(tab==='clients')loadClients();
   if(tab==='carga'){ initCarga(); }
   if(tab==='reparto'){ initReparto(); }
-  if(tab==='routes'){ startTrackingMonitor(); } else { stopTrackingMonitor(); }
+  if(tab==='tiempos'){ initTiempos(); }
   // Redibujar mapa al volver a tabs que lo muestran
-  if(map && ['list','routes'].includes(tab)){ setTimeout(()=>map.invalidateSize(),150); }
-  if(tab==='optimizer'){
-    // Limpiar TODO el mapa al entrar a optimizar
-    clearRouteLines();
-    Object.keys(markers).forEach(k=>{ map.removeLayer(markers[k]); delete markers[k]; });
-    // Siempre cargar la ruta guardada desde el servidor
-    _loadOptAny().then(saved => {
-      if(saved){
-        renderOptResult(saved);
-        // Detectar si hay pedidos del día que no están en la ruta
-        const savedIds = new Set(saved.ordered.map(s => s.id));
-        const missing = deliveries.filter(d =>
-          d.delivery_date === selectedDate &&
-          !d.completed &&
-          !savedIds.has(d.id) &&
-          (!selectedOptDriver || d.driver === selectedOptDriver)
-        );
-        if(missing.length > 0){
-          const warn = document.createElement('div');
-          warn.style.cssText = 'background:#f59e0b22;border:1px solid #f59e0b;border-radius:7px;padding:.5rem .75rem;margin-bottom:.5rem;font-size:.75rem;color:#f59e0b;font-weight:600;';
-          warn.innerHTML = `⚠️ Hay ${missing.length} pedido(s) nuevo(s) no incluidos en la ruta: ${missing.map(d=>d.name).join(', ')}. Se agregarán al final automáticamente.`;
-          const optResult = document.getElementById('opt-result');
-          if(optResult) optResult.prepend(warn);
-          // Agregarlos automáticamente al final
-          missing.forEach(d => _appendToOpt(d));
-        }
-      }
-    });
-  } else {
-    // Al salir de optimizar: limpiar ruta y restaurar marcadores del día
+  if(map && ['list'].includes(tab)){ setTimeout(()=>map.invalidateSize(),150); }
+  // Limpiar marcadores opt_ al salir de optimizer
+  if(tab!=='optimizer'){
     clearRouteLines();
     Object.keys(markers)
       .filter(k=>k.startsWith('opt_'))
@@ -3613,28 +3096,19 @@ function mobSwitch(tab,el){
       }
     },250);
   } else {
-    // Al salir de optimizer en móvil: limpiar marcadores de ruta del mapa
-    const prevTab = document.querySelector('.mnb.active')?.dataset?.tab || '';
-    if(prevTab === 'optimizer' || tab !== 'optimizer'){
-      clearRouteLines();
-      Object.keys(markers)
-        .filter(k => k.startsWith('opt_'))
-        .forEach(k => { map.removeLayer(markers[k]); delete markers[k]; });
-    }
-    // Al salir de reparto: limpiar marcadores de reparto
-    if(prevTab === 'reparto'){
-      Object.keys(markers)
-        .filter(k => k.startsWith('rep_'))
-        .forEach(k => { map.removeLayer(markers[k]); delete markers[k]; });
-    }
+    // Limpiar marcadores de ruta y reparto
+    clearRouteLines();
+    Object.keys(markers)
+      .filter(k => k.startsWith('opt_') || k.startsWith('rep_'))
+      .forEach(k => { map.removeLayer(markers[k]); delete markers[k]; });
     panel.style.display='';mapCol.classList.remove('mob-show');switchPanel(tab,null);
   }
   document.querySelectorAll('.mnb').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
   if(tab==='clients')loadClients();
   if(tab==='carga'){ initCarga(); }
-  if(tab==='routes')startTrackingMonitor();
   if(tab==='reparto'){ initReparto(); }
+  if(tab==='tiempos'){ initTiempos(); }
   if(tab==='calendar-mob') renderMobCal();
 }
 
@@ -3727,167 +3201,6 @@ function toggleTheme(){
 })();
 
 // ════════════════════════════════════════════════════════
-//  GPS TRACKING
-// ════════════════════════════════════════════════════════
-let trackingDriver   = null;   // repartidor seleccionado en este dispositivo
-let trackingActive   = false;  // seguimiento activo
-let trackingWatchId  = null;   // ID de watchPosition
-let trackingInterval = null;   // polling del monitor
-let gpsMarkers       = {};     // marcadores GPS en el mapa {driver: marker}
-let gpsTrails        = {};     // polylines de rastro {driver: polyline}
-
-// DRIVER_LABELS se define al inicio junto con COLORS y ALL_DRIVERS
-
-function setTrackingDriver(driver, el){
-  trackingDriver = driver;
-  document.querySelectorAll('#tracking-who .dchip').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  const btn = document.getElementById('btn-tracking');
-  btn.disabled = false;
-}
-
-function toggleTracking(){
-  if(trackingActive){ stopTracking(); } else { startTracking(); }
-}
-
-function startTracking(){
-  if(!trackingDriver){ toast('⚠️ Selecciona quién eres primero'); return; }
-  if(!navigator.geolocation){ toast('❌ Este dispositivo no tiene GPS'); return; }
-
-  trackingActive = true;
-  const btn = document.getElementById('btn-tracking');
-  btn.textContent = '⏹ DETENER SEGUIMIENTO';
-  btn.style.background = 'var(--acc3)';
-  document.getElementById('tracking-status').textContent = '📡 Enviando ubicación...';
-
-  trackingWatchId = navigator.geolocation.watchPosition(
-    pos => sendGps(pos.coords.latitude, pos.coords.longitude),
-    err => { toast('❌ Error GPS: ' + err.message); stopTracking(); },
-    { enableHighAccuracy: true, maximumAge: 3000, timeout: 10000 }
-  );
-}
-
-function stopTracking(){
-  trackingActive = false;
-  if(trackingWatchId !== null){
-    navigator.geolocation.clearWatch(trackingWatchId);
-    trackingWatchId = null;
-  }
-  const btn = document.getElementById('btn-tracking');
-  btn.textContent = '📍 ACTIVAR SEGUIMIENTO';
-  btn.style.background = '';
-  document.getElementById('tracking-status').textContent = '⏹ Seguimiento detenido';
-}
-
-async function sendGps(lat, lng){
-  try{
-    await fetch('/api/gps/update',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ driver: trackingDriver, lat, lng })
-    });
-    const ts = new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-    document.getElementById('tracking-status').textContent =
-      `📡 Última actualización: ${ts}`;
-  } catch(e){
-    document.getElementById('tracking-status').textContent = '⚠️ Sin conexión';
-  }
-}
-
-async function loadGpsStatus(){
-  try{
-    const res  = await fetch('/api/gps/status');
-    const data = await res.json();
-    renderTrackingMonitor(data);
-    updateGpsOnMap(data);
-  } catch(e){ console.error('GPS status error', e); }
-}
-
-function renderTrackingMonitor(drivers){
-  const el = document.getElementById('tracking-monitor');
-  if(!drivers.length){
-    el.innerHTML = '<div style="font-size:.72rem;color:var(--mut);text-align:center;padding:.5rem;">Sin repartidores activos</div>';
-    return;
-  }
-  el.innerHTML = drivers.map(d => {
-    const color = COLORS[d.driver] || '#fff';
-    const ts    = d.ts ? new Date(d.ts).toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit',second:'2-digit'}) : '';
-    return `
-      <div class="tracking-card">
-        <div class="tracking-dot" style="background:${color};box-shadow:0 0 0 3px ${color}33;"></div>
-        <div class="tracking-info">
-          <div class="tracking-name" style="color:${color};">${DRIVER_LABELS[d.driver]||d.driver}</div>
-          <div class="tracking-coords">${Number(d.lat).toFixed(5)}, ${Number(d.lng).toFixed(5)}</div>
-        </div>
-        <div class="tracking-time">${ts}</div>
-      </div>`;
-  }).join('');
-}
-
-function updateGpsOnMap(drivers){
-  drivers.forEach(d => {
-    const color = COLORS[d.driver] || '#fff';
-    const lat   = parseFloat(d.lat);
-    const lng   = parseFloat(d.lng);
-
-    // Marcador de posición actual
-    if(gpsMarkers[d.driver]){
-      gpsMarkers[d.driver].setLatLng([lat, lng]);
-    } else {
-      const icon = L.divIcon({
-        html: `<div style="
-          background:${color};border:3px solid #fff;border-radius:50%;
-          width:20px;height:20px;box-shadow:0 0 0 4px ${color}55;
-          display:flex;align-items:center;justify-content:center;
-          font-size:10px;font-weight:800;color:#000;">
-          ${(DRIVER_LABELS[d.driver]||'?')[0]}
-        </div>`,
-        className:'', iconSize:[20,20], iconAnchor:[10,10]
-      });
-      gpsMarkers[d.driver] = L.marker([lat,lng], {icon})
-        .bindPopup(`<div class="pu-name">${DRIVER_LABELS[d.driver]||d.driver}</div>`)
-        .addTo(map);
-    }
-
-    // Rastro recorrido
-    if(d.trail && d.trail.length > 1){
-      if(gpsTrails[d.driver]){ map.removeLayer(gpsTrails[d.driver]); }
-      gpsTrails[d.driver] = L.polyline(d.trail, {
-        color, weight:3, opacity:.6, dashArray:'4 4'
-      }).addTo(map);
-    }
-  });
-}
-
-async function clearAllTrails(){
-  // Limpiar del mapa
-  Object.values(gpsMarkers).forEach(m => map.removeLayer(m));
-  Object.values(gpsTrails).forEach(l => map.removeLayer(l));
-  gpsMarkers = {}; gpsTrails = {};
-  // Limpiar en el servidor para cada repartidor conocido
-  for(const driver of ALL_DRIVERS){
-    await fetch('/api/gps/clear',{
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({driver})
-    });
-  }
-  document.getElementById('tracking-monitor').innerHTML =
-    '<div style="font-size:.72rem;color:var(--mut);text-align:center;padding:.5rem;">Sin repartidores activos</div>';
-  toast('🗑️ Rastros eliminados');
-}
-
-// Al entrar a la pestaña Rutas, arrancar polling automático cada 5 seg
-function startTrackingMonitor(){
-  loadGpsStatus();
-  if(!trackingInterval){
-    trackingInterval = setInterval(loadGpsStatus, 5000);
-  }
-}
-function stopTrackingMonitor(){
-  if(trackingInterval){ clearInterval(trackingInterval); trackingInterval = null; }
-}
-
-// ════════════════════════════════════════════════════════
 //  CARGA DEL DÍA
 // ════════════════════════════════════════════════════════
 let cargaDriver   = 'jorge';
@@ -3945,8 +3258,8 @@ function renderSkuInputs(){
           <div style="display:flex;align-items:center;gap:.4rem;">
             <div class="sku-dot" style="background:${color};"></div>
             <div>
-              <div class="sku-name">${p.name}</div>
-              <div class="sku-unit">${p.unit}</div>
+              <div class="sku-name">${escapeHTML(p.name)}</div>
+              <div class="sku-unit">${escapeHTML(p.unit)}</div>
             </div>
           </div>
         </div>
@@ -4013,8 +3326,8 @@ function renderBalance(){
           <div class="balance-prod">
             <div class="sku-dot" style="background:${color};width:10px;height:10px;"></div>
             <div>
-              <div class="balance-prod-name">${p.name}</div>
-              <div class="balance-prod-unit">${p.unit}</div>
+              <div class="balance-prod-name">${escapeHTML(p.name)}</div>
+              <div class="balance-prod-unit">${escapeHTML(p.unit)}</div>
             </div>
           </div>
         </div>
@@ -4056,7 +3369,7 @@ function renderAlerts(){
   badge.style.display = '';
   container.innerHTML = alerts.map(a => `
     <div class="alert-banner">
-      ⚠️ <strong>${a.product_name} (${a.unit})</strong>:
+      ⚠️ <strong>${escapeHTML(a.product_name)} (${escapeHTML(a.unit)})</strong>:
       Faltan <strong>${a.shortage}</strong> unidades —
       tienes ${a.balance} pero quedan ${a.pending} por entregar.
     </div>
@@ -4128,14 +3441,14 @@ async function renderCargaPedidos(date){
           .map(([pid, qty]) => {
             const prod = (cargaProducts||[]).find(p => p.id === pid);
             const label = prod ? prod.unit : pid;
-            return `<div class="carga-pedido-sku">${label}: <span>${qty}</span></div>`;
+            return `<div class="carga-pedido-sku">${escapeHTML(label)}: <span>${Number(qty)||0}</span></div>`;
           }).join('')
       : '<span style="font-size:.63rem;color:#ff8040;">⚠️ Sin bolsas registradas</span>';
 
     const done = d.completed;
     return `
       <div class="carga-pedido-card">
-        <div class="carga-pedido-name">${d.name || 'Sin nombre'}</div>
+        <div class="carga-pedido-name">${escapeHTML(d.name || 'Sin nombre')}</div>
         <div class="carga-pedido-items">${skuBadges}</div>
         <div class="carga-pedido-status ${done?'done':'pending'}">${done ? '✅ Entregado' : '⏳ Pendiente'}</div>
       </div>`;
@@ -4190,47 +3503,49 @@ function openDeliveryModal(id, driver){
   document.getElementById('dm-num').textContent = stopNum;
 
   const stockHtml = '';
+  const phoneRaw = String(d.client_phone ?? '');
+  const phoneHref = phoneRaw.replace(/[^0-9+]/g,'');
 
   document.getElementById('dm-body').innerHTML = `
     <div class="dm-block">
       <div class="dm-lbl">📍 Dirección</div>
-      <div class="dm-val big">${d.formatted_address || d.address || '—'}</div>
-      ${d.reference ? `<div class="dm-val muted" style="margin-top:4px;">🔖 ${d.reference}</div>` : ''}
+      <div class="dm-val big">${escapeHTML(d.formatted_address || d.address || '—')}</div>
+      ${d.reference ? `<div class="dm-val muted" style="margin-top:4px;">🔖 ${escapeHTML(d.reference)}</div>` : ''}
     </div>
     <div class="dm-divider"></div>
     <div class="dm-row">
       <div class="dm-block">
         <div class="dm-lbl">📦 Producto</div>
-        <div class="dm-val">${d.product || '—'}</div>
+        <div class="dm-val">${escapeHTML(d.product || '—')}</div>
       </div>
       <div class="dm-block">
         <div class="dm-lbl">🔢 Cantidad</div>
-        <div class="dm-val">${d.amount || '—'}</div>
+        <div class="dm-val">${escapeHTML(d.amount || '—')}</div>
       </div>
     </div>
 
     <div class="dm-row">
       <div class="dm-block">
         <div class="dm-lbl">💳 Forma de pago</div>
-        <div class="dm-val accent">${d.payment || '—'}</div>
+        <div class="dm-val accent">${escapeHTML(d.payment || '—')}</div>
       </div>
       <div class="dm-block">
         <div class="dm-lbl">📞 Teléfono</div>
-        <div class="dm-val">${d.client_phone ? `<a href="tel:${d.client_phone}" style="color:var(--acc2)">${d.client_phone}</a>` : '—'}</div>
+        <div class="dm-val">${phoneHref ? `<a href="tel:${escapeHTML(phoneHref)}" style="color:var(--acc2)">${escapeHTML(phoneRaw)}</a>` : '—'}</div>
       </div>
     </div>
     <div class="dm-divider"></div>
     <div class="dm-row">
       <div class="dm-block">
         <div class="dm-lbl">🕐 Hora inicio</div>
-        <div class="dm-val">${d.time_start || '—'}</div>
+        <div class="dm-val">${escapeHTML(d.time_start || '—')}</div>
       </div>
       <div class="dm-block">
         <div class="dm-lbl">🕑 Hora fin</div>
-        <div class="dm-val">${d.time_end || '—'}</div>
+        <div class="dm-val">${escapeHTML(d.time_end || '—')}</div>
       </div>
     </div>
-    ${d.notes ? `<div class="dm-divider"></div><div class="dm-block"><div class="dm-lbl">📝 Nota interna</div><div class="dm-notes">${d.notes}</div></div>` : ''}
+    ${d.notes ? `<div class="dm-divider"></div><div class="dm-block"><div class="dm-lbl">📝 Nota interna</div><div class="dm-notes">${escapeHTML(d.notes)}</div></div>` : ''}
   `;
 
   _updateModalFooter(d);
