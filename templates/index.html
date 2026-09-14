@@ -601,9 +601,9 @@ textarea{resize:vertical;min-height:50px;}
       <!-- Panel calendario desplegable móvil -->
       <div id="mob-cal-panel" style="display:none;padding:.6rem .9rem;border-bottom:1px solid var(--brd);background:var(--surf2);">
         <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;">
-          <button class="ibtn" onclick="calPrev();renderMobCal();" style="font-size:1.1rem;">‹</button>
+          <button class="ibtn" onclick="calPrev()" style="font-size:1.1rem;">‹</button>
           <div id="mob-cal-title" style="flex:1;text-align:center;font-weight:700;font-size:.85rem;"></div>
-          <button class="ibtn" onclick="calNext();renderMobCal();" style="font-size:1.1rem;">›</button>
+          <button class="ibtn" onclick="calNext()" style="font-size:1.1rem;">›</button>
         </div>
         <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;font-size:.65rem;font-weight:600;color:var(--mut);text-align:center;margin-bottom:3px;">
           <div>L</div><div>M</div><div>X</div><div>J</div><div>V</div><div>S</div><div>D</div>
@@ -790,7 +790,7 @@ textarea{resize:vertical;min-height:50px;}
         <div style="font-size:.78rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;">📅 Seleccionar fecha</div>
         <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;">
           <button class="ibtn" onclick="calPrev()" style="font-size:1.1rem;">‹</button>
-          <div id="mob-cal-title" style="flex:1;text-align:center;font-weight:700;font-size:.9rem;"></div>
+          <div id="cal-full-title" style="flex:1;text-align:center;font-weight:700;font-size:.9rem;"></div>
           <button class="ibtn" onclick="calNext()" style="font-size:1.1rem;">›</button>
         </div>
         <div id="mob-cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;font-size:.72rem;text-align:center;">
@@ -802,7 +802,7 @@ textarea{resize:vertical;min-height:50px;}
           <div style="color:var(--mut);font-weight:600;">S</div>
           <div style="color:var(--mut);font-weight:600;">D</div>
         </div>
-        <div id="mob-cal-days" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:3px;"></div>
+        <div id="cal-full-days" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-top:3px;"></div>
         <div style="margin-top:.75rem;padding:.5rem;background:var(--surf2);border-radius:8px;font-size:.78rem;">
           Fecha seleccionada: <span id="mob-cal-selected" style="font-weight:700;color:var(--acc);"></span>
         </div>
@@ -969,7 +969,6 @@ let lookupTimer=null,currentClient=null,currentAddress=null,addingAddress=false;
 
 // Google Places state
 let addressAutocomplete=null;   // para formulario nuevo cliente
-let customDPAutocomplete=null;  // para punto partida personalizado
 let pendingAddressData=null;    // datos de la dirección seleccionada en Google
 let googleMapsLoaded=false;
 
@@ -1008,7 +1007,6 @@ function loadGoogleMaps(apiKey){
   // Una vez cargado, enganchar autocomplete al formulario nuevo cliente
   gmapsReadyPromise.then(()=>{
     attachNewClientAutocomplete();
-    attachCustomDPAutocomplete();
   });
 }
 
@@ -1064,34 +1062,6 @@ function attachNewClientAutocomplete(){
   });
 }
 
-// ── Autocomplete punto de partida personalizado ──────────
-function attachCustomDPAutocomplete(){
-  const input = document.getElementById('cdp-addr');
-  if(!input || input._acDone) return;
-
-  input._acDone = true;
-
-  const ac = new google.maps.places.Autocomplete(input, {
-    componentRestrictions: { country: 'cl' },
-    fields: ['place_id', 'formatted_address', 'geometry'],
-  });
-
-  input.addEventListener('keydown', e => {
-    if(e.key === 'Enter') e.preventDefault();
-  });
-
-  ac.addListener('place_changed', () => {
-    const place = ac.getPlace();
-    if(!place) return;
-
-    input._placeData = {
-      place_id: place.place_id || '',
-      formatted_address: place.formatted_address || input.value.trim()
-    };
-
-    input.value = place.formatted_address || input.value;
-  });
-}
 
 // ── Autocomplete para edición inline de tarjeta ──────────
 function attachEditAutocomplete(id){
@@ -1280,6 +1250,8 @@ function calMove(dir){
   if(calMonth<0){calMonth=11;calYear--;}
   loadCalSummary();
 }
+function calPrev(){ calMove(-1); renderMobCal(); }
+function calNext(){ calMove(1);  renderMobCal(); }
 function renderCalendar(){
   const MN=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   document.getElementById('cal-title').textContent=`${MN[calMonth]} ${calYear}`;
