@@ -570,7 +570,7 @@ textarea{resize:vertical;min-height:50px;}
 <div class="shell">
 
 <header>
-  <button onclick="location.reload()">🔄</button>
+  <button onclick="manualSync()" title="Actualizar datos">🔄</button>
   <div class="logo">Reparto<span>Track</span></div>
   
   <div class="desk-nav">
@@ -985,6 +985,7 @@ let map,markers={},routeLines=[];
 let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 let selectedDate=todayStr();
 let appConfig={google_maps_key:'',departure_points:[]};
+let syncTimer=null;
 
 let lookupTimer=null,currentClient=null,currentAddress=null,addingAddress=false;
 
@@ -1012,6 +1013,7 @@ async function init(){
   loadCalSummary();
   await selectDate(selectedDate);
   syncFormDate();
+  startGlobalSync();
 }
 init();
 
@@ -3061,6 +3063,7 @@ function switchPanel(tab,el){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+tab).classList.add('active');
   if(el)el.classList.add('active');
+  if(tab!=='carga') stopCargaPolling();
   if(tab==='clients')loadClients();
   if(tab==='carga'){ initCarga(); }
   if(tab==='reparto'){ initReparto(); }
@@ -3084,6 +3087,7 @@ function mobSwitch(tab,el){
   const mapCol=document.getElementById('map-col');
   const panel=document.querySelector('.panel');
   if(tab==='map'){
+    stopCargaPolling();
     panel.style.display='none';mapCol.classList.add('mob-show');
     setTimeout(()=>{
       map.invalidateSize();
@@ -3201,11 +3205,86 @@ function toggleTheme(){
 })();
 
 // ════════════════════════════════════════════════════════
+//  GLOBAL SYNC — sincronización multi-dispositivo de pedidos
+// ════════════════════════════════════════════════════════
+function stopGlobalSync(){
+  if(syncTimer){
+    clearInterval(syncTimer);
+    syncTimer=null;
+  }
+}
+
+function startGlobalSync(){
+  stopGlobalSync();
+  syncTimer=setInterval(function(){
+    if(document.visibilityState==='visible'){
+      syncDeliveries();
+    }
+  },15000);
+}
+
+function deliverySyncSignature(list){
+  if(!list||!list.length) return '';
+  var sorted=list.slice().sort(function(a,b){return String(a.id)<String(b.id)?-1:String(a.id)>String(b.id)?1:0;});
+  var FIELDS=['id','delivery_date','client_phone','name','address','formatted_address','reference','product','amount','payment','driver','time_start','time_end','notes','lat','lng','completed','arrived_at','route_order'];
+  return sorted.map(function(d){
+    var parts=FIELDS.map(function(f){return d[f]===undefined?'':String(d[f]);});
+    var si=d.stock_items||{};
+    var siKeys=Object.keys(si).sort();
+    var siStr=siKeys.map(function(k){return k+':'+si[k];}).join(',');
+    return parts.join('|')+'#SI:'+siStr;
+  }).join('\n');
+}
+
+let _syncPending=false;
+async function syncDeliveries(){
+  if(_syncPending) return;
+  _syncPending=true;
+  try{
+    const r=await fetch('/api/deliveries?date='+selectedDate+'&_='+Date.now());
+    if(!r.ok){return;}
+    const data=await r.json();
+    const oldSig=deliverySyncSignature(deliveries);
+    const newSig=deliverySyncSignature(data);
+    if(oldSig===newSig) return;
+    deliveries=data;
+    renderAll();
+    refreshMarkers();
+    if(document.getElementById('page-reparto')?.classList.contains('active')){
+      const dragging=!!document.querySelector('.sortable-chosen');
+      const hasDirty=Object.values(repartoState).some(function(s){return s.dirty;});
+      if(!dragging && !hasDirty){
+        repartoLoadedDate=null;
+        await loadRepartoStateForDate();
+        renderAllDriverCols();
+      }
+    }
+    if(document.getElementById('page-tiempos')?.classList.contains('active')){
+      renderTiempos();
+    }
+  }catch(e){
+    console.warn('[GLOBAL SYNC] Error:',e);
+  }finally{
+    _syncPending=false;
+  }
+}
+
+function manualSync(){
+  syncDeliveries();
+  var page=document.getElementById('page-carga');
+  if(page && page.classList.contains('active')){
+    loadCarga();
+  }
+  loadCalSummary();
+}
+
+// ════════════════════════════════════════════════════════
 //  CARGA DEL DÍA
 // ════════════════════════════════════════════════════════
-let cargaDriver   = 'jorge';
-let cargaProducts = [];
-let cargaData     = null;
+let cargaDriver      = 'jorge';
+let cargaProducts    = [];
+let cargaData        = null;
+let cargaPollingTimer = null;
 
 const PRODUCT_COLORS = {
   'LAV-8':    '#f0e040',
@@ -3235,6 +3314,7 @@ async function initCarga(){
   }
 
   await loadCarga();
+  startCargaPolling();
 }
 
 function setCargaDriver(driver, el){
@@ -3242,6 +3322,23 @@ function setCargaDriver(driver, el){
   document.querySelectorAll('.carga-driver-tab').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
   loadCarga();
+}
+
+function stopCargaPolling(){
+  if(cargaPollingTimer){
+    clearInterval(cargaPollingTimer);
+    cargaPollingTimer = null;
+  }
+}
+
+function startCargaPolling(){
+  stopCargaPolling();
+  cargaPollingTimer = setInterval(function(){
+    var page = document.getElementById('page-carga');
+    if(page && page.classList.contains('active') && document.visibilityState === 'visible'){
+      loadCarga();
+    }
+  }, 15000);
 }
 
 function renderSkuInputs(){
@@ -3587,6 +3684,21 @@ function closeDeliveryModal(){
   _modalDeliveryId = null;
   _modalDriver = null;
 }
+
+document.addEventListener('visibilitychange', function(){
+  var page = document.getElementById('page-carga');
+  if(document.visibilityState === 'visible'){
+    syncDeliveries();
+    startGlobalSync();
+    if(page && page.classList.contains('active')){
+      loadCarga();
+      startCargaPolling();
+    }
+  } else {
+    stopGlobalSync();
+    stopCargaPolling();
+  }
+});
 </script>
 <!-- ══ MODAL CRUD CLIENTE — fuera del panel para que funcione en móvil ══ -->
 <div id="cli-modal" onclick="if(event.target===this)closeClientModal()"
