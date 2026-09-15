@@ -1155,12 +1155,12 @@ function navigateWaze(id){
 }
 
 function getMapTileLayer(isLight){
-  // Ambos modos usan Voyager (rico en colores y jerarquía).
+  // Ambos modos usan OpenStreetMap como capa base.
   // El modo noche aplica un filtro CSS invert+hue que convierte el mapa
   // en un estilo oscuro tipo Waze/Google Maps noche.
-  return L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
-    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
-    maxZoom:20, subdomains:'abcd'
+  return L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom:19
   });
 }
 
