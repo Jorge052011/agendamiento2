@@ -1154,11 +1154,18 @@ function navigateWaze(id){
   window.open(`https://www.google.com/maps/dir/?api=1&destination=${dest}&travelmode=driving`, '_blank');
 }
 
+
+const CARTO_API_KEY = "{{ CARTO_API_KEY|escapejs }}";
+
 function getMapTileLayer(isLight){
-  return L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
-    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
-    maxZoom:20, subdomains:'abcd'
-  });
+  return L.tileLayer(
+    `https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=${CARTO_API_KEY}`,
+    {
+      attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
+      maxZoom:20,
+      subdomains:'abcd'
+    }
+  );
 }
 
 function applyMapNightMode(isLight){

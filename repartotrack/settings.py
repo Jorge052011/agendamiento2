@@ -60,3 +60,4 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Google Maps API Key — desde .env
 GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY', '')
+CARTO_API_KEY = os.environ.get("CARTO_API_KEY", "")
