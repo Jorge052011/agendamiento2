@@ -61,7 +61,7 @@ header{background:var(--surf);border-bottom:1px solid var(--brd);display:flex;al
 .desk-nav .nb:hover{background:var(--surf2);color:var(--txt);}
 .desk-nav .nb.active{background:var(--surf2);border-color:var(--acc);color:var(--acc);}
 .main{display:flex;flex:1;overflow:hidden;}
-.cal-col{width:240px;flex-shrink:0;background:var(--surf);border-right:1px solid var(--brd);display:flex;flex-direction:column;overflow:hidden;}
+.cal-col{width:240px;flex-shrink:0;background:var(--surf);border-right:1px solid var(--brd);display:flex;flex-direction:column;overflow-x:auto;}
 .cal-hdr{padding:.7rem .9rem .4rem;border-bottom:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between;}
 .cal-month{font-family:'Syne',sans-serif;font-weight:700;font-size:.85rem;text-transform:capitalize;}
 .cal-nav{display:flex;gap:3px;}
@@ -69,9 +69,9 @@ header{background:var(--surf);border-bottom:1px solid var(--brd);display:flex;al
 .cal-nav button:hover{border-color:var(--acc);color:var(--acc);}
 .cal-body{padding:.4rem .5rem .6rem;flex:1;overflow-y:auto;}
 .cal-wds{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:2px;}
-.cal-wd{text-align:center;font-size:.68rem;font-weight:700;color:var(--mut);text-transform:uppercase;padding:2px 0;}
+.cal-wd{text-align:center;font-size:.68rem;font-weight:700;color:var(--mut);text-transform:uppercase;padding:1px 0;}
 .cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
-.cal-day{aspect-ratio:1;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:2px;cursor:pointer;transition:all .15s;border:1px solid transparent;}
+.cal-day{border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:2px 1px;cursor:pointer;transition:all .15s;border:1px solid transparent;min-height:38px;}
 .cal-day:hover{background:var(--surf2);border-color:var(--brd2);}
 .cal-day.empty{cursor:default;pointer-events:none;}
 .cal-day.today .dn{color:var(--acc);font-weight:700;}
