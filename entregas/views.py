@@ -210,30 +210,105 @@ def _required_materials_for(product_label, amount):
     return required
 
 
+def _item_from_raw(raw):
+    """Normaliza un producto del pedido y calcula sus bolsas requeridas."""
+    if not isinstance(raw, dict):
+        raise ValueError('Formato de producto inválido')
+
+    label = str(raw.get('product') or '').strip()
+    amount = str(raw.get('amount') or '').strip()
+    product = _commercial_product_for(label)
+    required = _required_materials_for(label, amount)
+
+    if label and product and product.active and required is None:
+        raise ValueError(f'El producto "{product.label}" no tiene composición configurada')
+
+    return {
+        'product':        label,
+        'amount':         amount,
+        'product_ref_id': product.id if product else None,
+        'stock_items':    required or {},
+    }
+
+
+def _clean_items(raw_items):
+    if not isinstance(raw_items, list):
+        raise ValueError('items debe ser una lista de productos')
+
+    items = []
+    for raw in raw_items:
+        item = _item_from_raw(raw)
+        if item['product'] or item['amount']:
+            items.append(item)
+    return items
+
+
+def _items_signature(items):
+    return [
+        ((item.get('product') or ''), (item.get('amount') or ''))
+        for item in (items or [])
+    ]
+
+
+def _delivery_items(delivery):
+    if delivery is None:
+        return []
+    if delivery.items:
+        return [dict(item) for item in delivery.items]
+    if delivery.product or delivery.amount:
+        return [{
+            'product':        delivery.product or '',
+            'amount':         delivery.amount or '',
+            'product_ref_id': delivery.product_ref_id,
+            'stock_items':    delivery.stock_items or {},
+        }]
+    return []
+
+
+def _aggregate_item_stock(items):
+    total = {}
+    for item in items:
+        for sku, qty in (item.get('stock_items') or {}).items():
+            total[sku] = total.get(sku, 0) + int(qty or 0)
+    return total
+
+
+def _apply_delivery_items(data, items):
+    data['items'] = items
+    data['stock_items'] = _aggregate_item_stock(items)
+    first = items[0] if items else {}
+    data['product'] = first.get('product', '') or ''
+    data['amount'] = first.get('amount', '') or ''
+    data['product_ref_id'] = first.get('product_ref_id') if first else None
+
+
 def _prepare_delivery_catalog(data, current_delivery=None):
-    """Completa product_ref y stock_items sin destruir valores históricos."""
-    product_label = data.get('product', current_delivery.product if current_delivery else '')
-    amount = data.get('amount', current_delivery.amount if current_delivery else '')
-    product = _commercial_product_for(product_label)
+    """Completa items, product_ref y stock_items sin destruir valores históricos."""
+    if 'items' in data:
+        new_items = _clean_items(data.get('items') or [])
+        current_items = _delivery_items(current_delivery)
+        if (current_delivery is not None and
+                _items_signature(new_items) == _items_signature(current_items)):
+            new_items = current_items
+        _apply_delivery_items(data, new_items)
+        return data
 
-    product_changed = (
-        current_delivery is None or
-        (product_label or '') != (current_delivery.product or '')
-    )
-    amount_changed = (
-        current_delivery is None or
-        (amount or '') != (current_delivery.amount or '')
-    )
+    if current_delivery is None:
+        _apply_delivery_items(data, _clean_items([{
+            'product': data.get('product', ''),
+            'amount':  data.get('amount', ''),
+        }]))
+        return data
 
-    if product_changed:
-        data['product_ref_id'] = product.id if product else None
-
-    if product_changed or amount_changed:
-        required = _required_materials_for(product_label, amount)
-        if required is not None:
-            data['stock_items'] = required
-        elif product and product.active:
-            raise ValueError(f'El producto "{product.label}" no tiene composición configurada')
+    if 'product' in data or 'amount' in data:
+        new_items = _clean_items([{
+            'product': data.get('product', current_delivery.product),
+            'amount':  data.get('amount', current_delivery.amount),
+        }])
+        current_items = _delivery_items(current_delivery)
+        if _items_signature(new_items) == _items_signature(current_items):
+            new_items = current_items
+        _apply_delivery_items(data, new_items)
 
     return data
 
@@ -311,6 +386,7 @@ def deliveries(request):
         product          = data.get("product", "").strip(),
         product_ref_id   = data.get("product_ref_id") or data.get("product_ref"),
         amount           = data.get("amount", "").strip(),
+        items            = data.get("items", []),
         payment          = data.get("payment", "").strip(),
         driver           = driver,
         time_start       = data.get("time_start", ""),

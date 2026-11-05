@@ -30,6 +30,82 @@ class CatalogAndLoadTests(TestCase):
         payload.update(overrides)
         return self.post_json('/api/deliveries', payload)
 
+    def add_other_composition(self):
+        ProductComponent.objects.get_or_create(
+            product=self.other_product, material=self.material,
+            defaults={'quantity': 1})
+
+    def test_create_delivery_with_multiple_items(self):
+        self.add_other_composition()
+        response = self.create_delivery(items=[
+            {'product': self.product.label, 'amount': '2'},
+            {'product': self.other_product.label, 'amount': '3'},
+        ])
+        self.assertEqual(response.status_code, 201)
+        data = response.json()
+        self.assertEqual(len(data['items']), 2)
+
+        delivery = Delivery.objects.get(id=data['id'])
+        self.assertEqual(delivery.items[1]['product'], self.other_product.label)
+        self.assertEqual(delivery.stock_items, {'LAV-8': 7})
+        self.assertEqual(delivery.product, self.product.label)
+        self.assertEqual(delivery.amount, '2')
+
+    def test_stock_required_aggregates_multiple_items(self):
+        self.add_other_composition()
+        self.create_delivery(items=[
+            {'product': self.product.label, 'amount': '2'},
+            {'product': self.other_product.label, 'amount': '3'},
+        ])
+        response = self.client.get('/api/stock?date=2026-11-05&driver=jorge')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['required']['LAV-8'], 7)
+
+    def test_edit_items_recalculates_and_supports_add_remove(self):
+        self.add_other_composition()
+        created = self.create_delivery(amount='1').json()
+
+        response = self.post_json(
+            f"/api/deliveries/{created['id']}",
+            {'items': [
+                {'product': self.product.label, 'amount': '2'},
+                {'product': self.other_product.label, 'amount': '3'},
+            ]},
+            method='patch')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['stock_items'], {'LAV-8': 7})
+
+        response = self.post_json(
+            f"/api/deliveries/{created['id']}",
+            {'items': [{'product': self.other_product.label, 'amount': '4'}]},
+            method='patch')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['stock_items'], {'LAV-8': 4})
+        self.assertEqual(response.json()['product'], self.other_product.label)
+        self.assertEqual(response.json()['amount'], '4')
+
+    def test_edit_notes_keeps_items_snapshot(self):
+        created = self.create_delivery(amount='2').json()
+        ProductComponent.objects.filter(
+            product=self.product, material=self.material).update(quantity=5)
+
+        response = self.post_json(
+            f"/api/deliveries/{created['id']}", {'notes': 'nota'}, method='patch')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['items'][0]['stock_items'], {'LAV-8': 4})
+        self.assertEqual(response.json()['stock_items'], {'LAV-8': 4})
+
+    def test_legacy_delivery_returns_items_fallback(self):
+        Delivery.objects.create(
+            id='legacy-items-1', delivery_date=date(2026, 11, 5), name='Viejo',
+            address='Calle', driver='jorge', product='20 k aroma café',
+            amount='1', stock_items={'LAV-20': 1})
+        response = self.client.get('/api/deliveries?date=2026-11-05')
+        self.assertEqual(response.status_code, 200)
+        data = next(d for d in response.json() if d['id'] == 'legacy-items-1')
+        self.assertEqual(data['items'][0]['product'], '20 k aroma café')
+        self.assertEqual(data['items'][0]['amount'], '1')
+
     def test_catalog_includes_components(self):
         response = self.client.get('/api/catalog')
         self.assertEqual(response.status_code, 200)

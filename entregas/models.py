@@ -155,6 +155,7 @@ class Delivery(models.Model):
     product_ref     = models.ForeignKey(CommercialProduct, null=True, blank=True,
                                         on_delete=models.SET_NULL, related_name='deliveries')
     amount          = models.CharField(max_length=100, blank=True)
+    items           = models.JSONField(default=list, blank=True)
     payment         = models.CharField(max_length=100, blank=True)
     driver          = models.CharField(max_length=100, blank=True)
     time_start      = models.CharField(max_length=10, blank=True)
@@ -171,7 +172,21 @@ class Delivery(models.Model):
     class Meta:
         db_table = 'deliveries'
 
+    def items_payload(self):
+        if self.items:
+            return self.items
+        if self.product or self.amount or self.stock_items:
+            return [{
+                'product':       self.product,
+                'amount':        self.amount,
+                'product_ref_id': self.product_ref_id,
+                'stock_items':   self.stock_items or {},
+            }]
+        return []
+
     def to_dict(self, client=None):
+        items = self.items_payload()
+        first_item = items[0] if items else {}
         d = {
             'id':                self.id,
             'delivery_date':     self.delivery_date.isoformat() if hasattr(self.delivery_date, 'isoformat') else self.delivery_date,
@@ -182,9 +197,10 @@ class Delivery(models.Model):
             'formatted_address': self.formatted_address,
             'place_id':          self.place_id,
             'reference':         self.reference,
-            'product':           self.product,
-            'product_ref_id':    self.product_ref_id,
-            'amount':            self.amount,
+            'product':           self.product or first_item.get('product', ''),
+            'product_ref_id':    self.product_ref_id or first_item.get('product_ref_id'),
+            'amount':            self.amount or first_item.get('amount', ''),
+            'items':             items,
             'payment':           self.payment,
             'driver':            self.driver,
             'time_start':        self.time_start,
