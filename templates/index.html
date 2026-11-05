@@ -703,18 +703,8 @@ textarea{resize:vertical;min-height:50px;}
             </div>
           </div>
 
-          <div class="form-row">
-            <div class="field">
-              <label>Producto</label>
-              <select id="f-product" onchange="updateAddStockPreview()">
-                <option value="">Cargando catálogo...</option>
-              </select>
-            </div>
-            <div class="field">
-              <label>Cantidad</label>
-              <input id="f-amount" type="text" placeholder="Ej: 1" oninput="updateAddStockPreview()">
-            </div>
-          </div>
+          <div id="add-product-rows" style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:.5rem;"></div>
+          <button type="button" class="btn-secondary" onclick="addProductRow()" style="margin-bottom:.5rem;">➕ Agregar producto</button>
 
           <!-- BOLSAS REQUERIDAS SEGÚN COMPOSICIÓN -->
           <div style="background:var(--surf2);border:1px solid var(--brd);border-radius:8px;padding:.6rem .75rem;margin-bottom:.5rem;">
@@ -982,6 +972,25 @@ function findCommercialProduct(label){
   return (catalog.commercial_products||[]).find(p=>p.label===label)||null;
 }
 
+function deliveryItems(delivery){
+  if(Array.isArray(delivery?.items)&&delivery.items.length)return delivery.items;
+  if(delivery&&(delivery.product||delivery.amount)){
+    return [{product:delivery.product||'',amount:delivery.amount||''}];
+  }
+  return [];
+}
+
+function deliveryItemsText(delivery){
+  return deliveryItems(delivery)
+    .filter(item=>item.product||item.amount)
+    .map(item=>[item.product,item.amount].filter(Boolean).join(' × '))
+    .join(', ');
+}
+
+function itemsSignature(items){
+  return JSON.stringify((items||[]).map(item=>[item.product||'',item.amount||'']));
+}
+
 function optionsHtml(values,current,placeholder){
   const list=(values||[]).slice();
   const isLegacy=!!current&&!list.includes(current);
@@ -1008,10 +1017,10 @@ function driverOptionsHtml(current){
 }
 
 function renderCommercialProductOptions(){
-  const select=document.getElementById('f-product');
-  if(!select)return;
-  const current=select.value;
-  select.innerHTML=productOptionsHtml(current);
+  document.querySelectorAll('.product-row-product, .edit-product-select').forEach(select=>{
+    const current=select.value;
+    select.innerHTML=productOptionsHtml(current);
+  });
 }
 
 function requiredMaterialsFor(label,amount){
@@ -1044,17 +1053,129 @@ function stockPreviewHtml(items){
   }).join('');
 }
 
+function sumRequiredMaterials(items){
+  const total={};
+  (items||[]).forEach(item=>{
+    const required=requiredMaterialsFor(item.product,item.amount);
+    Object.entries(required).forEach(([sku,qty])=>{
+      total[sku]=(total[sku]||0)+(Number(qty)||0);
+    });
+  });
+  return total;
+}
+
+function stockWarningHtml(){
+  return '<div style="font-size:.68rem;color:#ff8040;grid-column:1/-1;">⚠️ Producto sin composición configurada.</div>';
+}
+
+function productRowHtml(item){
+  return `<div class="product-row form-row">
+    <div class="field">
+      <label>Producto</label>
+      <select class="product-row-product" onchange="updateAddStockPreview()">${productOptionsHtml(item?.product||'')}</select>
+    </div>
+    <div class="field">
+      <label>Cantidad</label>
+      <div style="display:flex;gap:.4rem;">
+        <input class="product-row-amount" type="text" placeholder="Ej: 1" value="${escapeHTML(item?.amount||'')}" oninput="updateAddStockPreview()">
+        <button type="button" class="btn-secondary" onclick="removeProductRow(this)" title="Quitar producto" style="padding:8px 10px;">✕</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function addProductRow(item){
+  const container=document.getElementById('add-product-rows');
+  if(!container)return;
+  const wrap=document.createElement('div');
+  wrap.innerHTML=productRowHtml(item);
+  container.appendChild(wrap.firstElementChild);
+  updateAddStockPreview();
+}
+
+function removeProductRow(btn){
+  const container=document.getElementById('add-product-rows');
+  const row=btn.closest('.product-row');
+  if(!container||!row)return;
+  if(container.querySelectorAll('.product-row').length<=1){
+    row.querySelector('.product-row-product').value='';
+    row.querySelector('.product-row-amount').value='';
+  }else{
+    row.remove();
+  }
+  updateAddStockPreview();
+}
+
+function getAddProductItems(){
+  return Array.from(document.querySelectorAll('#add-product-rows .product-row')).map(row=>({
+    product: row.querySelector('.product-row-product')?.value||'',
+    amount:  row.querySelector('.product-row-amount')?.value.trim()||'',
+  })).filter(item=>item.product||item.amount);
+}
+
+function resetAddProductRows(){
+  const container=document.getElementById('add-product-rows');
+  if(!container)return;
+  container.innerHTML='';
+  addProductRow();
+}
+
 function updateAddStockPreview(){
   const container=document.getElementById('add-stock-items');
   if(!container)return;
-  const label=document.getElementById('f-product')?.value||'';
-  const amount=document.getElementById('f-amount')?.value||'';
-  const product=findCommercialProduct(label);
-  if(label&&product&&(!product.components||!product.components.length)){
-    container.innerHTML='<div style="font-size:.68rem;color:#ff8040;grid-column:1/-1;">⚠️ Producto sin composición configurada.</div>';
-    return;
+  const items=getAddProductItems();
+  for(const item of items){
+    if(!item.product)continue;
+    const product=findCommercialProduct(item.product);
+    if(product&&(!product.components||!product.components.length)){
+      container.innerHTML=stockWarningHtml();
+      return;
+    }
   }
-  container.innerHTML=stockPreviewHtml(requiredMaterialsFor(label,amount));
+  container.innerHTML=stockPreviewHtml(sumRequiredMaterials(items));
+}
+
+function editProductRowHtml(eid,item){
+  return `<div class="edit-product-row" style="display:grid;grid-template-columns:1fr 72px auto;gap:.35rem;align-items:center;">
+    <select class="edit-product-select" onchange="updateEditStockPreview('${eid}')">${productOptionsHtml(item?.product||'')}</select>
+    <input class="edit-product-amount" type="text" value="${escapeHTML(item?.amount||'')}" placeholder="Cant." oninput="updateEditStockPreview('${eid}')" style="min-width:0;">
+    <button type="button" class="btn-secondary" onclick="removeEditProductRow('${eid}',this)" title="Quitar producto" style="padding:6px 9px;">✕</button>
+  </div>`;
+}
+
+function editProductRowsHtml(eid,delivery){
+  const items=deliveryItems(delivery);
+  const list=items.length?items:[{product:'',amount:''}];
+  return list.map(item=>editProductRowHtml(eid,item)).join('');
+}
+
+function addEditProductRow(eid,item){
+  const container=document.getElementById(`${eid}-product-rows`);
+  if(!container)return;
+  const wrap=document.createElement('div');
+  wrap.innerHTML=editProductRowHtml(eid,item);
+  container.appendChild(wrap.firstElementChild);
+  updateEditStockPreview(eid);
+}
+
+function removeEditProductRow(eid,btn){
+  const container=document.getElementById(`${eid}-product-rows`);
+  const row=btn.closest('.edit-product-row');
+  if(!container||!row)return;
+  if(container.querySelectorAll('.edit-product-row').length<=1){
+    row.querySelector('.edit-product-select').value='';
+    row.querySelector('.edit-product-amount').value='';
+  }else{
+    row.remove();
+  }
+  updateEditStockPreview(eid);
+}
+
+function getEditProductItems(eid){
+  return Array.from(document.querySelectorAll(`#${eid}-product-rows .edit-product-row`)).map(row=>({
+    product: row.querySelector('.edit-product-select')?.value||'',
+    amount:  row.querySelector('.edit-product-amount')?.value.trim()||'',
+  })).filter(item=>item.product||item.amount);
 }
 
 function editStockItemsHtml(delivery){
@@ -1065,22 +1186,20 @@ function updateEditStockPreview(eid){
   const container=document.getElementById(`${eid}-stock-items`);
   if(!container)return;
   const delivery=deliveries.find(d=>`edit-${d.id}`===eid);
-  const label=document.getElementById(`${eid}-product`)?.value||'';
-  const amount=document.getElementById(`${eid}-amount`)?.value||'';
-  const product=findCommercialProduct(label);
-  if(label&&product&&(!product.components||!product.components.length)){
-    container.innerHTML='<div style="font-size:.68rem;color:#ff8040;grid-column:1/-1;">⚠️ Producto sin composición configurada.</div>';
-    return;
+  const items=getEditProductItems(eid);
+  for(const item of items){
+    if(!item.product)continue;
+    const product=findCommercialProduct(item.product);
+    if(product&&(!product.components||!product.components.length)){
+      container.innerHTML=stockWarningHtml();
+      return;
+    }
   }
-  if(delivery&&label===delivery.product&&amount===delivery.amount){
+  if(delivery&&itemsSignature(items)===itemsSignature(deliveryItems(delivery))){
     container.innerHTML=stockPreviewHtml(delivery.stock_items||{});
     return;
   }
-  if(!product&&delivery){
-    container.innerHTML=stockPreviewHtml(delivery.stock_items||{});
-    return;
-  }
-  container.innerHTML=stockPreviewHtml(requiredMaterialsFor(label,amount));
+  container.innerHTML=stockPreviewHtml(sumRequiredMaterials(items));
 }
 
 // Google Places state
@@ -1095,6 +1214,7 @@ async function init(){
   initMap();
   await loadConfig();
   await loadCatalog();
+  resetAddProductRows();
   renderCalendar();
   loadCalSummary();
   await selectDate(selectedDate);
@@ -1327,13 +1447,17 @@ function addMarker(d){
   }
 
   const ref = d.reference || d._client?.reference || '';
+  const itemsHtml = deliveryItems(d)
+    .filter(item=>item.product||item.amount)
+    .map(item=>escapeHTML([item.product,item.amount].filter(Boolean).join(' × ')))
+    .join('<br>');
   const m = L.marker([d.lat, d.lng], {icon: makeIcon(d.driver, num, 38, !d.completed)});
   m.bindPopup(`
     <div class="pu-name">${escapeHTML(d.name)}</div>
     <div class="pu-addr">📍 ${escapeHTML(d.address)}</div>
     ${ref?`<div class="pu-row"><span class="pu-lbl">🔖</span><span class="pu-val">${escapeHTML(ref)}</span></div>`:''}
     ${d.client_phone?`<div class="pu-row"><span class="pu-lbl">📞</span><span class="pu-val">${escapeHTML(d.client_phone)}</span></div>`:''}
-    ${d.product?`<div class="pu-row"><span class="pu-lbl">📦</span><span class="pu-val">${escapeHTML(d.product)} ${escapeHTML(d.amount)}</span></div>`:''}
+    ${itemsHtml?`<div class="pu-row"><span class="pu-lbl">📦</span><span class="pu-val">${itemsHtml}</span></div>`:''}
     ${d.payment?`<div class="pu-row"><span class="pu-lbl">💳</span><span class="pu-val">${escapeHTML(d.payment)}</span></div>`:''}
     <div class="pu-row"><span class="pu-lbl">⏰</span><span class="pu-val">${escapeHTML(d.time_start)}–${escapeHTML(d.time_end)}</span></div>
     <div class="pu-row"><span class="pu-lbl">🚴</span><span class="pu-val" style="color:${COLORS[d.driver]}">${driverLabel(d.driver)}</span></div>
@@ -1541,14 +1665,15 @@ function hideClientBoxes(){
 // ════════════════════════════════════════════════════════
 async function addDelivery(){
   const phone=v('f-phone');
-  const product=v('f-product'),amount=v('f-amount'),payment=v('f-payment');
+  const items=getAddProductItems(),payment=v('f-payment');
   const driver=v('f-driver'),ts=v('f-ts'),te=v('f-te'),notes=v('f-notes');
   const date=v('f-date')||selectedDate;
 
   if(!phone){toast('⚠️ Teléfono requerido');return;}
   if(!driver){toast('⚠️ Repartidor requerido');return;}
-  if(product){
-    const prod=findCommercialProduct(product);
+  for(const item of items){
+    if(!item.product)continue;
+    const prod=findCommercialProduct(item.product);
     if(!prod){toast('⚠️ El producto seleccionado no está activo');return;}
     if(!prod.components||!prod.components.length){
       toast('⚠️ Configura la composición del producto en Admin');
@@ -1628,10 +1753,12 @@ async function addDelivery(){
         formatted_address:clientData.formatted_address||clientData.address,
         reference:clientData.reference||'',
         client_address_id:clientData.client_address_id||null,
-        product,amount,payment,driver,
+        items,
+        product:items[0]?.product||'',
+        amount:items[0]?.amount||'',
+        payment,driver,
         time_start:ts,time_end:te,notes,
-        lat:clientData.lat,lng:clientData.lng,
-        stock_items:requiredMaterialsFor(product,amount)
+        lat:clientData.lat,lng:clientData.lng
       })
     });
 
@@ -1641,8 +1768,9 @@ async function addDelivery(){
       const[y,m]=date.split('-').map(Number);
       if(y===calYear&&m===calMonth+1)await loadCalSummary();
       renderAll();
-      ['f-phone','f-name','f-address','f-reference','f-amount','f-notes'].forEach(id=>document.getElementById(id).value='');
-      ['f-product','f-payment','f-driver'].forEach(id=>document.getElementById(id).value='');
+      ['f-phone','f-name','f-address','f-reference','f-notes'].forEach(id=>document.getElementById(id).value='');
+      ['f-payment','f-driver'].forEach(id=>document.getElementById(id).value='');
+      resetAddProductRows();
       updateAddStockPreview();
       hideClientBoxes();currentClient=null;currentAddress=null;addingAddress=false;pendingAddressData=null;
       const addrHint=document.getElementById('addr-hint');
@@ -1752,27 +1880,24 @@ async function saveEdit(id){
   const te     =document.getElementById(`${eid}-te`).value;
   const driver =document.getElementById(`${eid}-driver`).value;
   const phoneRaw=document.getElementById(`${eid}-phone`).value.replace(/\s/g,'');
-  const product =document.getElementById(`${eid}-product`).value;
-  const amount  =document.getElementById(`${eid}-amount`).value.trim();
+  const items=getEditProductItems(eid);
   const payment =document.getElementById(`${eid}-payment`).value;
 
   if(!name){toast('⚠️ El nombre no puede estar vacío');return;}
-  const productDef=findCommercialProduct(product);
-  const compositionChanged=product!==(d.product||'')||amount!==(d.amount||'');
-  if(compositionChanged&&productDef&&productDef.active&&(!productDef.components||!productDef.components.length)){
-    toast('⚠️ Configura la composición del producto en Admin');
-    return;
+  for(const item of items){
+    if(!item.product)continue;
+    const productDef=findCommercialProduct(item.product);
+    if(productDef&&productDef.active&&(!productDef.components||!productDef.components.length)){
+      toast('⚠️ Configura la composición del producto en Admin');
+      return;
+    }
   }
 
   // Construir payload
   const notes = document.getElementById(`${eid}-notes`)?.value.trim() || '';
-  const patch={name,reference:ref,time_start:ts,time_end:te,driver,product,amount,payment,notes};
-  if(!compositionChanged){
-    patch.stock_items=d.stock_items||{};
-  }else if(productDef&&productDef.components&&productDef.components.length){
-    patch.stock_items=requiredMaterialsFor(product,amount);
-  }else{
-    patch.stock_items={};
+  const patch={name,reference:ref,time_start:ts,time_end:te,driver,payment,notes};
+  if(itemsSignature(items)!==itemsSignature(deliveryItems(d))){
+    patch.items=items;
   }
 
   // Teléfono: actualizar cliente y delivery si cambió
@@ -1849,8 +1974,6 @@ function renderList(){
     const safeName=escapeHTML(d.name);
     const safeAddr=escapeHTML(d.address);
     const safePhone=escapeHTML(d.client_phone);
-    const safeProduct=escapeHTML(d.product);
-    const safeAmount=escapeHTML(d.amount);
     const safePayment=escapeHTML(d.payment);
     const safeTimeStart=escapeHTML(d.time_start);
     const safeTimeEnd=escapeHTML(d.time_end);
@@ -1873,8 +1996,7 @@ function renderList(){
       ${ref?`<div class="card-ref" onclick="focusDelivery(${deliveryId})">🔖 ${safeRef}</div>`:''}
       ${d.client_phone?`<div class="card-phone" onclick="focusDelivery(${deliveryId})">📞 ${safePhone}</div>`:''}
       <div class="card-tags" onclick="focusDelivery(${deliveryId})">
-        ${d.product?`<span class="tag product">${safeProduct}</span>`:''}
-        ${d.amount?`<span class="tag">${safeAmount}</span>`:''}
+        ${deliveryItems(d).map(item=>`${item.product?`<span class="tag product">${escapeHTML(item.product)}</span>`:''}${item.amount?`<span class="tag">${escapeHTML(item.amount)}</span>`:''}`).join('')}
         ${d.payment?`<span class="tag pay">${safePayment}</span>`:''}
         <span class="tag time">⏰ ${safeTimeStart}–${safeTimeEnd}</span>
         <span class="tag driver ${d.driver}">${driverLabel(d.driver)}</span>
@@ -1907,22 +2029,17 @@ function renderList(){
               oninput="this.value=this.value.replace(/\s/g,'')">
           </div>
           <div class="edit-field" style="grid-column:1/-1">
-            <div class="edit-label">Producto</div>
-            <select id="${eid}-product" onchange="updateEditStockPreview('${eid}')">
-              ${productOptionsHtml(d.product||'')}
-            </select>
+            <div class="edit-label">Productos</div>
+            <div id="${eid}-product-rows" style="display:flex;flex-direction:column;gap:.35rem;">
+              ${editProductRowsHtml(eid,d)}
+            </div>
+            <button type="button" class="btn-secondary" onclick="addEditProductRow('${eid}')" style="margin-top:.35rem;padding:6px 10px;font-size:.72rem;">➕ Agregar producto</button>
           </div>
-          <div class="edit-row" style="grid-column:1/-1">
-            <div class="edit-field">
-              <div class="edit-label">Cantidad</div>
-              <input id="${eid}-amount" type="text" value="${escapeHTML(d.amount||'')}" oninput="updateEditStockPreview('${eid}')">
-            </div>
-            <div class="edit-field">
-              <div class="edit-label">Forma de pago</div>
-              <select id="${eid}-payment">
-                ${paymentOptionsHtml(d.payment||'')}
-              </select>
-            </div>
+          <div class="edit-field" style="grid-column:1/-1">
+            <div class="edit-label">Forma de pago</div>
+            <select id="${eid}-payment">
+              ${paymentOptionsHtml(d.payment||'')}
+            </select>
           </div>
           <div class="edit-field" style="grid-column:1/-1">
             <div class="edit-label">Bolsas requeridas</div>
@@ -2983,8 +3100,9 @@ function _fillStopsList(listEl, driver, stops){
     const horario = (s.time_start || s.time_end)
       ? (s.time_start && s.time_end ? `${escapeHTML(s.time_start)} – ${escapeHTML(s.time_end)}` : escapeHTML(s.time_start || s.time_end))
       : '';
+    const itemsLabel = deliveryItemsText(s);
     const chips = [
-      (s.product || s.amount) ? `<span class="r-chip">📦 ${escapeHTML([s.product, s.amount].filter(Boolean).join(' × '))}</span>` : '',
+      itemsLabel ? `<span class="r-chip">📦 ${escapeHTML(itemsLabel)}</span>` : '',
       s.payment ? `<span class="r-chip">💳 ${escapeHTML(s.payment)}</span>` : '',
       horario ? `<span class="r-chip">⏰ ${horario}</span>` : '',
     ].filter(Boolean).join('');
@@ -3333,7 +3451,8 @@ function deliverySyncSignature(list){
     var si=d.stock_items||{};
     var siKeys=Object.keys(si).sort();
     var siStr=siKeys.map(function(k){return k+':'+si[k];}).join(',');
-    return parts.join('|')+'#SI:'+siStr;
+    var itStr=(d.items||[]).map(function(it){return (it.product||'')+'×'+(it.amount||'');}).join(',');
+    return parts.join('|')+'#IT:'+itStr+'#SI:'+siStr;
   }).join('\n');
 }
 
@@ -3751,9 +3870,9 @@ function openDeliveryModal(id, driver){
   document.getElementById('dm-title').textContent = d.name || 'Sin nombre';
   document.getElementById('dm-num').textContent = stopNum;
 
-  const stockHtml = '';
   const phoneRaw = String(d.client_phone ?? '');
   const phoneHref = phoneRaw.replace(/[^0-9+]/g,'');
+  const modalItems = deliveryItems(d).filter(item=>item.product||item.amount);
 
   document.getElementById('dm-body').innerHTML = `
     <div class="dm-block">
@@ -3762,15 +3881,9 @@ function openDeliveryModal(id, driver){
       ${d.reference ? `<div class="dm-val muted" style="margin-top:4px;">🔖 ${escapeHTML(d.reference)}</div>` : ''}
     </div>
     <div class="dm-divider"></div>
-    <div class="dm-row">
-      <div class="dm-block">
-        <div class="dm-lbl">📦 Producto</div>
-        <div class="dm-val">${escapeHTML(d.product || '—')}</div>
-      </div>
-      <div class="dm-block">
-        <div class="dm-lbl">🔢 Cantidad</div>
-        <div class="dm-val">${escapeHTML(d.amount || '—')}</div>
-      </div>
+    <div class="dm-block">
+      <div class="dm-lbl">📦 Productos</div>
+      ${modalItems.length ? modalItems.map(item=>`<div class="dm-val">${escapeHTML(item.product || '—')}${item.amount ? ` <span style="color:var(--acc);font-weight:700;">× ${escapeHTML(item.amount)}</span>` : ''}</div>`).join('') : '<div class="dm-val">—</div>'}
     </div>
 
     <div class="dm-row">
