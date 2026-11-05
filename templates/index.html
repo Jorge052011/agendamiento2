@@ -1242,10 +1242,14 @@ function navigateWaze(id){
 }
 
 function getMapTileLayer(isLight){
-  return L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
-    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
-    maxZoom:20, subdomains:'abcd'
-  });
+  return L.tileLayer(
+    'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key={{ CARTO_API_KEY|escapejs }}',
+    {
+      attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
+      maxZoom:20,
+      subdomains:'abcd'
+    }
+  );
 }
 
 function applyMapNightMode(isLight){
