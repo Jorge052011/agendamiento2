@@ -28,7 +28,9 @@ def no_cache(response):
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'index.html', {
+        'CARTO_API_KEY': settings.CARTO_API_KEY,
+    })
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
