@@ -706,58 +706,21 @@ textarea{resize:vertical;min-height:50px;}
           <div class="form-row">
             <div class="field">
               <label>Producto</label>
-              <select id="f-product">
-                <option value="">Seleccionar...</option>
-                <option>8 k ca lav</option>
-                <option>16 k ca lav</option><option>20 k ca lav</option><option>24 k ca lav</option>
-                <option>28 k ca lav</option><option>32 k ca lav</option><option>40 k ca lav</option>
-                <option>20 k ca tal</option><option>40 k ca tal</option>
-                <option>20 k ca café</option><option>40 k ca café</option>
-                <option>8 k lav</option>
-                <option>16 k lav</option><option>20 k lav</option><option>24 k lav</option>
-                <option>28 k lav</option><option>32 k lav</option><option>40 k lav</option>
+              <select id="f-product" onchange="updateAddStockPreview()">
+                <option value="">Cargando catálogo...</option>
               </select>
             </div>
             <div class="field">
               <label>Cantidad</label>
-              <input id="f-amount" type="text" placeholder="Ej: 1">
+              <input id="f-amount" type="text" placeholder="Ej: 1" oninput="updateAddStockPreview()">
             </div>
           </div>
 
-          <!-- BOLSAS FÍSICAS -->
+          <!-- BOLSAS REQUERIDAS SEGÚN COMPOSICIÓN -->
           <div style="background:var(--surf2);border:1px solid var(--brd);border-radius:8px;padding:.6rem .75rem;margin-bottom:.5rem;">
-            <div style="font-size:.7rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;">📦 Bolsas a entregar</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem;">
-              <div style="display:flex;align-items:center;gap:.4rem;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#f0e040;flex-shrink:0;"></div>
-                <span style="font-size:.68rem;flex:1;">Lav. 8kg</span>
-                <input type="number" min="0" id="si-LAV-8" value="0" style="width:46px;background:var(--surf3);border:1px solid var(--brd2);border-radius:4px;color:var(--txt);font-size:.78rem;text-align:center;padding:2px;">
-              </div>
-              <div style="display:flex;align-items:center;gap:.4rem;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#f0e040;flex-shrink:0;"></div>
-                <span style="font-size:.68rem;flex:1;">Lav. 20kg</span>
-                <input type="number" min="0" id="si-LAV-20" value="0" style="width:46px;background:var(--surf3);border:1px solid var(--brd2);border-radius:4px;color:var(--txt);font-size:.78rem;text-align:center;padding:2px;">
-              </div>
-              <div style="display:flex;align-items:center;gap:.4rem;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#1e90ff;flex-shrink:0;"></div>
-                <span style="font-size:.68rem;flex:1;">Lav+C 8kg</span>
-                <input type="number" min="0" id="si-LAV-CA-8" value="0" style="width:46px;background:var(--surf3);border:1px solid var(--brd2);border-radius:4px;color:var(--txt);font-size:.78rem;text-align:center;padding:2px;">
-              </div>
-              <div style="display:flex;align-items:center;gap:.4rem;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#1e90ff;flex-shrink:0;"></div>
-                <span style="font-size:.68rem;flex:1;">Lav+C 20kg</span>
-                <input type="number" min="0" id="si-LAV-CA-20" value="0" style="width:46px;background:var(--surf3);border:1px solid var(--brd2);border-radius:4px;color:var(--txt);font-size:.78rem;text-align:center;padding:2px;">
-              </div>
-              <div style="display:flex;align-items:center;gap:.4rem;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#ff6b2b;flex-shrink:0;"></div>
-                <span style="font-size:.68rem;flex:1;">C+Talco 20kg</span>
-                <input type="number" min="0" id="si-CA-TB-20" value="0" style="width:46px;background:var(--surf3);border:1px solid var(--brd2);border-radius:4px;color:var(--txt);font-size:.78rem;text-align:center;padding:2px;">
-              </div>
-              <div style="display:flex;align-items:center;gap:.4rem;">
-                <div style="width:8px;height:8px;border-radius:50%;background:#a66a3f;flex-shrink:0;"></div>
-                <span style="font-size:.68rem;flex:1;">Café 20kg</span>
-                <input type="number" min="0" id="si-CAF-20" value="0" style="width:46px;background:var(--surf3);border:1px solid var(--brd2);border-radius:4px;color:var(--txt);font-size:.78rem;text-align:center;padding:2px;">
-              </div>
+            <div style="font-size:.7rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;">📦 Bolsas requeridas</div>
+            <div id="add-stock-items" style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem;">
+              <div style="font-size:.68rem;color:var(--mut2);grid-column:1/-1;">Selecciona un producto para calcular las bolsas.</div>
             </div>
           </div>
 
@@ -886,7 +849,7 @@ textarea{resize:vertical;min-height:50px;}
     <div id="page-carga" class="page" style="background:var(--surf);overflow:hidden;">
       <div class="panel-hd">
         <span class="panel-title">📦 Carga del Día</span>
-        <span id="carga-alerta-badge" style="display:none;background:#ff4040;color:#fff;font-size:.65rem;font-weight:700;padding:2px 9px;border-radius:20px;">⚠️ Sin stock suficiente</span>
+        <span id="carga-alerta-badge" style="display:none;background:#ff4040;color:#fff;font-size:.65rem;font-weight:700;padding:2px 9px;border-radius:20px;">⚠️ Carga insuficiente</span>
       </div>
 
       <!-- Fecha -->
@@ -907,20 +870,21 @@ textarea{resize:vertical;min-height:50px;}
       <!-- Cuerpo en dos columnas -->
       <div class="carga-body">
 
-        <!-- COL IZQ: Stock inicial -->
+        <!-- COL IZQ: Carga declarada -->
         <div class="carga-col">
-          <div class="carga-col-title">🏗 Stock al salir de bodega</div>
+          <div class="carga-col-title">🏗 Carga declarada del día</div>
           <div id="carga-sku-list">
             <!-- generado por JS -->
           </div>
           <button class="btn-guardar-stock" onclick="guardarStock()">💾 Guardar carga</button>
+          <button onclick="recalcularCarga()" style="width:100%;margin-top:.35rem;padding:.45rem;background:var(--surf3);border:1px solid var(--brd2);border-radius:6px;color:var(--txt);font-size:.72rem;font-weight:600;cursor:pointer;">🔄 Recalcular según requerido</button>
           <div id="carga-save-msg" style="font-size:.7rem;color:var(--grn);margin-top:.4rem;min-height:1rem;"></div>
         </div>
 
-        <!-- COL DER: Balance en ruta + alertas -->
+        <!-- COL DER: Control de carga + alertas -->
         <div class="carga-col">
           <div id="carga-alerts-container"></div>
-          <div class="carga-col-title">📊 Balance en ruta</div>
+          <div class="carga-col-title">📊 Control de carga</div>
           <div id="carga-balance-list">
             <div class="carga-empty">Cargando...</div>
           </div>
@@ -985,6 +949,7 @@ let calYear=new Date().getFullYear(),calMonth=new Date().getMonth();
 let selectedDate=todayStr();
 let appConfig={google_maps_key:'',departure_points:[]};
 let syncTimer=null;
+let catalog={materials:[],commercial_products:[]};
 
 let lookupTimer=null,currentClient=null,currentAddress=null,addingAddress=false;
 
@@ -995,6 +960,127 @@ function escapeHTML(value){
     .replaceAll('>','&gt;')
     .replaceAll('"','&quot;')
     .replaceAll("'",'&#039;');
+}
+
+// ════════════════════════════════════════════════════════
+//  CATÁLOGO / COMPOSICIÓN
+// ════════════════════════════════════════════════════════
+async function loadCatalog(){
+  try{
+    const res=await fetch('/api/catalog?_='+Date.now());
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    catalog=await res.json();
+  }catch(e){
+    console.error('[CATALOGO] Error:',e);
+    catalog={materials:[],commercial_products:[]};
+  }
+  renderCommercialProductOptions();
+  updateAddStockPreview();
+}
+
+function findCommercialProduct(label){
+  return (catalog.commercial_products||[]).find(p=>p.label===label)||null;
+}
+
+function optionsHtml(values,current,placeholder){
+  const list=(values||[]).slice();
+  const isLegacy=!!current&&!list.includes(current);
+  if(isLegacy)list.push(current);
+  let html=placeholder?`<option value="">${escapeHTML(placeholder)}</option>`:'';
+  html+=list.map(value=>{
+    const label=isLegacy&&value===current?`${value} (histórico)`:value;
+    return `<option value="${escapeHTML(value)}" ${value===current?'selected':''}>${escapeHTML(label)}</option>`;
+  }).join('');
+  return html;
+}
+
+function productOptionsHtml(currentLabel){
+  const values=(catalog.commercial_products||[]).map(p=>p.label);
+  return optionsHtml(values,currentLabel,'Seleccionar...');
+}
+
+function paymentOptionsHtml(current){
+  return optionsHtml(['Transferencia','Efectivo','Pago web','otro'],current,'Seleccionar...');
+}
+
+function driverOptionsHtml(current){
+  return optionsHtml(['jorge','diego','jorge_noche','diego_noche'],current,'Seleccionar...');
+}
+
+function renderCommercialProductOptions(){
+  const select=document.getElementById('f-product');
+  if(!select)return;
+  const current=select.value;
+  select.innerHTML=productOptionsHtml(current);
+}
+
+function requiredMaterialsFor(label,amount){
+  const product=findCommercialProduct(label);
+  if(!product||!product.components||!product.components.length)return {};
+  const match=String(amount??'').match(/\d+/);
+  const qty=match?Number(match[0]):1;
+  const required={};
+  product.components.forEach(component=>{
+    const sku=component.sku;
+    required[sku]=(required[sku]||0)+(Number(component.quantity)||0)*qty;
+  });
+  return required;
+}
+
+function stockPreviewHtml(items){
+  const entries=Object.entries(items||{}).filter(([,qty])=>Number(qty)>0);
+  if(!entries.length){
+    return '<div style="font-size:.68rem;color:var(--mut2);grid-column:1/-1;">Sin bolsas requeridas. Configura la composición en Admin.</div>';
+  }
+  return entries.map(([sku,qty])=>{
+    const material=(catalog.materials||[]).find(m=>m.id===sku);
+    const color=material?.color||'#999999';
+    const name=material?`${material.name} ${material.unit||''}`.trim():sku;
+    return `<div style="display:flex;align-items:center;gap:.4rem;">
+      <div style="width:8px;height:8px;border-radius:50%;background:${escapeHTML(color)};flex-shrink:0;"></div>
+      <span style="font-size:.68rem;flex:1;">${escapeHTML(name)}</span>
+      <strong style="font-size:.74rem;">× ${Number(qty)||0}</strong>
+    </div>`;
+  }).join('');
+}
+
+function updateAddStockPreview(){
+  const container=document.getElementById('add-stock-items');
+  if(!container)return;
+  const label=document.getElementById('f-product')?.value||'';
+  const amount=document.getElementById('f-amount')?.value||'';
+  const product=findCommercialProduct(label);
+  if(label&&product&&(!product.components||!product.components.length)){
+    container.innerHTML='<div style="font-size:.68rem;color:#ff8040;grid-column:1/-1;">⚠️ Producto sin composición configurada.</div>';
+    return;
+  }
+  container.innerHTML=stockPreviewHtml(requiredMaterialsFor(label,amount));
+}
+
+function editStockItemsHtml(delivery){
+  return stockPreviewHtml(delivery.stock_items||{});
+}
+
+function updateEditStockPreview(eid){
+  const container=document.getElementById(`${eid}-stock-items`);
+  if(!container)return;
+  const delivery=deliveries.find(d=>`edit-${d.id}`===eid);
+  const label=document.getElementById(`${eid}-product`)?.value||'';
+  const amount=document.getElementById(`${eid}-amount`)?.value||'';
+  const product=findCommercialProduct(label);
+  if(label&&product&&(!product.components||!product.components.length)){
+    container.innerHTML='<div style="font-size:.68rem;color:#ff8040;grid-column:1/-1;">⚠️ Producto sin composición configurada.</div>';
+    return;
+  }
+  if(delivery&&label===delivery.product&&amount===delivery.amount){
+    container.innerHTML=stockPreviewHtml(delivery.stock_items||{});
+    return;
+  }
+  if(!product&&delivery){
+    container.innerHTML=stockPreviewHtml(delivery.stock_items||{});
+    return;
+  }
+  container.innerHTML=stockPreviewHtml(requiredMaterialsFor(label,amount));
 }
 
 // Google Places state
@@ -1008,6 +1094,7 @@ let googleMapsLoaded=false;
 async function init(){
   initMap();
   await loadConfig();
+  await loadCatalog();
   renderCalendar();
   loadCalSummary();
   await selectDate(selectedDate);
@@ -1155,16 +1242,11 @@ function navigateWaze(id){
 }
 
 function getMapTileLayer(isLight){
-  return L.tileLayer(
-    'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key={{ CARTO_API_KEY|escapejs }}',
-    {
-      attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
-      maxZoom:20,
-      subdomains:'abcd'
-    }
-  );
+  return L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
+    maxZoom:20, subdomains:'abcd'
+  });
 }
-
 
 function applyMapNightMode(isLight){
   const mapEl = document.getElementById('map');
@@ -1461,6 +1543,14 @@ async function addDelivery(){
 
   if(!phone){toast('⚠️ Teléfono requerido');return;}
   if(!driver){toast('⚠️ Repartidor requerido');return;}
+  if(product){
+    const prod=findCommercialProduct(product);
+    if(!prod){toast('⚠️ El producto seleccionado no está activo');return;}
+    if(!prod.components||!prod.components.length){
+      toast('⚠️ Configura la composición del producto en Admin');
+      return;
+    }
+  }
 
   const btn=document.getElementById('btn-add');
   btn.textContent='⏳ Guardando...';btn.disabled=true;
@@ -1537,14 +1627,7 @@ async function addDelivery(){
         product,amount,payment,driver,
         time_start:ts,time_end:te,notes,
         lat:clientData.lat,lng:clientData.lng,
-        stock_items:{
-          'LAV-8':    parseInt(document.getElementById('si-LAV-8').value)||0,
-          'LAV-20':   parseInt(document.getElementById('si-LAV-20').value)||0,
-          'LAV-CA-8': parseInt(document.getElementById('si-LAV-CA-8').value)||0,
-          'LAV-CA-20':parseInt(document.getElementById('si-LAV-CA-20').value)||0,
-          'CA-TB-20': parseInt(document.getElementById('si-CA-TB-20').value)||0,
-          'CAF-20':   parseInt(document.getElementById('si-CAF-20').value)||0,
-        }
+        stock_items:requiredMaterialsFor(product,amount)
       })
     });
 
@@ -1556,7 +1639,7 @@ async function addDelivery(){
       renderAll();
       ['f-phone','f-name','f-address','f-reference','f-amount','f-notes'].forEach(id=>document.getElementById(id).value='');
       ['f-product','f-payment','f-driver'].forEach(id=>document.getElementById(id).value='');
-      ['si-LAV-8','si-LAV-20','si-LAV-CA-8','si-LAV-CA-20','si-CA-TB-20','si-CAF-20'].forEach(id=>{ const el=document.getElementById(id); if(el)el.value='0'; });
+      updateAddStockPreview();
       hideClientBoxes();currentClient=null;currentAddress=null;addingAddress=false;pendingAddressData=null;
       const addrHint=document.getElementById('addr-hint');
       if(addrHint){addrHint.textContent='Selecciona una sugerencia de Google Maps';addrHint.style.color='';}
@@ -1670,10 +1753,23 @@ async function saveEdit(id){
   const payment =document.getElementById(`${eid}-payment`).value;
 
   if(!name){toast('⚠️ El nombre no puede estar vacío');return;}
+  const productDef=findCommercialProduct(product);
+  const compositionChanged=product!==(d.product||'')||amount!==(d.amount||'');
+  if(compositionChanged&&productDef&&productDef.active&&(!productDef.components||!productDef.components.length)){
+    toast('⚠️ Configura la composición del producto en Admin');
+    return;
+  }
 
   // Construir payload
   const notes = document.getElementById(`${eid}-notes`)?.value.trim() || '';
   const patch={name,reference:ref,time_start:ts,time_end:te,driver,product,amount,payment,notes};
+  if(!compositionChanged){
+    patch.stock_items=d.stock_items||{};
+  }else if(productDef&&productDef.components&&productDef.components.length){
+    patch.stock_items=requiredMaterialsFor(product,amount);
+  }else{
+    patch.stock_items={};
+  }
 
   // Teléfono: actualizar cliente y delivery si cambió
   const oldPhone = d.client_phone||'';
@@ -1808,22 +1904,26 @@ function renderList(){
           </div>
           <div class="edit-field" style="grid-column:1/-1">
             <div class="edit-label">Producto</div>
-            <select id="${eid}-product">
-              <option value="">Seleccionar...</option>
-              ${['8 k ca lav','16 k ca lav','20 k ca lav','24 k ca lav','28 k ca lav','32 k ca lav','40 k ca lav','20 k ca tal','40 k ca tal','8 k lav','16 k lav','20 k lav','24 k lav','28 k lav','32 k lav','40 k lav'].map(p=>`<option ${d.product===p?'selected':''}>${p}</option>`).join('')}
+            <select id="${eid}-product" onchange="updateEditStockPreview('${eid}')">
+              ${productOptionsHtml(d.product||'')}
             </select>
           </div>
           <div class="edit-row" style="grid-column:1/-1">
             <div class="edit-field">
               <div class="edit-label">Cantidad</div>
-              <input id="${eid}-amount" type="text" value="${escapeHTML(d.amount||'')}">
+              <input id="${eid}-amount" type="text" value="${escapeHTML(d.amount||'')}" oninput="updateEditStockPreview('${eid}')">
             </div>
             <div class="edit-field">
               <div class="edit-label">Forma de pago</div>
               <select id="${eid}-payment">
-                <option value="">Seleccionar...</option>
-                ${['Efectivo','Transferencia','Débito','Crédito'].map(p=>`<option ${d.payment&&d.payment.toLowerCase()===p.toLowerCase()?'selected':''}>${p}</option>`).join('')}
+                ${paymentOptionsHtml(d.payment||'')}
               </select>
+            </div>
+          </div>
+          <div class="edit-field" style="grid-column:1/-1">
+            <div class="edit-label">Bolsas requeridas</div>
+            <div id="${eid}-stock-items" style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem;background:var(--surf3);border:1px solid var(--brd2);border-radius:6px;padding:.45rem .6rem;">
+              ${editStockItemsHtml(d)}
             </div>
           </div>
           <div class="edit-row" style="grid-column:1/-1">
@@ -1839,13 +1939,9 @@ function renderList(){
           <div class="edit-field" style="grid-column:1/-1">
             <div class="edit-label">Repartidor</div>
             <select id="${eid}-driver">
-              <option value="jorge" ${d.driver==='jorge'?'selected':''}>Jorge</option>
-              <option value="diego" ${d.driver==='diego'?'selected':''}>Diego</option>
-              <option value="jorge_noche" ${d.driver==='jorge_noche'?'selected':''}>Jorge Noche</option>
-              <option value="diego_noche" ${d.driver==='diego_noche'?'selected':''}>Diego Noche</option>
+              ${driverOptionsHtml(d.driver||'')}
             </select>
           </div>
-        </div>
           <div class="edit-field" style="grid-column:1/-1">
             <div class="edit-label">Notas internas</div>
             <textarea id="${eid}-notes" rows="2" style="resize:vertical;min-height:42px">${escapeHTML(d.notes||'')}</textarea>
@@ -2016,7 +2112,7 @@ async function deleteClient(phone){
 //  OPTIMIZADOR
 // ════════════════════════════════════════════════════════
 async function loadConfig(){
-  const r=await fetch('/api/config');
+  const r=await fetch('/api/config?_='+Date.now());
   appConfig=await r.json();
   if(appConfig.google_maps_key){
     loadGoogleMaps(appConfig.google_maps_key);
@@ -3286,6 +3382,8 @@ let cargaDriver      = 'jorge';
 let cargaProducts    = [];
 let cargaData        = null;
 let cargaPollingTimer = null;
+let cargaDirty        = false;
+let cargaKey          = '';
 
 const PRODUCT_COLORS = {
   'LAV-8':    '#f0e040',
@@ -3305,14 +3403,11 @@ async function initCarga(){
     dateEl.value = ds;
   }
 
-  // Cargar catálogo de productos solo si no está cargado
-  if(!cargaProducts.length){
-    try {
-      const res = await fetch('/api/products');
-      cargaProducts = await res.json();
-    } catch(e){ cargaProducts = []; }
-    renderSkuInputs();
+  if(!catalog.materials.length){
+    await loadCatalog();
   }
+  cargaProducts = (catalog.materials||[]).slice();
+  document.getElementById('carga-sku-list').dataset.sig='';
 
   await loadCarga();
   startCargaPolling();
@@ -3342,32 +3437,47 @@ function startCargaPolling(){
   }, 15000);
 }
 
-function renderSkuInputs(){
+function renderSkuInputs(products){
   const container = document.getElementById('carga-sku-list');
-  if(!cargaProducts.length){ container.innerHTML='<div class="carga-empty">Sin productos</div>'; return; }
+  const list = products || [];
+  if(!list.length){ container.innerHTML='<div class="carga-empty">Sin materiales activos</div>'; return; }
 
-  container.innerHTML = cargaProducts.map(p => {
-    const color = PRODUCT_COLORS[p.id] || '#aaa';
-    const suggested = (cargaData && cargaData.demand) ? (cargaData.demand[p.id] || 0) : 0;
-    const current   = (cargaData && cargaData.initial) ? (cargaData.initial[p.id] || 0) : 0;
+  const required = (cargaData && cargaData.required) || {};
+  const loaded   = (cargaData && cargaData.loaded) || {};
+  const hasSaved = !!(cargaData && cargaData.has_saved_load);
+
+  container.innerHTML = list.map(p => {
+    const color = p.color || PRODUCT_COLORS[p.id] || '#aaa';
+    const req = Number(required[p.id]||0);
+    const current = hasSaved ? Number(loaded[p.id]||0) : req;
+    const inactive = p.active === false ? ' <span style="font-size:.6rem;color:var(--mut);">(inactivo)</span>' : '';
     return `
       <div class="sku-row">
         <div>
           <div style="display:flex;align-items:center;gap:.4rem;">
             <div class="sku-dot" style="background:${color};"></div>
             <div>
-              <div class="sku-name">${escapeHTML(p.name)}</div>
+              <div class="sku-name">${escapeHTML(p.name)}${inactive}</div>
               <div class="sku-unit">${escapeHTML(p.unit)}</div>
             </div>
           </div>
         </div>
         <div class="sku-suggested">
-          <div>Min:</div>
-          <div class="sug-val" id="sug-${p.id}">${suggested}</div>
+          <div>Requerido:</div>
+          <div class="sug-val" id="sug-${p.id}">${req}</div>
         </div>
-        <input class="sku-input" type="number" min="0" id="sku-${p.id}" value="${current}" placeholder="0">
+        <input class="sku-input" type="number" min="0" id="sku-${p.id}" value="${current}" placeholder="0" oninput="cargaDirty=true">
       </div>`;
   }).join('');
+}
+
+function ensureSkuInputs(products){
+  const container = document.getElementById('carga-sku-list');
+  const sig = (products||[]).map(p=>p.id).join('|');
+  if(container.dataset.sig !== sig){
+    renderSkuInputs(products);
+    container.dataset.sig = sig;
+  }
 }
 
 async function loadCarga(){
@@ -3386,17 +3496,27 @@ async function loadCarga(){
   console.log('📦 Carga data:', cargaData);
   console.log('📋 Pedidos del día:', cargaData.deliveries_detail);
 
-  // Actualizar sugerencias y valores actuales en inputs
-  if(cargaProducts.length){
-    cargaProducts.forEach(p => {
-      const sugEl = document.getElementById('sug-'+p.id);
-      const inpEl = document.getElementById('sku-'+p.id);
-      if(sugEl) sugEl.textContent = cargaData.demand[p.id] || 0;
-      if(inpEl && !inpEl.matches(':focus')){
-        inpEl.value = cargaData.initial[p.id] || 0;
-      }
-    });
+  const key = `${date}|${cargaDriver}`;
+  if(cargaKey !== key){
+    cargaDirty = false;
+    cargaKey = key;
   }
+
+  cargaProducts = (cargaData.products||[]).slice();
+  ensureSkuInputs(cargaProducts);
+
+  const required = cargaData.required || {};
+  const loaded   = cargaData.loaded || {};
+  const hasSaved = !!cargaData.has_saved_load;
+  cargaProducts.forEach(p => {
+    const sugEl = document.getElementById('sug-'+p.id);
+    const inpEl = document.getElementById('sku-'+p.id);
+    const req = Number(required[p.id]||0);
+    if(sugEl) sugEl.textContent = req;
+    if(inpEl && !inpEl.matches(':focus') && !cargaDirty){
+      inpEl.value = hasSaved ? Number(loaded[p.id]||0) : req;
+    }
+  });
 
   renderBalance();
   renderAlerts();
@@ -3407,16 +3527,18 @@ async function loadCarga(){
 function renderBalance(){
   if(!cargaData) return;
   const container = document.getElementById('carga-balance-list');
-  const { products, balance, delivered, pending, initial } = cargaData;
+  const { products, required={}, loaded={}, delivered={} } = cargaData;
+  const hasSaved = !!cargaData.has_saved_load;
 
   const rows = products.map(p => {
     const pid  = p.id;
-    const ini  = initial[pid]    || 0;
-    const del  = delivered[pid]  || 0;
-    const pend = pending[pid]    || 0;
-    const bal  = balance[pid]    || 0;
-    const color = PRODUCT_COLORS[pid] || '#aaa';
-    const pct  = ini > 0 ? Math.round((del / ini) * 100) : 0;
+    const req  = Number(required[pid]||0);
+    const car  = Number((hasSaved ? loaded : required)[pid]||0);
+    const del  = Number(delivered[pid]||0);
+    const diff = car - req;
+    const color = p.color || PRODUCT_COLORS[pid] || '#aaa';
+    const pct  = req > 0 ? Math.min(100, Math.round((car / req) * 100)) : 0;
+    const diffColor = diff < 0 ? '#ff6060' : (diff > 0 ? 'var(--acc)' : 'var(--grn)');
 
     return `
       <div class="balance-card">
@@ -3430,26 +3552,30 @@ function renderBalance(){
           </div>
         </div>
         <div class="balance-bars">
+          <div class="balance-stat pendiente">
+            <div class="balance-stat-val">${req}</div>
+            <div class="balance-stat-lbl">Requerido</div>
+          </div>
           <div class="balance-stat disponible">
-            <div class="balance-stat-val">${bal}</div>
-            <div class="balance-stat-lbl">Disponible</div>
+            <div class="balance-stat-val">${car}</div>
+            <div class="balance-stat-lbl">${hasSaved?'Cargado':'Cargado sugerido'}</div>
           </div>
           <div class="balance-stat entregado">
             <div class="balance-stat-val">${del}</div>
             <div class="balance-stat-lbl">Entregado</div>
           </div>
-          <div class="balance-stat pendiente">
-            <div class="balance-stat-val">${pend}</div>
-            <div class="balance-stat-lbl">Pendiente</div>
-          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:.35rem;font-size:.62rem;color:var(--mut);">
+          <span>Carga vs requerido</span>
+          <span style="color:${diffColor};font-weight:700;">${diff>0?'+':''}${diff}</span>
         </div>
         <div class="balance-progress">
-          <div class="balance-progress-fill" style="width:${pct}%;background:${color};"></div>
+          <div class="balance-progress-fill" style="width:${pct}%;background:${diff<0?'#ff6060':color};"></div>
         </div>
       </div>`;
   });
 
-  container.innerHTML = rows.join('') || '<div class="carga-empty">Sin datos de stock aún</div>';
+  container.innerHTML = rows.join('') || '<div class="carga-empty">Sin materiales para esta carga</div>';
 }
 
 function renderAlerts(){
@@ -3468,40 +3594,45 @@ function renderAlerts(){
   container.innerHTML = alerts.map(a => `
     <div class="alert-banner">
       ⚠️ <strong>${escapeHTML(a.product_name)} (${escapeHTML(a.unit)})</strong>:
-      Faltan <strong>${a.shortage}</strong> unidades —
-      tienes ${a.balance} pero quedan ${a.pending} por entregar.
+      Carga insuficiente, faltan <strong>${a.shortage}</strong> —
+      requerido ${a.required}, cargado ${a.loaded}, pendiente ${a.pending}.
     </div>
   `).join('');
 }
 
 function renderDebugPanel(){
   if(!cargaData) return;
-  const { deliveries_count, deliveries_detail, delivered, demand } = cargaData;
+  const { deliveries_count, deliveries_detail, required, has_saved_load } = cargaData;
 
-  // Contar pedidos con y sin stock_items
+  // Contar pedidos con y sin composición de bolsas
   const conItems    = (deliveries_detail||[]).filter(d => Object.values(d.stock_items||{}).some(v=>v>0));
   const sinItems    = (deliveries_detail||[]).filter(d => !Object.values(d.stock_items||{}).some(v=>v>0));
   const completados = (deliveries_detail||[]).filter(d => d.completed);
 
-  const anyDemand   = Object.values(demand||{}).some(v=>v>0);
-  const anyDelivered= Object.values(delivered||{}).some(v=>v>0);
+  const anyRequired = Object.values(required||{}).some(v=>v>0);
 
   let html = `
     <div style="background:var(--surf3);border:1px solid var(--brd2);border-radius:8px;padding:.6rem .8rem;margin-bottom:.6rem;font-size:.68rem;">
       <div style="font-weight:700;color:var(--mut2);margin-bottom:.35rem;">🔍 Diagnóstico</div>
       <div style="color:var(--txt);margin-bottom:.2rem;">Pedidos encontrados: <strong>${deliveries_count}</strong> &nbsp;|&nbsp; Completados: <strong>${completados.length}</strong></div>
       <div style="color:${conItems.length>0?'var(--grn)':'#ff6060'};margin-bottom:.2rem;">Con bolsas definidas: <strong>${conItems.length}</strong> ${conItems.length===0?'← aquí está el problema':''}</div>
-      <div style="color:var(--mut2);margin-bottom:.35rem;">Sin bolsas definidas: <strong>${sinItems.length}</strong></div>`;
+      <div style="color:var(--mut2);margin-bottom:.35rem;">Sin bolsas definidas: <strong>${sinItems.length}</strong> &nbsp;|&nbsp; Carga guardada: <strong>${has_saved_load?'Sí':'No'}</strong></div>`;
 
   if(sinItems.length > 0){
     html += `<div style="color:#ffaa40;border-top:1px solid var(--brd);padding-top:.35rem;margin-top:.2rem;">
-      ⚠️ Los pedidos sin bolsas fueron creados antes de este módulo. Para que el balance funcione, edita cada pedido y agrega las bolsas, o usa el botón "Registrar entrega manual" abajo.
+      ⚠️ Los pedidos sin bolsas fueron creados antes de este módulo. Edita cada pedido para recalcular su composición.
     </div>`;
   }
 
-  if(!anyDemand && !anyDelivered && deliveries_count > 0){
+  if(!anyRequired && deliveries_count > 0){
     html += `<div style="color:#ff6060;border-top:1px solid var(--brd);padding-top:.35rem;margin-top:.2rem;">
-      ❌ Hay pedidos pero sin stock_items → el balance no puede calcularse automáticamente.
+      ❌ Hay pedidos pero no hay requerido calculado. Configura la composición del producto en Admin.
+    </div>`;
+  }
+
+  if(!has_saved_load && anyRequired){
+    html += `<div style="color:var(--mut2);border-top:1px solid var(--brd);padding-top:.35rem;margin-top:.2rem;">
+      ℹ️ Aún no hay carga declarada para esta fecha; se muestra el requerido como sugerencia.
     </div>`;
   }
 
@@ -3537,8 +3668,8 @@ async function renderCargaPedidos(date){
       ? Object.entries(items)
           .filter(([,qty]) => qty > 0)
           .map(([pid, qty]) => {
-            const prod = (cargaProducts||[]).find(p => p.id === pid);
-            const label = prod ? prod.unit : pid;
+            const prod = (cargaData.products||cargaProducts||[]).find(p => p.id === pid);
+            const label = prod ? `${prod.name} (${prod.unit})` : pid;
             return `<div class="carga-pedido-sku">${escapeHTML(label)}: <span>${Number(qty)||0}</span></div>`;
           }).join('')
       : '<span style="font-size:.63rem;color:#ff8040;">⚠️ Sin bolsas registradas</span>';
@@ -3553,27 +3684,43 @@ async function renderCargaPedidos(date){
   }).join('');
 }
 
+function recalcularCarga(){
+  if(!cargaData){ toast('⚠️ No hay datos de carga'); return; }
+  if(!confirm('¿Reemplazar la carga declarada por el requerido actual? Luego deberás guardar.')) return;
+
+  const required = cargaData.required || {};
+  (cargaData.products||cargaProducts||[]).forEach(p => {
+    const el = document.getElementById('sku-'+p.id);
+    if(el) el.value = Number(required[p.id]||0);
+  });
+  cargaDirty = true;
+  toast('✅ Carga actualizada al requerido. Presiona Guardar carga.');
+}
+
 async function guardarStock(){
   const date = document.getElementById('carga-date').value;
   if(!date){ toast('⚠️ Selecciona una fecha'); return; }
 
-  const initial = {};
-  (cargaProducts || []).forEach(p => {
+  const loaded = {};
+  (cargaData?.products||cargaProducts||[]).forEach(p => {
     const el = document.getElementById('sku-'+p.id);
-    initial[p.id] = el ? parseInt(el.value)||0 : 0;
+    loaded[p.id] = el ? parseInt(el.value)||0 : 0;
   });
 
   try {
     const res = await fetch('/api/stock',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ date, driver: cargaDriver, initial })
+      body: JSON.stringify({ date, driver: cargaDriver, loaded })
     });
     if(res.ok){
       const msg = document.getElementById('carga-save-msg');
-      msg.textContent = '✅ Guardado correctamente';
+      msg.textContent = '✅ Carga guardada correctamente';
       setTimeout(()=>{ msg.textContent=''; }, 3000);
+      cargaDirty = false;
       await loadCarga();
+    } else {
+      toast('❌ No se pudo guardar la carga');
     }
   } catch(e){ toast('❌ Error al guardar'); }
 }

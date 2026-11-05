@@ -13,7 +13,8 @@ urlpatterns = [
     path('api/config',    views.config,    name='config'),
     # Ruta optimizada guardada (espejo servidor)
     path('api/opt-route', views.opt_route, name='opt_route'),
-    # Stock / Carga del Día
+    # Catálogo / Carga del Día
+    path('api/catalog',       views.catalog,       name='catalog'),
     path('api/products',      views.products,      name='products'),
     path('api/stock',         views.stock,          name='stock'),
     path('api/stock/summary', views.stock_summary,  name='stock_summary'),
