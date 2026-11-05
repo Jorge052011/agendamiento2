@@ -77,6 +77,70 @@ class ClientAddress(models.Model):
         }
 
 
+class Material(models.Model):
+    sku        = models.CharField(max_length=20, primary_key=True)
+    name       = models.CharField(max_length=200)
+    unit       = models.CharField(max_length=50, blank=True)
+    color      = models.CharField(max_length=20, default='#999999')
+    active     = models.BooleanField(default=True)
+    sort_order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        db_table = 'materials'
+        ordering = ['sort_order', 'sku']
+
+    def to_dict(self):
+        return {
+            'id':         self.sku,
+            'sku':        self.sku,
+            'name':       self.name,
+            'unit':       self.unit,
+            'color':      self.color,
+            'active':     self.active,
+            'sort_order': self.sort_order,
+        }
+
+
+class CommercialProduct(models.Model):
+    label      = models.CharField(max_length=100, unique=True)
+    active     = models.BooleanField(default=True)
+    sort_order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        db_table = 'commercial_products'
+        ordering = ['sort_order', 'label']
+
+    def to_dict(self):
+        return {
+            'id':         self.id,
+            'label':      self.label,
+            'name':       self.label,
+            'active':     self.active,
+            'sort_order': self.sort_order,
+            'components': [
+                {
+                    'sku':      c.material_id,
+                    'quantity': c.quantity,
+                }
+                for c in self.components.select_related('material').all()
+            ],
+        }
+
+
+class ProductComponent(models.Model):
+    product  = models.ForeignKey(CommercialProduct, on_delete=models.CASCADE, related_name='components')
+    material = models.ForeignKey(Material, on_delete=models.PROTECT, related_name='components')
+    quantity = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        db_table = 'product_components'
+        unique_together = ('product', 'material')
+        ordering = ['material__sort_order', 'material_id']
+
+    def __str__(self):
+        return f'{self.product.label} → {self.material_id} x {self.quantity}'
+
+
 class Delivery(models.Model):
     id              = models.CharField(max_length=20, primary_key=True)
     delivery_date   = models.DateField()
@@ -88,6 +152,8 @@ class Delivery(models.Model):
     place_id        = models.CharField(max_length=200, blank=True)
     reference       = models.TextField(blank=True)
     product         = models.CharField(max_length=200, blank=True)
+    product_ref     = models.ForeignKey(CommercialProduct, null=True, blank=True,
+                                        on_delete=models.SET_NULL, related_name='deliveries')
     amount          = models.CharField(max_length=100, blank=True)
     payment         = models.CharField(max_length=100, blank=True)
     driver          = models.CharField(max_length=100, blank=True)
@@ -117,6 +183,7 @@ class Delivery(models.Model):
             'place_id':          self.place_id,
             'reference':         self.reference,
             'product':           self.product,
+            'product_ref_id':    self.product_ref_id,
             'amount':            self.amount,
             'payment':           self.payment,
             'driver':            self.driver,

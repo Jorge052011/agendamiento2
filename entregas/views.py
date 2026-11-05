@@ -1,4 +1,5 @@
 import json
+import re
 from datetime import datetime, date
 from collections import defaultdict
 
@@ -8,7 +9,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 
-from .models import Client, ClientAddress, Delivery, DailyStock, OptRoute, Config
+from .models import (
+    Client, ClientAddress, Delivery, DailyStock, OptRoute, Config,
+    Material, CommercialProduct,
+)
 from .utils import normalize_phone
 
 
@@ -24,9 +28,8 @@ def no_cache(response):
 # ═══════════════════════════════════════════════════════════════════════════════
 
 def index(request):
-    return render(request, 'index.html', {
-        'CARTO_API_KEY': settings.CARTO_API_KEY,
-    })
+    return render(request, 'index.html')
+
 
 # ═══════════════════════════════════════════════════════════════════════════════
 #  CLIENTES
@@ -173,6 +176,67 @@ def client_address_detail(request, phone, address_id):
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
+#  CATÁLOGO Y COMPOSICIÓN
+# ═══════════════════════════════════════════════════════════════════════════════
+
+def _commercial_product_for(label):
+    label = (label or '').strip()
+    if not label:
+        return None
+    return CommercialProduct.objects.filter(label=label).first()
+
+
+def _parse_quantity(value):
+    """Extrae la cantidad numérica de campos históricos como '1' o '2 bolsas'."""
+    if value is None:
+        return 0
+    match = re.search(r'\d+', str(value))
+    return int(match.group()) if match else 0
+
+
+def _required_materials_for(product_label, amount):
+    """Calcula las bolsas requeridas desde la composición del producto."""
+    product = _commercial_product_for(product_label)
+    if not product or not product.components.exists():
+        return None
+
+    qty = _parse_quantity(amount) or 1
+    required = {}
+    for component in product.components.all():
+        sku = component.material_id
+        required[sku] = required.get(sku, 0) + (component.quantity * qty)
+    return required
+
+
+def _prepare_delivery_catalog(data, current_delivery=None):
+    """Completa product_ref y stock_items sin destruir valores históricos."""
+    product_label = data.get('product', current_delivery.product if current_delivery else '')
+    amount = data.get('amount', current_delivery.amount if current_delivery else '')
+    product = _commercial_product_for(product_label)
+
+    product_changed = (
+        current_delivery is None or
+        (product_label or '') != (current_delivery.product or '')
+    )
+    amount_changed = (
+        current_delivery is None or
+        (amount or '') != (current_delivery.amount or '')
+    )
+
+    if product_changed:
+        data['product_ref_id'] = product.id if product else None
+
+    if product_changed or amount_changed:
+        required = _required_materials_for(product_label, amount)
+        if required is not None:
+            data['stock_items'] = required
+        elif product and product.active:
+            raise ValueError(f'El producto "{product.label}" no tiene composición configurada')
+
+    return data
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
 #  ENTREGAS
 # ═══════════════════════════════════════════════════════════════════════════════
 
@@ -191,6 +255,11 @@ def deliveries(request):
 
     # POST
     data   = json.loads(request.body)
+    try:
+        _prepare_delivery_catalog(data)
+    except ValueError as exc:
+        return JsonResponse({"error": str(exc)}, status=400)
+
     phone  = normalize_phone(data.get("phone", ""))
     client = None
     try:
@@ -238,6 +307,7 @@ def deliveries(request):
         reference        = (data.get("reference", "").strip() or
                             (client_address.reference if client_address else (client.reference if client else ""))),
         product          = data.get("product", "").strip(),
+        product_ref_id   = data.get("product_ref_id") or data.get("product_ref"),
         amount           = data.get("amount", "").strip(),
         payment          = data.get("payment", "").strip(),
         driver           = driver,
@@ -269,6 +339,11 @@ def delivery_detail(request, delivery_id):
         data = json.loads(request.body)
     except Exception:
         return JsonResponse({"error": "JSON inválido"}, status=400)
+
+    try:
+        _prepare_delivery_catalog(data, current_delivery=delivery)
+    except ValueError as exc:
+        return JsonResponse({"error": str(exc)}, status=400)
 
     for k, v in data.items():
         if not hasattr(delivery, k):
@@ -325,7 +400,9 @@ def config(request):
         except Config.DoesNotExist:
             pass
         key = settings.GOOGLE_MAPS_API_KEY or ""
-        return JsonResponse({"google_maps_key": key, "departure_points": departure_points})
+        return no_cache(JsonResponse({
+            "google_maps_key": key, "departure_points": departure_points,
+        }))
 
     data = json.loads(request.body)
     if "departure_points" in data:
@@ -375,25 +452,74 @@ def opt_route(request):
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  PRODUCTOS
+#  CATÁLOGO / MATERIALES
 # ═══════════════════════════════════════════════════════════════════════════════
 
-PRODUCTS = [
-    {"id": "LAV-8",     "name": "Arena Lavanda",             "unit": "Bolsa 8kg",  "color": "#f0e040"},
-    {"id": "LAV-20",    "name": "Arena Lavanda",             "unit": "Bolsa 20kg", "color": "#f0e040"},
-    {"id": "LAV-CA-8",  "name": "Arena Lavanda + Carbón",    "unit": "Bolsa 8kg",  "color": "#40c8f0"},
-    {"id": "LAV-CA-20", "name": "Arena Lavanda + Carbón",    "unit": "Bolsa 20kg", "color": "#40c8f0"},
-    {"id": "CA-TB-20",  "name": "Arena Carbón + Talco Bebé", "unit": "Bolsa 20kg", "color": "#f04090"},
-    {"id": "CAF-20",    "name": "Bentonita Aroma Café",      "unit": "Bolsa 20kg", "color": "#a66a3f"},
-]
+def _active_materials_payload():
+    return [
+        material.to_dict()
+        for material in Material.objects.filter(active=True).order_by('sort_order', 'sku')
+    ]
+
+
+def _active_commercial_products_payload():
+    products = (
+        CommercialProduct.objects
+        .filter(active=True)
+        .prefetch_related('components__material')
+        .order_by('sort_order', 'label')
+    )
+    result = []
+    for product in products:
+        item = product.to_dict()
+        item['has_composition'] = bool(item['components'])
+        result.append(item)
+    return result
+
 
 @require_http_methods(["GET"])
 def products(request):
-    return JsonResponse(PRODUCTS, safe=False)
+    """Catálogo de materiales activos (compatibilidad con Carga del Día)."""
+    return JsonResponse(_active_materials_payload(), safe=False)
+
+
+@require_http_methods(["GET"])
+def catalog(request):
+    return no_cache(JsonResponse({
+        "materials": _active_materials_payload(),
+        "commercial_products": _active_commercial_products_payload(),
+    }))
+
+
+def _stock_products_payload(deliveries_qs, loaded):
+    """Materiales activos + SKUs históricos con movimiento en la fecha."""
+    material_map = {material.sku: material for material in Material.objects.all()}
+    skus = {
+        material.sku for material in material_map.values() if material.active
+    }
+    for delivery in deliveries_qs:
+        skus.update((delivery.stock_items or {}).keys())
+    skus.update((loaded or {}).keys())
+
+    def sort_key(sku):
+        material = material_map.get(sku)
+        return (material.sort_order if material else 9999, sku)
+
+    result = []
+    for sku in sorted(skus, key=sort_key):
+        material = material_map.get(sku)
+        if material:
+            result.append(material.to_dict())
+        else:
+            result.append({
+                'id': sku, 'sku': sku, 'name': sku, 'unit': '',
+                'color': '#999999', 'active': False, 'sort_order': 9999,
+            })
+    return result
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-#  STOCK DIARIO
+#  CARGA DEL DÍA
 # ═══════════════════════════════════════════════════════════════════════════════
 
 @csrf_exempt
@@ -406,89 +532,105 @@ def stock(request):
         qs = Delivery.objects.filter(delivery_date=date_filter)
         if driver_filter:
             qs = qs.filter(driver=driver_filter)
-
-        demand    = {p["id"]: 0 for p in PRODUCTS}
-        delivered = {p["id"]: 0 for p in PRODUCTS}
-
-        for d in qs:
-            items = d.stock_items or {}
-            for pid, qty in items.items():
-                if pid in demand:
-                    demand[pid] += int(qty or 0)
-                if d.completed and pid in delivered:
-                    delivered[pid] += int(qty or 0)
-
-        pending = {pid: demand[pid] - delivered[pid] for pid in demand}
+        deliveries_list = list(qs)
 
         try:
             stock_entry = DailyStock.objects.get(date=date_filter, driver=driver_filter)
-            initial = stock_entry.initial
+            loaded_saved = stock_entry.initial or {}
+            has_saved_load = True
         except DailyStock.DoesNotExist:
-            initial = {}
+            loaded_saved = {}
+            has_saved_load = False
 
-        balance = {}
-        alerts  = []
-        for p in PRODUCTS:
-            pid = p["id"]
-            ini = int(initial.get(pid, 0))
-            bal = ini - delivered.get(pid, 0)
-            balance[pid] = bal
-            if bal < pending.get(pid, 0):
-                alerts.append({
-                    "product_id":   pid,
-                    "product_name": p["name"],
-                    "unit":         p["unit"],
-                    "balance":      bal,
-                    "pending":      pending[pid],
-                    "shortage":     pending[pid] - bal,
-                })
+        stock_products = _stock_products_payload(deliveries_list, loaded_saved)
+        skus = [product['id'] for product in stock_products]
+        required  = {sku: 0 for sku in skus}
+        delivered = {sku: 0 for sku in skus}
+
+        for delivery in deliveries_list:
+            for sku, qty in (delivery.stock_items or {}).items():
+                qty = int(qty or 0)
+                if sku not in required:
+                    continue
+                required[sku] += qty
+                if delivery.completed:
+                    delivered[sku] += qty
+
+        loaded = {sku: int(loaded_saved.get(sku, 0) or 0) for sku in skus}
+        pending = {sku: required[sku] - delivered[sku] for sku in skus}
+        coverage = {sku: loaded[sku] - required[sku] for sku in skus}
+
+        alerts = []
+        if has_saved_load:
+            for product in stock_products:
+                sku = product['id']
+                if loaded[sku] < required[sku]:
+                    alerts.append({
+                        'product_id':   sku,
+                        'product_name': product['name'],
+                        'unit':         product['unit'],
+                        'loaded':       loaded[sku],
+                        'required':     required[sku],
+                        'shortage':     required[sku] - loaded[sku],
+                    })
 
         return JsonResponse({
             "date": date_filter, "driver": driver_filter,
-            "products": PRODUCTS, "demand": demand,
+            "products": stock_products,
+            "required": required, "demand": required,
+            "loaded": loaded, "initial": loaded,
             "delivered": delivered, "pending": pending,
-            "initial": initial, "balance": balance, "alerts": alerts,
-            "deliveries_count": qs.count(),
+            "coverage": coverage, "has_saved_load": has_saved_load,
+            "alerts": alerts,
+            "deliveries_count": len(deliveries_list),
             "deliveries_detail": [
                 {"id": d.id, "name": d.name, "completed": d.completed,
                  "driver": d.driver, "stock_items": d.stock_items or {}}
-                for d in qs
+                for d in deliveries_list
             ],
         })
 
     # POST
-    data   = json.loads(request.body)
-    day    = data.get("date", date.today().isoformat())
-    driver = data.get("driver", "").lower().strip()
-    initial = data.get("initial", {})
+    data    = json.loads(request.body)
+    day     = data.get("date", date.today().isoformat())
+    driver  = data.get("driver", "").lower().strip()
+    loaded  = data.get("loaded", data.get("initial", {}))
 
     if not driver:
         return JsonResponse({"error": "driver requerido"}, status=400)
 
     DailyStock.objects.update_or_create(
         date=day, driver=driver,
-        defaults={"initial": initial}
+        defaults={"initial": loaded}
     )
-    return JsonResponse({"ok": True, "date": day, "driver": driver, "initial": initial})
+    return JsonResponse({
+        "ok": True, "date": day, "driver": driver,
+        "loaded": loaded, "initial": loaded,
+    })
 
 
 @require_http_methods(["GET"])
 def stock_summary(request):
     date_filter = request.GET.get("date", date.today().isoformat())
     qs = Delivery.objects.filter(delivery_date=date_filter)
+    stock_products = _stock_products_payload(list(qs), {})
+    skus = [product['id'] for product in stock_products]
 
     summary = {}
     for driver in ["jorge", "diego", "otro"]:
-        demand = {p["id"]: 0 for p in PRODUCTS}
+        required = {sku: 0 for sku in skus}
         driver_qs = qs.filter(driver=driver)
-        for d in driver_qs:
-            items = d.stock_items or {}
-            for pid, qty in items.items():
-                if pid in demand:
-                    demand[pid] += int(qty or 0)
+        for delivery in driver_qs:
+            for sku, qty in (delivery.stock_items or {}).items():
+                if sku in required:
+                    required[sku] += int(qty or 0)
         summary[driver] = {
             "total_deliveries": driver_qs.count(),
-            "demand": demand,
+            "required": required,
+            "demand": required,
         }
 
-    return JsonResponse({"date": date_filter, "summary": summary, "products": PRODUCTS})
+    return JsonResponse({
+        "date": date_filter, "summary": summary,
+        "products": stock_products,
+    })
