@@ -158,6 +158,7 @@ class Delivery(models.Model):
     items           = models.JSONField(default=list, blank=True)
     payment         = models.CharField(max_length=100, blank=True)
     driver          = models.CharField(max_length=100, blank=True)
+    route_order     = models.PositiveIntegerField(null=True, blank=True)
     time_start      = models.CharField(max_length=10, blank=True)
     time_end        = models.CharField(max_length=10, blank=True)
     notes           = models.TextField(blank=True)
@@ -203,6 +204,7 @@ class Delivery(models.Model):
             'items':             items,
             'payment':           self.payment,
             'driver':            self.driver,
+            'route_order':       self.route_order,
             'time_start':        self.time_start,
             'time_end':          self.time_end,
             'notes':             self.notes,
