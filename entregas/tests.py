@@ -185,3 +185,42 @@ class CatalogAndLoadTests(TestCase):
         response = self.client.get('/api/stock/summary?date=2026-11-05')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()['summary']['jorge']['required']['LAV-8'], 4)
+
+    def test_create_delivery_accepts_route_order(self):
+        response = self.create_delivery(route_order=3)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()['route_order'], 3)
+
+    def test_patch_route_order_persists_and_orders_deliveries(self):
+        first = self.create_delivery(name='Primero', amount='1').json()
+        second = self.create_delivery(name='Segundo', amount='1').json()
+
+        response = self.post_json(
+            f"/api/deliveries/{second['id']}", {'route_order': 1}, method='patch')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['route_order'], 1)
+
+        response = self.post_json(
+            f"/api/deliveries/{first['id']}", {'route_order': 2}, method='patch')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['route_order'], 2)
+
+        first_delivery = Delivery.objects.get(id=first['id'])
+        second_delivery = Delivery.objects.get(id=second['id'])
+        self.assertEqual(second_delivery.route_order, 1)
+        self.assertEqual(first_delivery.route_order, 2)
+
+        response = self.client.get('/api/deliveries?date=2026-11-05')
+        self.assertEqual(response.status_code, 200)
+        ids = [d['id'] for d in response.json()]
+        self.assertEqual(ids, [second['id'], first['id']])
+
+    def test_deliveries_without_route_order_go_last(self):
+        unordered = self.create_delivery(name='Sin orden', amount='1').json()
+        ordered = self.create_delivery(name='Con orden', amount='1').json()
+        self.post_json(
+            f"/api/deliveries/{ordered['id']}", {'route_order': 1}, method='patch')
+
+        response = self.client.get('/api/deliveries?date=2026-11-05')
+        ids = [d['id'] for d in response.json()]
+        self.assertEqual(ids, [ordered['id'], unordered['id']])

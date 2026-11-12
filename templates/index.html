@@ -1818,7 +1818,8 @@ async function deleteDelivery(id){
     await loadCalSummary();renderAll();refreshMarkers();toast('🗑️ Eliminada');
   }catch(e){toast('❌ Sin conexión con el servidor');}
 }
-async function patchDelivery(id,data){
+async function patchDelivery(id,data,opts){
+  const silent = !!(opts && opts.silent);
   try{
     const targetId=String(id);
     const r=await fetch(`/api/deliveries/${encodeURIComponent(targetId)}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
@@ -1826,10 +1827,12 @@ async function patchDelivery(id,data){
       const u=await r.json();
       const i=deliveries.findIndex(x=>String(x.id)===targetId);
       if(i>-1)deliveries[i]=u;
-      renderAll();refreshMarkers();
-      // Actualizar columna del repartidor en Mi Ruta si está visible
-      if(document.getElementById('page-reparto')?.classList.contains('active')){
-        renderAllDriverCols();
+      if(!silent){
+        renderAll();refreshMarkers();
+        // Actualizar columna del repartidor en Mi Ruta si está visible
+        if(document.getElementById('page-reparto')?.classList.contains('active')){
+          renderAllDriverCols();
+        }
       }
     }
     else{const err=await r.json().catch(()=>({}));toast('❌ Error al guardar: '+(err.error||r.status));}
@@ -3212,12 +3215,28 @@ function verRepartoEnMapa(driver){
   toast(`🗺️ ${stops.length} paradas de ${driver.charAt(0).toUpperCase()+driver.slice(1)} desde ${resolvedOrigin.name || 'origen'}`);
 }
 
+// ── Persistir route_order de las paradas en el servidor ──────────────────
+async function persistRouteOrderForStops(ordered){
+  await Promise.all(ordered.map((d, i) => {
+    const n = i + 1;
+    d.route_order = n;
+    return patchDelivery(d.id, { route_order: n }, { silent: true });
+  }));
+}
+
+function markRepartoOrderSaved(driver){
+  repartoState[driver].dirty = false;
+  const btn = document.getElementById(`reparto-save-${driver}`);
+  if(btn){ btn.classList.remove('dirty'); btn.textContent='✅ Orden guardado'; }
+}
+
 // ── Guardar orden + DP del repartidor en servidor ─────────────────────────
 async function saveRepartoOrder(driver){
   const dp = getResolvedRepartoDP(driver);
   if(!dp?.id){ toast(`⚠️ Selecciona punto de partida para ${driver}`); return; }
   const stops = getSortedStops(driver);
   if(!stops.length){ toast('Sin repartos para guardar'); return; }
+  stops.forEach((s, i) => { s.route_order = i + 1; });
   try{
     await fetch('/api/opt-route',{
       method:'POST',
@@ -3226,9 +3245,13 @@ async function saveRepartoOrder(driver){
         result: { origin: dp, ordered: stops, stops: stops.length, total_km: null }
       })
     });
-    repartoState[driver].dirty = false;
-    const btn = document.getElementById(`reparto-save-${driver}`);
-    if(btn){ btn.classList.remove('dirty'); btn.textContent='✅ Orden guardado'; }
+    await persistRouteOrderForStops(stops);
+    markRepartoOrderSaved(driver);
+    renderDriverColBody(driver);
+    refreshMarkers();
+    if(currentRepartoMapDriver === driver){
+      setTimeout(()=>verRepartoEnMapa(driver), 0);
+    }
     toast(`💾 Ruta de ${driver} guardada`);
   } catch(e){ toast('❌ Error al guardar'); }
 }
@@ -3240,19 +3263,8 @@ async function applyRepartoOrderToViews(driver){
     return;
   }
 
-  const patches = [];
-  deliveries
-    .filter(d => d.driver === driver)
-    .forEach(d => { d.route_order = null; });
-
-  ordered.forEach((d, i) => {
-    d.route_order = i + 1;
-    patches.push(patchDelivery(d.id, { route_order: i + 1 }));
-  });
-
-  try{
-    await Promise.all(patches);
-  } catch(e){}
+  await persistRouteOrderForStops(ordered);
+  markRepartoOrderSaved(driver);
 
   renderList();
   renderDriverColBody(driver);

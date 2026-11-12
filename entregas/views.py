@@ -4,6 +4,7 @@ from datetime import datetime, date
 from collections import defaultdict
 
 from django.conf import settings
+from django.db.models import F
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
@@ -325,6 +326,11 @@ def deliveries(request):
         qs = Delivery.objects.all()
         if date_filter:
             qs = qs.filter(delivery_date=date_filter)
+        qs = qs.order_by(
+            'delivery_date',
+            F('route_order').asc(nulls_last=True),
+            'created_at',
+        )
 
         clients_map = {c.phone: c for c in Client.objects.all()}
         result = [d.to_dict(client=clients_map.get(d.client_phone)) for d in qs]
@@ -389,6 +395,7 @@ def deliveries(request):
         items            = data.get("items", []),
         payment          = data.get("payment", "").strip(),
         driver           = driver,
+        route_order      = data.get("route_order"),
         time_start       = data.get("time_start", ""),
         time_end         = data.get("time_end", ""),
         notes            = data.get("notes", "").strip(),
